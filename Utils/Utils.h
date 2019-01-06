@@ -1,0 +1,30 @@
+#ifndef ZHY_UTILS_UTILS_H
+#define ZHY_UTILS_UTILS_H
+
+#include "Common.h"
+
+using namespace cv;
+using namespace std;
+
+//获取当前版本
+UTILS_API(string) GetCurrentVersion();
+
+//RGB转灰度图，输入彩色图，输出灰度图
+UTILS_API(int) ConvertRGB2Gray(const cv::Mat& imgRGB, cv::Mat& imgGray);
+
+//遍历图像像素，利用 .ptr 和 * ++ 以及位运算 (continuous+channels)，速度最快
+UTILS_API(int) FastColorReduce(Mat& image,int div);
+
+//修改图片的亮度和对比度，采用公式g(i,j) = α*f(i,j)+β，需要输入alpha和beta值
+UTILS_API(int) ContrastAndBright(Mat& src_image, Mat& dst_image, const double alpha, const double beta);
+
+//将文件路径中的视频转为图片，需要输入视频地址，图片地址
+UTILS_API(int) VideoToPic(string Video_Path, string Pic_Path, double totalFremeNumber);
+
+//将文件路径中的图片合成视频，需要输入图片地址，视频地址，高和宽，视频地址精确到后缀
+UTILS_API(int) PicToVideo(string Pic_Path, string Video_Path,int height,int width);
+
+//自动对比度调整
+UTILS_API(int) AutoControst(Mat matface);
+
+#endif//ZHY_UTILS_UTILS_H

@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="json">
+      <UniqueIdentifier>{1914ecab-db27-44d1-94f6-a98a2816cd4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="calibration">
+      <UniqueIdentifier>{b14cb9b6-6a65-432c-8699-4a0da6a91545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{04d20394-9844-4f54-ad42-91329e470e48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{051d4a54-1cd7-4059-91fc-373e3d0060d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pattern">
+      <UniqueIdentifier>{7cd65457-c51b-4e56-a71d-92c53eddbcf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Direction">
+      <UniqueIdentifier>{0611c9f1-066e-4453-8460-2902104a0e58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="share_memory_api">
+      <UniqueIdentifier>{d35d9885-30b0-44c7-90de-8a3d78a78dff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UManger.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="UVersion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AKCalibr.h">
+      <Filter>calibration</Filter>
+    </ClInclude>
+    <ClInclude Include="complex.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="fft.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformLinux_Arm.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformWin32.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="ZHYSingleton.h">
+      <Filter>Pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="direction.h">
+      <Filter>Direction</Filter>
+    </ClInclude>
+    <ClInclude Include="share_memory_api.h">
+      <Filter>share_memory_api</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Utils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UManger.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AKCalibr.cpp">
+      <Filter>calibration</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessCalibr.cpp">
+      <Filter>calibration</Filter>
+    </ClCompile>
+    <ClCompile Include="complex.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="fft.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="direction.cpp">
+      <Filter>Direction</Filter>
+    </ClCompile>
+    <ClCompile Include="share_memory_api.cpp">
+      <Filter>share_memory_api</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
