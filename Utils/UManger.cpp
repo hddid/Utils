@@ -228,11 +228,13 @@ int UManger::PicToVideo(string Pic_Path, string Video_Path, int height, int widt
 //************************************
 int UManger::AutoControst(Mat matface)
 {
+	Mat dst = Mat::zeros(matface.size(), matface.type());
 	imshow("before", matface);
 	//进行自动对比度校正
 	double HistRed[256] = { 0 };
 	double HistGreen[256] = { 0 };
 	double HistBlue[256] = { 0 };
+
 	int bluemap[256] = { 0 };
 	int redmap[256] = { 0 };
 	int greenmap[256] = { 0 };
@@ -246,12 +248,14 @@ int UManger::AutoControst(Mat matface)
 			int iblue = matface.at<Vec3b>(i, j)[0];
 			int igreen = matface.at<Vec3b>(i, j)[1];
 			int ired = matface.at<Vec3b>(i, j)[2];
+
 			HistBlue[iblue]++;
 			HistGreen[igreen]++;
 			HistRed[ired]++;
 		}
 	}
 	int PixelAmount = matface.rows*matface.cols;
+	cout << "rows" << matface.rows << endl;
 	int isum = 0;
 	// blue
 	int iminblue = 0; 
@@ -321,27 +325,30 @@ int UManger::AutoControst(Mat matface)
 	}
 	/////////自动色阶
 	//自动对比度
-	int imin = 255; int imax = 0;
-	if (imin > iminblue)
+	int imin = 0;
+	if (imingreen > iminblue)
 		imin = iminblue;
+	else
+		imin = imingreen;
 	if (imin > iminred)
 		imin = iminred;
-	if (imin > imingreen)
-		imin = imingreen;
+	
 	iminblue = imin;
 	imingreen = imin;
 	iminred = imin;
 
-	if (imax < imaxblue)
+	int imax = 0;
+	if (imaxgreen < imaxblue)
 		imax = imaxblue;
-	if (imax < imaxgreen)
-		imax = imaxgreen;
-	if (imax < imaxred)
+	else
+		imax = imaxblue;
+	if (imaxred > imax)
 		imax = imaxred;
+		
 	imaxred = imax;
 	imaxgreen = imax;
 	imaxblue = imax;
-	/////////////////
+	
 	//blue
 	for (int y = 0; y < 256; y++)
 	{
@@ -357,7 +364,9 @@ int UManger::AutoControst(Mat matface)
 			{
 				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      '线性隐射
 				float ftmp = (float)(y - iminblue) / (imaxblue - iminblue);
+				cout << "ftmp" << ftmp << endl;
 				bluemap[y] = (int)(ftmp * 255);
+				cout << "blue" << bluemap[y] << endl;
 			}
 		
 
@@ -400,20 +409,19 @@ int UManger::AutoControst(Mat matface)
 				greenmap[y] = (int)(ftmp * 255);
 			}
 		
-
 	}
 	//查表
 	for (int i = 0; i < matface.rows; i++)
 	{
 		for (int j = 0; j < matface.cols; j++)
 		{
-			matface.at<Vec3b>(i, j)[0] = bluemap[matface.at<Vec3b>(i, j)[0]];
-			matface.at<Vec3b>(i, j)[1] = greenmap[matface.at<Vec3b>(i, j)[1]];
-			matface.at<Vec3b>(i, j)[2] = redmap[matface.at<Vec3b>(i, j)[2]];
+			dst.at<Vec3b>(i, j)[0] = bluemap[matface.at<Vec3b>(i, j)[0]];
+			dst.at<Vec3b>(i, j)[1] = greenmap[matface.at<Vec3b>(i, j)[1]];
+			dst.at<Vec3b>(i, j)[2] = redmap[matface.at<Vec3b>(i, j)[2]];
 
 		}
 	}
-	imshow("after", matface);
+	imshow("after", dst);
 	waitKey(0);
 	return RET_ERROR_OK;
 }
