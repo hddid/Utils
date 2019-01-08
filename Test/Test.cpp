@@ -114,7 +114,7 @@ using namespace cv;
 int main()
 {
 	Mat src, dst;
-	src = imread("3.jpg");
+	src = imread("4.jpg");
 	
 	if (RET_ERROR_OK == AutoControst(src))
 	{

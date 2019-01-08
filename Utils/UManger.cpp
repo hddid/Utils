@@ -228,7 +228,6 @@ int UManger::PicToVideo(string Pic_Path, string Video_Path, int height, int widt
 //************************************
 int UManger::AutoControst(Mat matface)
 {
-	Mat dst = Mat::zeros(matface.size(), matface.type());
 	imshow("before", matface);
 	//进行自动对比度校正
 	double HistRed[256] = { 0 };
@@ -241,6 +240,7 @@ int UManger::AutoControst(Mat matface)
 
 	double dlowcut = 0.1;
 	double dhighcut = 0.1;
+
 	for (int i = 0; i < matface.rows; i++)
 	{
 		for (int j = 0; j < matface.cols; j++)
@@ -255,7 +255,6 @@ int UManger::AutoControst(Mat matface)
 		}
 	}
 	int PixelAmount = matface.rows*matface.cols;
-	cout << "rows" << matface.rows << endl;
 	int isum = 0;
 	// blue
 	int iminblue = 0; 
@@ -281,7 +280,8 @@ int UManger::AutoControst(Mat matface)
 	}
 	//red
 	isum = 0;
-	int iminred = 0; int imaxred = 0;
+	int iminred = 0; 
+	int imaxred = 0;
 	for (int y = 0; y < 256; y++)
 	{
 		isum = isum + HistRed[y];
@@ -301,50 +301,62 @@ int UManger::AutoControst(Mat matface)
 			break;
 		}
 	}
+
 	//green
 	isum = 0;
-	int imingreen = 0; int imaxgreen = 0;
+	int imingreen = 0;
+	int imaxgreen = 0;
 	for (int y = 0; y < 256; y++)
 	{
 		isum = isum + HistGreen[y];
-		if (isum >= PixelAmount*dlowcut*0.01)
+		if (isum >= PixelAmount*dlowcut*0.1)
 		{
 			imingreen = y;
 			break;
 		}
 	}
+
 	isum = 0;
 	for (int y = 255; y >= 0; y--)
 	{
 		isum = isum + HistGreen[y];
-		if (isum >= PixelAmount*dhighcut*0.01)
+		if (isum >= PixelAmount*dhighcut*0.1)
 		{
 			imaxgreen = y;
 			break;
 		}
 	}
+	
 	/////////自动色阶
 	//自动对比度
 	int imin = 0;
-	if (imingreen > iminblue)
+	if (imingreen >= iminblue)
 		imin = iminblue;
-	else
+	else 
+	{
 		imin = imingreen;
-	if (imin > iminred)
+	}
+	if (imin >= iminred)
 		imin = iminred;
+	else
+		imin = imin;
 	
+	cout << "imin" << imin << endl;
 	iminblue = imin;
 	imingreen = imin;
 	iminred = imin;
 
 	int imax = 0;
-	if (imaxgreen < imaxblue)
+	if (imaxgreen <= imaxblue)
 		imax = imaxblue;
 	else
-		imax = imaxblue;
-	if (imaxred > imax)
+		imax = imaxgreen;
+	if (imaxred >= imax)
 		imax = imaxred;
-		
+	else
+		imax = imax;
+
+	cout << "imax" << imax << endl;
 	imaxred = imax;
 	imaxgreen = imax;
 	imaxblue = imax;
@@ -357,17 +369,15 @@ int UManger::AutoControst(Mat matface)
 			bluemap[y] = 0;
 		}
 		else if (y > imaxblue)
-			{
+		{
 				bluemap[y] = 255;
-			}
+		}
 		else
-			{
+		{
 				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      '线性隐射
 				float ftmp = (float)(y - iminblue) / (imaxblue - iminblue);
-				cout << "ftmp" << ftmp << endl;
-				bluemap[y] = (int)(ftmp * 255);
-				cout << "blue" << bluemap[y] << endl;
-			}
+				bluemap[y] = (int)(ftmp * imax);
+		}
 		
 
 	}
@@ -379,15 +389,15 @@ int UManger::AutoControst(Mat matface)
 			redmap[y] = 0;
 		}
 		else if  (y > imaxred)
-			{
+		{
 				redmap[y] = 255;
-			}
+		}
 		else
-			{
+		{
 				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      '线性隐射
 				float ftmp = (float)(y - iminred) / (imaxred - iminred);
-				redmap[y] = (int)(ftmp * 255);
-			}
+				redmap[y] = (int)(ftmp * imax);
+		}
 		
 
 	}
@@ -399,15 +409,16 @@ int UManger::AutoControst(Mat matface)
 			greenmap[y] = 0;
 		}
 		else if (y > imaxgreen)
-			{
+		{
 				greenmap[y] = 255;
-			}
+		}
 		else
-			{
-				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      '线性隐射
+		{
+				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      线性隐射
 				float ftmp = (float)(y - imingreen) / (imaxgreen - imingreen);
-				greenmap[y] = (int)(ftmp * 255);
-			}
+			
+				greenmap[y] = (int)(ftmp * imax);
+		}
 		
 	}
 	//查表
@@ -415,13 +426,13 @@ int UManger::AutoControst(Mat matface)
 	{
 		for (int j = 0; j < matface.cols; j++)
 		{
-			dst.at<Vec3b>(i, j)[0] = bluemap[matface.at<Vec3b>(i, j)[0]];
-			dst.at<Vec3b>(i, j)[1] = greenmap[matface.at<Vec3b>(i, j)[1]];
-			dst.at<Vec3b>(i, j)[2] = redmap[matface.at<Vec3b>(i, j)[2]];
+			matface.at<Vec3b>(i, j)[0] = bluemap[matface.at<Vec3b>(i, j)[0]];
+			matface.at<Vec3b>(i, j)[1] = greenmap[matface.at<Vec3b>(i, j)[1]];
+			matface.at<Vec3b>(i, j)[2] = redmap[matface.at<Vec3b>(i, j)[2]];
 
 		}
 	}
-	imshow("after", dst);
+	imshow("after", matface);
 	waitKey(0);
 	return RET_ERROR_OK;
 }
