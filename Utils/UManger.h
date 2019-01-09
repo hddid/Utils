@@ -114,19 +114,69 @@ public:
 	//************************************
 	int PicToVideo(string Pic_Path, string Video_Path,int height,int width);
 
-//*****************************************************************
-	//自动对比度调整
+//****************************************************************
+	//两张图片像素相加
 	//************************************
-	// Method:    autocontrost
-	// FullName:  UManger::autocontrost
+	// Method:    PicAddPic
+	// FullName:  UManger::PicAddPic
 	// Access:    public 
 	// Returns:   int
 	// Qualifier:
-	// Parameter: Mat matface
+	// Parameter: Mat & img1
+	// Parameter: Mat & img2
+	// Parameter: Mat & result
 	// Author:    Haoyu_Zeng
-	// Date:      2019/01/06 16:52
+	// Date:      2019/01/09 15:50
 	//************************************
-	int AutoControst(Mat matface);
+	int PicAddPic(Mat& img1, Mat& img2, Mat& result);
+
+//******************************************************
+	//两张图片像素相减，img1是被减数
+	//************************************
+	// Method:    PicSubPic
+	// FullName:  UManger::PicSubPic
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img1
+	// Parameter: Mat & img2
+	// Parameter: Mat & result
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/09 15:52
+	//************************************
+	int PicSubPic(Mat& img1, Mat& img2, Mat& result);
+
+//********************************************************
+	//两张图片相乘
+	//************************************
+	// Method:    PicMulPic
+	// FullName:  UManger::PicMulPic
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img1
+	// Parameter: Mat & img2
+	// Parameter: Mat & result
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/09 15:54
+	//************************************
+	int PicMulPic(Mat& img1, Mat& img2, Mat& result);
+
+//***********************************************************
+	//两张图片相除，img1是被除数
+	//************************************
+	// Method:    PicDivPic
+	// FullName:  UManger::PicDivPic
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img1
+	// Parameter: Mat & img2
+	// Parameter: Mat & result
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/09 15:54
+	//************************************
+	int PicDivPic(Mat& img1, Mat& img2, Mat& result);
 
 protected:
 	UManger();

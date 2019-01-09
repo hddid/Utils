@@ -217,222 +217,169 @@ int UManger::PicToVideo(string Pic_Path, string Video_Path, int height, int widt
 }
 
 //************************************
-// Method:    AutoControst
-// FullName:  UManger::AutoControst
+// Method:    PicAddPic
+// FullName:  UManger::PicAddPic
 // Access:    public 
 // Returns:   int
 // Qualifier:
-// Parameter: Mat matface
+// Parameter: Mat & img1
+// Parameter: Mat & img2
+// Parameter: Mat & result
 // Author:    Haoyu_Zeng
-// Date:      2019/01/06 16:56
+// Date:      2019/01/09 16:59
 //************************************
-int UManger::AutoControst(Mat matface)
+int UManger::PicAddPic(Mat& img1, Mat& img2, Mat& result)
 {
-	imshow("before", matface);
-	//进行自动对比度校正
-	double HistRed[256] = { 0 };
-	double HistGreen[256] = { 0 };
-	double HistBlue[256] = { 0 };
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	int b1, g1, r1;
+	int b2, g2, r2;
 
-	int bluemap[256] = { 0 };
-	int redmap[256] = { 0 };
-	int greenmap[256] = { 0 };
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
 
-	double dlowcut = 0.1;
-	double dhighcut = 0.1;
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
 
-	for (int i = 0; i < matface.rows; i++)
-	{
-		for (int j = 0; j < matface.cols; j++)
-		{
-			int iblue = matface.at<Vec3b>(i, j)[0];
-			int igreen = matface.at<Vec3b>(i, j)[1];
-			int ired = matface.at<Vec3b>(i, j)[2];
-
-			HistBlue[iblue]++;
-			HistGreen[igreen]++;
-			HistRed[ired]++;
-		}
-	}
-	int PixelAmount = matface.rows*matface.cols;
-	int isum = 0;
-	// blue
-	int iminblue = 0; 
-	int imaxblue = 0;
-	for (int y = 0; y < 256; y++)
-	{
-		isum = isum + HistBlue[y];
-		if (isum >= PixelAmount*dlowcut*0.01)
-		{
-			iminblue = y;
-			break;
-		}
-	}
-	isum = 0;
-	for (int y = 255; y >= 0; y--)
-	{
-		isum = isum + HistBlue[y];
-		if (isum >= PixelAmount*dhighcut*0.01)
-		{
-			imaxblue = y;
-			break;
-		}
-	}
-	//red
-	isum = 0;
-	int iminred = 0; 
-	int imaxred = 0;
-	for (int y = 0; y < 256; y++)
-	{
-		isum = isum + HistRed[y];
-		if (isum >= PixelAmount*dlowcut*0.01)
-		{
-			iminred = y;
-			break;
-		}
-	}
-	isum = 0;
-	for (int y = 255; y >= 0; y--)
-	{
-		isum = isum + HistRed[y];
-		if (isum >= PixelAmount*dhighcut*0.01)
-		{
-			imaxred = y;
-			break;
-		}
-	}
-
-	//green
-	isum = 0;
-	int imingreen = 0;
-	int imaxgreen = 0;
-	for (int y = 0; y < 256; y++)
-	{
-		isum = isum + HistGreen[y];
-		if (isum >= PixelAmount*dlowcut*0.1)
-		{
-			imingreen = y;
-			break;
-		}
-	}
-
-	isum = 0;
-	for (int y = 255; y >= 0; y--)
-	{
-		isum = isum + HistGreen[y];
-		if (isum >= PixelAmount*dhighcut*0.1)
-		{
-			imaxgreen = y;
-			break;
-		}
-	}
-	
-	/////////自动色阶
-	//自动对比度
-	int imin = 0;
-	if (imingreen >= iminblue)
-		imin = iminblue;
-	else 
-	{
-		imin = imingreen;
-	}
-	if (imin >= iminred)
-		imin = iminred;
-	else
-		imin = imin;
-	
-	cout << "imin" << imin << endl;
-	iminblue = imin;
-	imingreen = imin;
-	iminred = imin;
-
-	int imax = 0;
-	if (imaxgreen <= imaxblue)
-		imax = imaxblue;
-	else
-		imax = imaxgreen;
-	if (imaxred >= imax)
-		imax = imaxred;
-	else
-		imax = imax;
-
-	cout << "imax" << imax << endl;
-	imaxred = imax;
-	imaxgreen = imax;
-	imaxblue = imax;
-	
-	//blue
-	for (int y = 0; y < 256; y++)
-	{
-		if (y <= iminblue)
-		{
-			bluemap[y] = 0;
-		}
-		else if (y > imaxblue)
-		{
-				bluemap[y] = 255;
-		}
-		else
-		{
-				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      '线性隐射
-				float ftmp = (float)(y - iminblue) / (imaxblue - iminblue);
-				bluemap[y] = (int)(ftmp * imax);
-		}
-		
-
-	}
-	//red
-	for (int y = 0; y < 256; y++)
-	{
-		if (y <= iminred)
-		{
-			redmap[y] = 0;
-		}
-		else if  (y > imaxred)
-		{
-				redmap[y] = 255;
-		}
-		else
-		{
-				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      '线性隐射
-				float ftmp = (float)(y - iminred) / (imaxred - iminred);
-				redmap[y] = (int)(ftmp * imax);
-		}
-		
-
-	}
-	//green
-	for (int y = 0; y < 256; y++)
-	{
-		if (y <= imingreen)
-		{
-			greenmap[y] = 0;
-		}
-		else if (y > imaxgreen)
-		{
-				greenmap[y] = 255;
-		}
-		else
-		{
-				//  BlueMap(Y) = (Y - MinBlue) / (MaxBlue - MinBlue) * 255      线性隐射
-				float ftmp = (float)(y - imingreen) / (imaxgreen - imingreen);
-			
-				greenmap[y] = (int)(ftmp * imax);
-		}
-		
-	}
-	//查表
-	for (int i = 0; i < matface.rows; i++)
-	{
-		for (int j = 0; j < matface.cols; j++)
-		{
-			matface.at<Vec3b>(i, j)[0] = bluemap[matface.at<Vec3b>(i, j)[0]];
-			matface.at<Vec3b>(i, j)[1] = greenmap[matface.at<Vec3b>(i, j)[1]];
-			matface.at<Vec3b>(i, j)[2] = redmap[matface.at<Vec3b>(i, j)[2]];
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 + b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 + g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 + r2);
 
 		}
 	}
-	imshow("after", matface);
-	waitKey(0);
+	return RET_ERROR_OK;
+}
+
+//************************************
+// Method:    PicSubPic
+// FullName:  UManger::PicSubPic
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: Mat & img1
+// Parameter: Mat & img2
+// Parameter: Mat & result
+// Author:    Haoyu_Zeng
+// Date:      2019/01/09 16:59
+//************************************
+int UManger::PicSubPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	int b1, g1, r1;
+	int b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 - b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 - g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 - r2);
+
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+//************************************
+// Method:    PicMulPic
+// FullName:  UManger::PicMulPic
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: Mat & img1
+// Parameter: Mat & img2
+// Parameter: Mat & result
+// Author:    Haoyu_Zeng
+// Date:      2019/01/09 16:59
+//************************************
+int UManger::PicMulPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	int b1, g1, r1;
+	int b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 * b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 * g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 * r2);
+
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+//************************************
+// Method:    PicDivPic
+// FullName:  UManger::PicDivPic
+// Access:    public 
+// Returns:   int
+// Qualifier:
+// Parameter: Mat & img1
+// Parameter: Mat & img2
+// Parameter: Mat & result
+// Author:    Haoyu_Zeng
+// Date:      2019/01/09 16:59
+//************************************
+int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	double b1, g1, r1;
+	double b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 / b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 / g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 / r2);
+
+		}
+	}
 	return RET_ERROR_OK;
 }

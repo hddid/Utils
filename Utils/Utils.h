@@ -24,7 +24,15 @@ UTILS_API(int) VideoToPic(string Video_Path, string Pic_Path, double totalFremeN
 //将文件路径中的图片合成视频，需要输入图片地址，视频地址，高和宽，视频地址精确到后缀
 UTILS_API(int) PicToVideo(string Pic_Path, string Video_Path,int height,int width);
 
-//自动对比度调整
-UTILS_API(int) AutoControst(Mat matface);
+//两张图片相加，分别输入两张图片，输出一张合成的结果
+UTILS_API(int) PicAddPic(Mat& img1, Mat& img2, Mat& result);
 
+//两张图片相加，分别输入两张图片，输出一张合成的结果，img1是被减数
+UTILS_API(int) PicSubPic(Mat& img1, Mat& img2, Mat& result);
+
+//两张图片相加，分别输入两张图片，输出一张合成的结果
+UTILS_API(int) PicMulPic(Mat& img1, Mat& img2, Mat& result);
+
+//两张图片相加，分别输入两张图片，输出一张合成的结果，img1是被除数
+UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
 #endif//ZHY_UTILS_UTILS_H

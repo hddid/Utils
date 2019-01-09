@@ -113,12 +113,14 @@ using namespace cv;
 
 int main()
 {
-	Mat src, dst;
-	src = imread("4.jpg");
-	
-	if (RET_ERROR_OK == AutoControst(src))
+	Mat img1 = imread("8.jpg");
+	Mat img2 = imread("9.jpg");
+
+	Mat result = Mat::zeros(img1.size(), img1.type());
+	if (RET_ERROR_OK == PicDivPic(img1, img2, result))
 	{
-	
+		imshow("result", result);
 	}
+	waitKey(0);
 	return 0;
 }

@@ -48,7 +48,23 @@ UTILS_IMPL int PicToVideo(string Pic_Path, string Video_Path,int height,int widt
 	return UManger::Instance()->PicToVideo(Pic_Path, Video_Path, height, width);
 }
 
-UTILS_IMPL int AutoControst(Mat matface)
+UTILS_IMPL int PicAddPic(Mat& img1, Mat& img2, Mat& result)
 {
-	return UManger::Instance()->AutoControst(matface);
+	return UManger::Instance()->PicAddPic(img1, img2, result);
+}
+
+UTILS_IMPL int PicSubPic(Mat& img1, Mat& img2, Mat& result)
+{
+	return UManger::Instance()->PicSubPic(img1, img2, result);
+}
+
+UTILS_IMPL int PicMulPic(Mat& img1, Mat& img2, Mat& result)
+{
+	return UManger::Instance()->PicMulPic(img1, img2, result);
+}
+
+
+UTILS_IMPL int PicDivPic(Mat& img1, Mat& img2, Mat& result)
+{
+	return UManger::Instance()->PicDivPic(img1, img2, result);
 }
