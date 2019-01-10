@@ -111,15 +111,27 @@ using namespace cv;
 //	system("pause");
 //}
 
+//int main()
+//{
+//	Mat img1 = imread("8.jpg");
+//	Mat img2 = imread("9.jpg");
+//
+//	Mat result = Mat::zeros(img1.size(), img1.type());
+//	if (RET_ERROR_OK == PicDivPic(img1, img2, result))
+//	{
+//		imshow("result", result);
+//	}
+//	waitKey(0);
+//	return 0;
+//}
+
 int main()
 {
-	Mat img1 = imread("8.jpg");
-	Mat img2 = imread("9.jpg");
-
-	Mat result = Mat::zeros(img1.size(), img1.type());
-	if (RET_ERROR_OK == PicDivPic(img1, img2, result))
+	Mat img = imread("3.jpg");
+	Mat dst;
+	if (RET_ERROR_OK == RGBSkin(img, dst))
 	{
-		imshow("result", result);
+		imshow("dst", dst);
 	}
 	waitKey(0);
 	return 0;

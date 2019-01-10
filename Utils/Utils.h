@@ -35,4 +35,10 @@ UTILS_API(int) PicMulPic(Mat& img1, Mat& img2, Mat& result);
 
 //两张图片相加，分别输入两张图片，输出一张合成的结果，img1是被除数
 UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
+
+/////////////////////////////////////////////////////////////////////
+//增加六种肤色检测方法
+
+//第一种：基于RGB color space
+UTILS_API(int) RGBSkin(Mat& src_img,Mat& dst_img);
 #endif//ZHY_UTILS_UTILS_H

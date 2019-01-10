@@ -383,3 +383,33 @@ int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	}
 	return RET_ERROR_OK;
 }
+
+int UManger::RGBSkin(Mat& src_img, Mat& dst_img)
+{
+	dst_img = Mat::zeros(src_img.size(), src_img.type());
+
+	if (src_img.empty() || 3 != src_img.channels())
+	{
+		cout << "cant load pic" << endl;
+		return 0;
+	}
+	for (int i = 0; i < src_img.rows; i++)
+	{
+		for (int j = 0; j < src_img.cols; j++)
+		{
+			uchar *p_src = src_img.ptr<uchar>(i, j);
+			uchar *p_dst = dst_img.ptr<uchar>(i, j);
+			if ((p_src[2] > 95 && p_src[1] > 40 && p_src[0] > 20 &&
+				(MAX(p_src[0], MAX(p_src[1], p_src[2])) - MIN(p_src[0], MIN(p_src[1], p_src[2])) > 15) &&
+				abs(p_src[2] - p_src[1]) > 15 && p_src[2] > p_src[1] && p_src[1] > p_src[0]) ||
+				(p_src[2] > 200 && p_src[1] > 210 && p_src[0] > 170 && abs(p_src[2] - p_src[1]) <= 15 &&
+					p_src[2] > p_src[0] && p_src[1] > p_src[0]))
+			{
+				p_dst[0] = p_src[0];
+				p_dst[1] = p_src[1];
+				p_dst[2] = p_src[2];
+			}
+		}
+	}
+	return RET_ERROR_OK;
+}
