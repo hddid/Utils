@@ -413,3 +413,96 @@ int UManger::RGBSkin(Mat& src_img, Mat& dst_img)
 	}
 	return RET_ERROR_OK;
 }
+
+int UManger::EllipseSkin(Mat& src_img, Mat& dst_img)
+{
+	dst_img = src_img.clone();
+	Mat skinCrCbHist = Mat::zeros(Size(256, 256), CV_8UC1);
+	ellipse(skinCrCbHist, Point(113, 155.6), Size(23.4, 15.2), 43.0, 0.0, 360.0, Scalar(255, 255, 255), -1);
+
+	Mat ycrcb_image;
+	Mat output_mask = Mat::zeros(dst_img.size(), CV_8UC1);
+	cvtColor(dst_img, ycrcb_image, CV_BGR2YCrCb);
+	
+	for (int i = 0; i < dst_img.rows; i++)
+	{
+		for (int j = 0; j < dst_img.cols; j++)
+		{
+			Vec3b ycrcb = ycrcb_image.at<Vec3b>(i, j);
+			if (skinCrCbHist.at<uchar>(ycrcb[1], ycrcb[2]) > 0)
+				output_mask.at<uchar>(i, j) = 255;
+		}
+	}
+	Mat detect;
+	dst_img.copyTo(detect, output_mask);
+	dst_img = detect.clone();
+	return RET_ERROR_OK;
+}
+
+int UManger::YCrCbOtsuSkin(Mat& src_img, Mat& dst_img)
+{
+	Mat ycrcb_image;
+	cvtColor(src_img, ycrcb_image, CV_BGR2YCrCb);
+	Mat detect;
+	vector<Mat> channels;
+	split(ycrcb_image, channels);
+	Mat output_mask = channels[1];
+	threshold(output_mask, output_mask, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+	src_img.copyTo(detect, output_mask);
+	dst_img = detect.clone();
+	return RET_ERROR_OK;
+}
+
+int UManger::YCrCbSkin(Mat& src_img, Mat& dst_img)
+{
+	Mat ycrcb_image;
+	int Cr = 1;
+	int Cb = 2;
+	cvtColor(src_img, ycrcb_image, CV_BGR2YCrCb);
+	Mat output_mask = Mat::zeros(src_img.size(), CV_8UC1);
+
+	for (int i = 0; i < src_img.rows; i++)
+	{
+		for (int j = 0; j < src_img.cols; j++)
+		{
+			uchar *p_mask = output_mask.ptr<uchar>(i, j);
+			uchar *p_src = ycrcb_image.ptr<uchar>(i, j);
+			if (p_src[Cr] >= 133 && p_src[Cr] <= 172 && p_src[Cb] >= 77 && p_src[Cb] <= 127)
+			{
+				p_mask[0] = 255;
+			}
+
+		}
+	}
+	Mat detect;
+	src_img.copyTo(detect, output_mask);
+	dst_img = detect.clone();
+	return RET_ERROR_OK;
+}
+
+int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
+{
+	Mat hsv_img;
+	int h = 0;
+	int s = 1;
+	int v = 2;
+	cvtColor(src_img, hsv_img, CV_BGR2HSV);
+
+	Mat output_mask = Mat::zeros(src_img.size(), CV_8UC1);
+	for (int i = 0; i < src_img.rows; i++)
+	{
+		for (int j = 0; j < src_img.cols; ++j)
+		{
+			uchar *p_mask = output_mask.ptr<uchar>(i, j);
+			uchar *p_src = hsv_img.ptr<uchar>(i, j);
+			if (p_src[h] >= 0 && p_src[h] <= 20 && p_src[s] >= 48 && p_src[v] >= 50)
+			{
+				p_mask[0] = 255;
+			}
+		}
+	}
+	Mat detect;
+	src_img.copyTo(detect, output_mask);
+	dst_img = detect.clone();
+	return RET_ERROR_OK;
+}

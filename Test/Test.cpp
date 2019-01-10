@@ -127,12 +127,21 @@ using namespace cv;
 
 int main()
 {
-	Mat img = imread("3.jpg");
+	//Mat img = imread("3.jpg");
 	Mat dst;
-	if (RET_ERROR_OK == RGBSkin(img, dst))
+	Mat img;
+	VideoCapture cap(0);
+	while (1)
 	{
-		imshow("dst", dst);
+		cap >> img;
+		if (RET_ERROR_OK == HSVSkin(img, dst))
+		{
+			HSVSkin(img, dst);
+			imshow("dst", dst);
+			waitKey(30);
+		}
 	}
-	waitKey(0);
 	return 0;
 }
+
+

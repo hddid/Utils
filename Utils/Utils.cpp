@@ -73,3 +73,23 @@ UTILS_IMPL int RGBSkin(Mat& src_img,Mat& dst_img)
 {
 	return UManger::Instance()->RGBSkin(src_img,dst_img);
 }
+
+UTILS_IMPL int EllipseSkin(Mat& src_img, Mat& dst_img)
+{
+	return UManger::Instance()->EllipseSkin(src_img, dst_img);
+}
+
+UTILS_IMPL int YCrCbOtusSkin(Mat& src_img, Mat& dst_img)
+{
+	return UManger::Instance()->YCrCbOtsuSkin(src_img, dst_img);
+}
+
+UTILS_IMPL int YCrCbSkin(Mat& src_img, Mat& dst_img)
+{
+	return UManger::Instance()->YCrCbSkin(src_img, dst_img);
+}
+
+UTILS_IMPL int HSVSkin(Mat& src_img, Mat& dst_img)
+{
+	return UManger::Instance()->HSVSkin(src_img, dst_img);
+}

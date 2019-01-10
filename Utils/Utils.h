@@ -37,8 +37,20 @@ UTILS_API(int) PicMulPic(Mat& img1, Mat& img2, Mat& result);
 UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
 
 /////////////////////////////////////////////////////////////////////
-//增加六种肤色检测方法
+//增加五种肤色检测方法
 
 //第一种：基于RGB color space
 UTILS_API(int) RGBSkin(Mat& src_img,Mat& dst_img);
+
+//第二种：基于椭圆模型的皮肤检测
+UTILS_API(int) EllipseSkin(Mat& src_img, Mat& dst_img);
+
+//第三种：基于YCrCb颜色空间Cr分量+Otus法阈值分割
+UTILS_API(int) YCrCbOtusSkin(Mat& src_img, Mat& dst_img);
+
+//第四种：基于YCrCb颜色空间Cr，Cb范围筛选
+UTILS_API(int) YCrCbSkin(Mat& src_img, Mat& dst_img);
+
+//第五种：基于HSV颜色空间H范围筛选法
+UTILS_API(int) HSVSkin(Mat& src_img, Mat& dst_img);
 #endif//ZHY_UTILS_UTILS_H
