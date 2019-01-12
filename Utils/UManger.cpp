@@ -471,7 +471,6 @@ int UManger::YCrCbSkin(Mat& src_img, Mat& dst_img)
 			{
 				p_mask[0] = 255;
 			}
-
 		}
 	}
 	Mat detect;
@@ -504,5 +503,51 @@ int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
 	Mat detect;
 	src_img.copyTo(detect, output_mask);
 	dst_img = detect.clone();
+
+	Mat element = getStructuringElement(MORPH_RECT, Size(3, 3));
+	dilate(dst_img, dst_img, element);
+	//erode(dst_img, dst_img, element);
+	return RET_ERROR_OK;
+}
+ 
+int UManger::AddOrnament(Mat& img)
+{
+	imshow("mask", img);
+	CascadeClassifier faceDetector;
+	faceDetector.load("D://workspace//Utils//face_feature//haarcascade_frontalface_alt_tree.xml");
+	Mat frame;
+	Mat gray;
+	VideoCapture cap(0);
+	while (1)
+	{
+		cap >> frame;
+		if(frame.empty())
+			continue;
+		cvtColor(frame, gray, CV_RGB2GRAY);
+		equalizeHist(gray, gray);
+		vector<Rect> faces;
+		faceDetector.detectMultiScale(gray, faces, 1.2, 1, 0, Size(30, 30),Size(400,400));
+		if (faces.size() > 0)
+		{
+			for (size_t i = 0; i < faces.size(); i++)
+			{
+				rectangle(frame, faces[i], Scalar(0, 0, 255), 2, 8, 0);
+				resize(img, img, Size(frame.rows /2,frame.cols/2));
+				imshow("img", img);
+				/*Mat roi = frame(Rect(faces[i].x, faces[i].y, img.rows, img.cols));
+				Mat mask = Mat::zeros(img.size(),0);*/
+			
+				//frame.copyTo(frame);
+			}
+			char c = waitKey(10);
+			if (c == 27)
+			{
+				break;
+			}
+			imshow("frame", frame);
+		}
+	}
+
+	waitKey(0);
 	return RET_ERROR_OK;
 }

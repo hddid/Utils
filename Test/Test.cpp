@@ -124,24 +124,35 @@ using namespace cv;
 //	waitKey(0);
 //	return 0;
 //}
+//
+//int main()
+//{
+//	//Mat img = imread("3.jpg");
+//	Mat dst;
+//	Mat img;
+//	VideoCapture cap(0);
+//	while (1)
+//	{
+//		cap >> img;
+//		if (RET_ERROR_OK == HSVSkin(img, dst))
+//		{
+//			HSVSkin(img, dst);
+//			imshow("dst", dst);
+//			waitKey(30);
+//		}
+//	}
+//	return 0;
+//}
+
+
 
 int main()
 {
-	//Mat img = imread("3.jpg");
-	Mat dst;
-	Mat img;
-	VideoCapture cap(0);
-	while (1)
+	Mat src = imread("0.png");
+	if (RET_ERROR_OK == AddOrnament(src))
 	{
-		cap >> img;
-		if (RET_ERROR_OK == HSVSkin(img, dst))
-		{
-			HSVSkin(img, dst);
-			imshow("dst", dst);
-			waitKey(30);
-		}
+		cout << "success" << endl;
+
 	}
 	return 0;
 }
-
-

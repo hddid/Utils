@@ -22,6 +22,7 @@
 #include <cv.h>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/objdetect/objdetect.hpp>
 
 #include "Singleton.h"
 
@@ -179,7 +180,7 @@ public:
 	int PicDivPic(Mat& img1, Mat& img2, Mat& result);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//增加六种皮肤检测方法
+	//增加五种皮肤检测方法
 //*****************************************************************
 	//第一种:基于RGB color space检测
 	int RGBSkin(Mat& src_img,Mat& dst_img);
@@ -191,6 +192,20 @@ public:
 	int YCrCbSkin(Mat& src_img, Mat& dst_img);
 	//第五种：基于HSV颜色空间H范围筛选法
 	int HSVSkin(Mat& src_img, Mat& dst_img);
+
+//*****************************************************************
+	//动态添加饰品
+	//************************************
+	// Method:    AddOrnament
+	// FullName:  UManger::AddOrnament
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & src_img
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/11 17:47
+	//************************************
+	int AddOrnament(Mat& img);
 protected:
 	UManger();
 	virtual ~UManger();

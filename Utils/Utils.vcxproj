@@ -127,7 +127,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>../lib/$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>opencv_core320.lib;opencv_calib3d320.lib;opencv_highgui320.lib;opencv_imgcodecs320.lib;opencv_features2d320.lib;opencv_imgproc320.lib;opencv_video320.lib;opencv_videoio320.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core320.lib;opencv_calib3d320.lib;opencv_highgui320.lib;opencv_imgcodecs320.lib;opencv_features2d320.lib;opencv_imgproc320.lib;opencv_video320.lib;opencv_videoio320.lib;opencv_objdetect320.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

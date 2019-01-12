@@ -93,3 +93,8 @@ UTILS_IMPL int HSVSkin(Mat& src_img, Mat& dst_img)
 {
 	return UManger::Instance()->HSVSkin(src_img, dst_img);
 }
+
+UTILS_IMPL int AddOrnament(Mat& img)
+{
+	return UManger::Instance()->AddOrnament(img);
+}

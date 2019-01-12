@@ -53,4 +53,9 @@ UTILS_API(int) YCrCbSkin(Mat& src_img, Mat& dst_img);
 
 //第五种：基于HSV颜色空间H范围筛选法
 UTILS_API(int) HSVSkin(Mat& src_img, Mat& dst_img);
+
+/////////////////////////////////////////////////////////
+
+//动态添加饰品
+UTILS_API(int) AddOrnament(Mat& img);
 #endif//ZHY_UTILS_UTILS_H
