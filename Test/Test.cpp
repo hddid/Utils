@@ -148,8 +148,8 @@ using namespace cv;
 
 int main()
 {
-	Mat src = imread("0.png");
-	if (RET_ERROR_OK == AddOrnament(src))
+	Mat src = imread("5.jpg");
+	if (RET_ERROR_OK == AddHat(src))
 	{
 		cout << "success" << endl;
 

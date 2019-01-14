@@ -57,5 +57,6 @@ UTILS_API(int) HSVSkin(Mat& src_img, Mat& dst_img);
 /////////////////////////////////////////////////////////
 
 //∂ØÃ¨ÃÌº” Œ∆∑
-UTILS_API(int) AddOrnament(Mat& img);
+UTILS_API(int) AddHat(Mat& img);
+UTILS_API(int) AddGrasses(Mat& img);
 #endif//ZHY_UTILS_UTILS_H

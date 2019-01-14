@@ -26,6 +26,7 @@
 
 #include "Singleton.h"
 
+
 using namespace std;
 using namespace cv;
 
@@ -205,7 +206,9 @@ public:
 	// Author:    Haoyu_Zeng
 	// Date:      2019/01/11 17:47
 	//************************************
-	int AddOrnament(Mat& img);
+	int AddHat(Mat& img);
+
+	int AddGrasses(Mat& img);
 protected:
 	UManger();
 	virtual ~UManger();

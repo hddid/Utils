@@ -14,6 +14,7 @@
 #include "Common.h"
 
 
+
 UManger::UManger()
 {
 } 
@@ -510,7 +511,7 @@ int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
 	return RET_ERROR_OK;
 }
  
-int UManger::AddOrnament(Mat& img)
+int UManger::AddHat(Mat& img)
 {
 	imshow("mask", img);
 	CascadeClassifier faceDetector;
@@ -526,17 +527,26 @@ int UManger::AddOrnament(Mat& img)
 		cvtColor(frame, gray, CV_RGB2GRAY);
 		equalizeHist(gray, gray);
 		vector<Rect> faces;
-		faceDetector.detectMultiScale(gray, faces, 1.2, 1, 0, Size(30, 30),Size(400,400));
+		faceDetector.detectMultiScale(gray, faces, 1.2, 1, 0, Size(100, 100),Size(400,400));
 		if (faces.size() > 0)
 		{
 			for (size_t i = 0; i < faces.size(); i++)
 			{
+				Mat out;
 				rectangle(frame, faces[i], Scalar(0, 0, 255), 2, 8, 0);
-				resize(img, img, Size(frame.rows /2,frame.cols/2));
-				imshow("img", img);
-				/*Mat roi = frame(Rect(faces[i].x, faces[i].y, img.rows, img.cols));
-				Mat mask = Mat::zeros(img.size(),0);*/
-			
+				
+				resize(img, out, Size(faces[i].width / 2, faces[i].height / 2));
+				imshow("img", out);
+				Mat imgROI = frame(Rect((faces[i].x + (faces[i].width)/4), abs(faces[i].y-(faces[i].height/3)), out.cols, out.rows));
+				Mat mask = out.clone();
+				cvtColor(mask, mask, CV_RGB2GRAY);
+				out.copyTo(imgROI, mask);
+				/*	cout << "faces.x" << faces[i].x << endl;
+					cout << "faces.y" << faces[i].y << endl;
+					cout << "faces.width" << faces[i].width << endl;
+					cout << "faces.height" << faces[i].height << endl;*/
+				cout << "faces.y" << faces[i].y << endl;
+
 				//frame.copyTo(frame);
 			}
 			char c = waitKey(10);
@@ -550,4 +560,36 @@ int UManger::AddOrnament(Mat& img)
 
 	waitKey(0);
 	return RET_ERROR_OK;
+}
+
+int UManger::AddGrasses(Mat& img)
+{
+	//imshow("mask", img);
+	bool use_detect = false;
+	CascadeClassifier eyesDetect;
+	eyesDetect.load("D://workspace//Utils//face_feature//haarcascade_eye.xml");
+	Mat frame, gray;
+	VideoCapture cap(0);
+	while (1)
+	{
+		cap >> frame;
+		cvtColor(frame, gray, CV_RGB2GRAY);
+		equalizeHist(gray, gray);
+		vector<Rect> eyes;
+		if (use_detect)
+		{
+			eyesDetect.detectMultiScale(gray, eyes, 1.2, 1, 0, Size(10, 10), Size(100, 100));
+			for (size_t i = 0; i < eyes.size(); i++)
+			{
+				rectangle(frame, eyes[i], Scalar(0, 255, 255), 2, 8, 0);
+			}
+			imshow("img", frame);
+		}
+		else
+			imshow("frame", frame);
+
+		waitKey(30);
+	}
+	return 0;
+
 }
