@@ -61,4 +61,5 @@ UTILS_API(int) AddHat(Mat& img);
 UTILS_API(int) AddGrasses(Mat& img);
 //添加卡通效果
 UTILS_API(int) CartoonFilter(Mat& img);
+UTILS_API(int) Nostalgic(Mat& img);
 #endif//ZHY_UTILS_UTILS_H

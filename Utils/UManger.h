@@ -211,6 +211,8 @@ public:
 	int AddGrasses(Mat& img);
 
 	int CartoonFilter(Mat& img);
+
+	int Nostalgic(Mat& img);
 protected:
 	UManger();
 	virtual ~UManger();

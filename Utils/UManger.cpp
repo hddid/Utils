@@ -629,12 +629,42 @@ int UManger::CartoonFilter(Mat& img)
 	
 	img = result.clone();
 
-	Mat eq;
-	equalizeHist(img, eq);
-	img = eq.clone();
 
 	return RET_ERROR_OK;
+}
 
+int UManger::Nostalgic(Mat& img)
+{
+	Mat src = Mat::zeros(img.size(),img.type());
+	imshow("src", src);
+
+	for (int i = 0;i<img.rows;i++)
+	{
+		for (int j = 0; j < img.cols; j++)
+		{
+			src.at<Vec3b>(i, j)[0] = static_cast<int>((img.at<Vec3b>(i, j)[0] * 272 + img.at<Vec3b>(i, j)[1] * 534 + img.at<Vec3b>(i, j)[1] * 131)/1000);
+			src.at<Vec3b>(i, j)[1] = static_cast<int>((img.at<Vec3b>(i, j)[0] * 349 + img.at<Vec3b>(i, j)[1] * 686 + img.at<Vec3b>(i, j)[1] * 168)/1000);
+			src.at<Vec3b>(i, j)[2] = static_cast<int>((img.at<Vec3b>(i, j)[0] * 393 + img.at<Vec3b>(i, j)[1] * 769 + img.at<Vec3b>(i, j)[1] * 189)/1000);
+
+			if (src.at<Vec3b>(i, j)[0] < 0)
+				src.at<Vec3b>(i, j)[0] = 0;
+			if (src.at<Vec3b>(i, j)[0] >= 255)
+				src.at<Vec3b>(i, j)[0] = 255;
+
+			if (src.at<Vec3b>(i, j)[1] < 0)
+				src.at<Vec3b>(i, j)[1] = 0;
+			if (src.at<Vec3b>(i, j)[1] >= 255)
+				src.at<Vec3b>(i, j)[1] = 255;
+
+			if (src.at<Vec3b>(i, j)[2] < 0)
+				src.at<Vec3b>(i, j)[2] = 0;
+			if (src.at<Vec3b>(i, j)[2] >= 255)
+				src.at<Vec3b>(i, j)[2] = 255;
+
+		}
+	}
 	
-	
+	img = src.clone();
+	return RET_ERROR_OK;
+
 }

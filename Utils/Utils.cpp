@@ -108,3 +108,8 @@ UTILS_IMPL int CartoonFilter(Mat& img)
 {
 	return UManger::Instance()->CartoonFilter(img);
 }
+
+UTILS_IMPL int Nostalgic(Mat& img)
+{
+	return UManger::Instance()->Nostalgic(img);
+}
