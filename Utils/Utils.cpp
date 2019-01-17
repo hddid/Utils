@@ -103,3 +103,8 @@ UTILS_IMPL int AddGrasses(Mat& img)
 {
 	return UManger::Instance()->AddGrasses(img);
 }
+
+UTILS_IMPL int CartoonFilter(Mat& img)
+{
+	return UManger::Instance()->CartoonFilter(img);
+}

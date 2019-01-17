@@ -593,3 +593,48 @@ int UManger::AddGrasses(Mat& img)
 	return 0;
 
 }
+
+int UManger::CartoonFilter(Mat& img)
+{
+	Mat dst;
+	
+	medianBlur(img, dst, 7);
+	Mat imgCanny;
+	Canny(dst, imgCanny, 50, 150);
+
+	Mat kernel = getStructuringElement(MORPH_RECT, Size(2, 2));
+	dilate(imgCanny, imgCanny, kernel);
+	imgCanny = imgCanny / 255;
+	imgCanny = 1 - imgCanny;
+
+	Mat imgf;
+	imgCanny.convertTo(imgf, CV_32FC3);
+	blur(imgf, imgf, Size(5, 5));
+	//imshow("imgf", imgf);
+	Mat bilater;
+	bilateralFilter(img, bilater, 9, 150.0, 150.0);
+	//imshow("bilater", bilater);
+
+	Mat result = bilater / 25;
+	result = result * 25;
+	Mat img3c;
+	Mat channels[] = { imgf,imgf,imgf };
+	merge(channels, 3, img3c);
+	Mat resultf;
+	result.convertTo(resultf, CV_32FC3);
+
+	multiply(resultf, img3c, resultf);
+
+	resultf.convertTo(result, CV_8UC3);
+	
+	img = result.clone();
+
+	Mat eq;
+	equalizeHist(img, eq);
+	img = eq.clone();
+
+	return RET_ERROR_OK;
+
+	
+	
+}

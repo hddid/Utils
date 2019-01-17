@@ -195,7 +195,7 @@ public:
 	int HSVSkin(Mat& src_img, Mat& dst_img);
 
 //*****************************************************************
-	//动态添加饰品
+	//相机功能
 	//************************************
 	// Method:    AddOrnament
 	// FullName:  UManger::AddOrnament
@@ -209,6 +209,8 @@ public:
 	int AddHat(Mat& img);
 
 	int AddGrasses(Mat& img);
+
+	int CartoonFilter(Mat& img);
 protected:
 	UManger();
 	virtual ~UManger();

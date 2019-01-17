@@ -143,16 +143,35 @@ using namespace cv;
 //	}
 //	return 0;
 //}
-
-
-
 int main()
 {
-	Mat src = imread("5.jpg");
-	if (RET_ERROR_OK == AddHat(src))
+	Mat img = imread("1.jpg");
+	if (RET_ERROR_OK == CartoonFilter(img))
 	{
-		cout << "success" << endl;
-
+		imshow("img",img);
+		waitKey(0);
 	}
 	return 0;
 }
+
+//int main()
+//{
+//	VideoCapture cap(0);
+//	while (1)
+//	{
+//		Mat frame;
+//		cap >> frame;
+//
+//		if (RET_ERROR_OK == AddCartoon(frame))
+//		{
+//			imshow("img", frame);
+//		}
+//		char c = waitKey(30);
+//		if (c == 27)
+//		{
+//			break;
+//		}
+//	}
+//	
+//	return 0;
+//}

@@ -55,8 +55,10 @@ UTILS_API(int) YCrCbSkin(Mat& src_img, Mat& dst_img);
 UTILS_API(int) HSVSkin(Mat& src_img, Mat& dst_img);
 
 /////////////////////////////////////////////////////////
-
+//相机功能
 //动态添加饰品
 UTILS_API(int) AddHat(Mat& img);
 UTILS_API(int) AddGrasses(Mat& img);
+//添加卡通效果
+UTILS_API(int) CartoonFilter(Mat& img);
 #endif//ZHY_UTILS_UTILS_H
