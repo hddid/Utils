@@ -636,31 +636,15 @@ int UManger::CartoonFilter(Mat& img)
 int UManger::Nostalgic(Mat& img)
 {
 	Mat src = Mat::zeros(img.size(),img.type());
-	imshow("src", src);
+	imshow("src", src); 
 
 	for (int i = 0;i<img.rows;i++)
 	{
 		for (int j = 0; j < img.cols; j++)
 		{
-			src.at<Vec3b>(i, j)[0] = static_cast<int>((img.at<Vec3b>(i, j)[0] * 272 + img.at<Vec3b>(i, j)[1] * 534 + img.at<Vec3b>(i, j)[1] * 131)/1000);
-			src.at<Vec3b>(i, j)[1] = static_cast<int>((img.at<Vec3b>(i, j)[0] * 349 + img.at<Vec3b>(i, j)[1] * 686 + img.at<Vec3b>(i, j)[1] * 168)/1000);
-			src.at<Vec3b>(i, j)[2] = static_cast<int>((img.at<Vec3b>(i, j)[0] * 393 + img.at<Vec3b>(i, j)[1] * 769 + img.at<Vec3b>(i, j)[1] * 189)/1000);
-
-			if (src.at<Vec3b>(i, j)[0] < 0)
-				src.at<Vec3b>(i, j)[0] = 0;
-			if (src.at<Vec3b>(i, j)[0] >= 255)
-				src.at<Vec3b>(i, j)[0] = 255;
-
-			if (src.at<Vec3b>(i, j)[1] < 0)
-				src.at<Vec3b>(i, j)[1] = 0;
-			if (src.at<Vec3b>(i, j)[1] >= 255)
-				src.at<Vec3b>(i, j)[1] = 255;
-
-			if (src.at<Vec3b>(i, j)[2] < 0)
-				src.at<Vec3b>(i, j)[2] = 0;
-			if (src.at<Vec3b>(i, j)[2] >= 255)
-				src.at<Vec3b>(i, j)[2] = 255;
-
+			src.at<Vec3b>(i, j)[0] = max(0,(min(255,(static_cast<int>((img.at<Vec3b>(i, j)[2] * 131 + img.at<Vec3b>(i, j)[1] * 534 + img.at<Vec3b>(i, j)[0] * 272)/1000)))));
+			src.at<Vec3b>(i, j)[1] = max(0,(min(255,(static_cast<int>((img.at<Vec3b>(i, j)[2] * 168 + img.at<Vec3b>(i, j)[1] * 686 + img.at<Vec3b>(i, j)[0] * 349)/1000)))));
+			src.at<Vec3b>(i, j)[2] = max(0,(min(255,(static_cast<int>((img.at<Vec3b>(i, j)[2] * 189 + img.at<Vec3b>(i, j)[1] * 769 + img.at<Vec3b>(i, j)[0] * 393)/1000)))));		
 		}
 	}
 	
@@ -668,3 +652,23 @@ int UManger::Nostalgic(Mat& img)
 	return RET_ERROR_OK;
 
 }
+
+//int UManger::Nostalgic(Mat& img)
+//{
+//	Mat src = Mat::zeros(img.size(),img.type());
+//	for (int i = 0; i < img.rows; i++)
+//	{
+//		uchar *p_img = img.ptr<uchar>(i);
+//		uchar *p_src = src.ptr<uchar>(i);
+//		for (int j = 0; j < img.cols; j++)
+//		{
+//			
+//			p_src[j * 3] = max(0,(min((static_cast<int>(p_img[j * 3] * 0.131 + p_img[j * 3 + 1] * 0.534 + p_img[j * 3 + 2] * 0.272)),255)));
+//			p_src[j * 3 + 1] =max(0, (min((static_cast<int>(p_img[j * 3] * 0.168 + p_img[j * 3 + 1] * 0.686 + p_img[j * 3 + 2] * 0.349)),255)));
+//			p_src[j * 3 + 2] =max(0, (min((static_cast<int>(p_img[j * 3] * 0.189 + p_img[j * 3 + 1] * 0.769 + p_img[j * 3 + 2] * 0.393)),255)));
+//
+//		}
+//	}
+//	img = src.clone();
+//	return RET_ERROR_OK;
+//}
