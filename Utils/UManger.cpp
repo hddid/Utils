@@ -509,6 +509,8 @@ int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
 	return RET_ERROR_OK;
 }
  
+///////////////////////////////////////
+//camera
 int UManger::AddHat(Mat& img)
 {
 	imshow("mask", img);
@@ -653,7 +655,26 @@ int UManger::Nostalgic(Mat& img)
 
 }
 
+int UManger::WhiteBalance(Mat& img)
+{
+	vector<Mat> imgRGB;
+	split(img, imgRGB);
+	double B = mean(imgRGB[0])[0];
+	double G = mean(imgRGB[1])[0];
+	double R = mean(imgRGB[2])[0];
 
+	double KB = (R + G + B) / (3 * B);
+	double KG = (R + G + B) / (3 * G);
+	double KR = (R + G + B) / (3 * R);
+
+	imgRGB[0] = imgRGB[0] * KB;
+	imgRGB[1] = imgRGB[1] * KG;
+	imgRGB[2] = imgRGB[2] * KR;
+
+	merge(imgRGB, img);
+	return RET_ERROR_OK;
+
+}
 //int UManger::Nostalgic(Mat& img)
 //{
 //	Mat src = Mat::zeros(img.size(), img.type());
@@ -735,6 +756,9 @@ int UManger::AddRandom(Mat& img)
 }
 #endif
 
+
+/////////////////////////////////////////
+//noise
 int UManger::AddGaussianNoise(Mat& img)
 {
 	Mat noise = Mat::zeros(img.size(), img.type());
@@ -767,3 +791,4 @@ int UManger::AddSaltPepperNoise(Mat& img)
 	img = img.clone();
 	return RET_ERROR_OK;
 }
+

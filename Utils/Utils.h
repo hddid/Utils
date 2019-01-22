@@ -67,6 +67,8 @@ UTILS_API(int) Nostalgic(Mat& img);
 //≤‚ ‘
 //UTILS_API(int) AddRandom(Mat& img);
 
+UTILS_API(int) WhiteBalance(Mat& img);
+
 ////////////////////////////////////////
 //‘Î…˘
 UTILS_API(int) AddGaussianNoise(Mat& img);

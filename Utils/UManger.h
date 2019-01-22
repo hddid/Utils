@@ -259,6 +259,19 @@ public:
 	//************************************
 	//int AddRandom(Mat& img);
 
+	//°×Æ½ºâ
+	//************************************
+	// Method:    WhiteBalance
+	// FullName:  UManger::WhiteBalance
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/22 21:40
+	//************************************
+	int WhiteBalance(Mat& img);
+
 
 ///////////////////////////////////////////////
 //add gaussian noise
