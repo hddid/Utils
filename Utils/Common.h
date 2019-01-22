@@ -58,6 +58,11 @@
 #define OST_MAX(a, b)				( (a) > (b) ? (a) : (b) )
 #define OST_SWAP(a, b, t)			( (t) = (a); (a) = (b); (b) = (t); )
 
+//[x,y]
+#define HY_RANDOM(x,y)              ( rand() % (y - x +1) + (x))
+
+#define HY_ABS(a)					( (a) < 0   ? (-(a)) : (a) )
+
 
 #define OST_SAFE_DELETE(x)			{ if(x) delete x; x = 0; }
 #define OST_SAFE_DELETE_ARRAY(x)	{ if(x) delete[] x; x = 0; }

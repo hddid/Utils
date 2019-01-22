@@ -113,3 +113,18 @@ UTILS_IMPL int Nostalgic(Mat& img)
 {
 	return UManger::Instance()->Nostalgic(img);
 }
+
+//UTILS_IMPL int AddRandom(Mat& img)
+//{
+//	return UManger::Instance()->AddRandom(img);
+//}
+
+UTILS_IMPL int AddGaussianNoise(Mat& img)
+{
+	return UManger::Instance()->AddGaussianNoise(img);
+}
+
+UTILS_IMPL int AddSaltPepperNoise(Mat& img)
+{
+	return UManger::Instance()->AddSaltPepperNoise(img);
+}

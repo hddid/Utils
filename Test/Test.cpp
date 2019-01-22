@@ -124,7 +124,7 @@ using namespace cv;
 //	waitKey(0);
 //	return 0;
 //}
-//
+
 //int main()
 //{
 //	//Mat img = imread("3.jpg");
@@ -143,16 +143,18 @@ using namespace cv;
 //	}
 //	return 0;
 //}
-//int main()
-//{
-//	Mat img = imread("1.jpg");
-//	if (RET_ERROR_OK == CartoonFilter(img))
-//	{
-//		imshow("img",img);
-//		waitKey(0);
-//	}
-//	return 0;
-//}
+
+
+int main()
+{
+	Mat img = imread("1.jpg");
+	if (RET_ERROR_OK == AddSaltPepperNoise(img))
+	{
+		imshow("img", img);
+		waitKey(0);
+	}
+	return 0;
+}
 
 //int main()
 //{
@@ -175,21 +177,40 @@ using namespace cv;
 //	return 0;
 //}
 
-int main()
-{
-	//Mat img = imread("1.jpg");
-	VideoCapture cap(0);
-	while (1)
-	{
-		Mat img;
-		cap >> img;
-		if (RET_ERROR_OK == Nostalgic(img))
-		{
-			imshow("dst", img);
-		}
-		char c = waitKey(30);
-		if (c == waitKey(27))
-			break;
-	}
-	return 0;
-}
+//int main()
+//{
+//	Mat img = imread("1.jpg");
+//	VideoCapture cap(0);
+//	while (1)
+//	{
+//		Mat img;
+//		cap >> img;
+//		if (RET_ERROR_OK == Nostalgic(img))
+//		{
+//			imshow("dst", img);
+//		}
+//		char c = waitKey(30);
+//		if (c == waitKey(27))
+//			break;
+//	}
+//	return 0;
+//}
+
+//int main()
+//{
+//	//Mat img = imread("1.jpg");
+//	VideoCapture cap(0);
+//	while (1)
+//	{
+//		Mat img;
+//		cap >> img;
+//		if (RET_ERROR_OK == AddRandom(img))
+//		{
+//			imshow("dst", img);
+//		}
+//		char c = waitKey(30);
+//		if (c == waitKey(27))
+//			break;
+//	}
+//	return 0;
+//}

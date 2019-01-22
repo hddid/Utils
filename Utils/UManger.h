@@ -24,6 +24,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 
+
 #include "Singleton.h"
 
 
@@ -208,11 +209,63 @@ public:
 	//************************************
 	int AddHat(Mat& img);
 
+	//************************************
+	// Method:    AddGrasses
+	// FullName:  UManger::AddGrasses
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/18 20:22
+	//************************************
 	int AddGrasses(Mat& img);
 
+	//¿¨Í¨ÂË¾µ
+	//************************************
+	// Method:    CartoonFilter
+	// FullName:  UManger::CartoonFilter
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/18 20:22
+	//************************************
 	int CartoonFilter(Mat& img);
 
+	//»³¾ÉÂË¾µ
+	//************************************
+	// Method:    Nostalgic
+	// FullName:  UManger::Nostalgic
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/18 20:22
+	//************************************
 	int Nostalgic(Mat& img);
+
+	//************************************
+	// Method:    AddRandom
+	// FullName:  UManger::AddRandom
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: Mat & img
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/18 20:22
+	//************************************
+	//int AddRandom(Mat& img);
+
+
+///////////////////////////////////////////////
+//add gaussian noise
+	int AddGaussianNoise(Mat& img);
+//add salt_noise
+	int AddSaltPepperNoise(Mat& img);
+
 protected:
 	UManger();
 	virtual ~UManger();

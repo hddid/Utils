@@ -13,8 +13,6 @@
 #include "UManger.h"
 #include "Common.h"
 
-
-
 UManger::UManger()
 {
 } 
@@ -514,6 +512,8 @@ int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
 int UManger::AddHat(Mat& img)
 {
 	imshow("mask", img);
+	
+
 	CascadeClassifier faceDetector;
 	faceDetector.load("D://workspace//Utils//face_feature//haarcascade_frontalface_alt_tree.xml");
 	Mat frame;
@@ -636,7 +636,7 @@ int UManger::CartoonFilter(Mat& img)
 int UManger::Nostalgic(Mat& img)
 {
 	Mat src = Mat::zeros(img.size(),img.type());
-	imshow("src", src); 
+	//imshow("src", src); 
 
 	for (int i = 0;i<img.rows;i++)
 	{
@@ -653,22 +653,117 @@ int UManger::Nostalgic(Mat& img)
 
 }
 
+
 //int UManger::Nostalgic(Mat& img)
 //{
-//	Mat src = Mat::zeros(img.size(),img.type());
+//	Mat src = Mat::zeros(img.size(), img.type());
 //	for (int i = 0; i < img.rows; i++)
 //	{
 //		uchar *p_img = img.ptr<uchar>(i);
 //		uchar *p_src = src.ptr<uchar>(i);
 //		for (int j = 0; j < img.cols; j++)
 //		{
-//			
-//			p_src[j * 3] = max(0,(min((static_cast<int>(p_img[j * 3] * 0.131 + p_img[j * 3 + 1] * 0.534 + p_img[j * 3 + 2] * 0.272)),255)));
-//			p_src[j * 3 + 1] =max(0, (min((static_cast<int>(p_img[j * 3] * 0.168 + p_img[j * 3 + 1] * 0.686 + p_img[j * 3 + 2] * 0.349)),255)));
-//			p_src[j * 3 + 2] =max(0, (min((static_cast<int>(p_img[j * 3] * 0.189 + p_img[j * 3 + 1] * 0.769 + p_img[j * 3 + 2] * 0.393)),255)));
+//
+//			p_src[j * 3] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.131 + p_img[j * 3 + 1] * 0.534 + p_img[j * 3 + 2] * 0.272)), 255)));
+//			p_src[j * 3 + 1] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.168 + p_img[j * 3 + 1] * 0.686 + p_img[j * 3 + 2] * 0.349)), 255)));
+//			p_src[j * 3 + 2] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.189 + p_img[j * 3 + 1] * 0.769 + p_img[j * 3 + 2] * 0.393)), 255)));
 //
 //		}
 //	}
 //	img = src.clone();
 //	return RET_ERROR_OK;
 //}
+
+#if 0
+int UManger::AddRandom(Mat& img)
+{
+	Mat src = Mat::zeros(img.size(), img.type());
+	for (int i = 0; i < img.rows; i++)
+	{
+		
+		uchar *p_img = img.ptr<uchar>(i);
+		uchar *p_src = src.ptr<uchar>(i);
+		for (int j = 0; j < img.cols; j++)
+		{
+			RNG rng;
+			int b0, b1, b2, g0, g1, g2, r0, r1, r2;
+#if 0	
+			b0 = rng.uniform(0, 255);
+			b1 = rng.uniform(0, 255);
+			b2 = rng.uniform(0, 255);
+
+			g0 = rng.uniform(0, 255);
+			g1 = rng.uniform(0, 255);
+			g2 = rng.uniform(0, 255);
+
+			r0 = rng.uniform(0, 255);
+			r1 = rng.uniform(0, 255);
+			r2 = rng.uniform(0, 255);
+#endif
+
+			b0 = HY_RANDOM(1,2);
+			b1 = HY_RANDOM(1,2);
+			b2 = HY_RANDOM(1,2);
+
+			g0 = HY_RANDOM(110,255);
+			g1 = HY_RANDOM(110,255);
+			g2 = HY_RANDOM(110,255);
+
+			r0 = HY_RANDOM(110,255);
+			r1 = HY_RANDOM(110,255);
+			r2 = HY_RANDOM(110,255);
+
+
+			cout << "b0 " << b0 << endl;
+			cout << "b1 " << b1 << endl;
+			cout << "b2 " << b2 << endl;
+			cout << "g0 " << g0 << endl;
+			cout << "g1 " << g1 << endl;
+			cout << "g2 " << g2 << endl;
+			cout << "r0 " << r0 << endl;
+			cout << "r1 " << r1 << endl; 
+			cout << "r2 " << r2 << endl;
+
+			p_src[j * 3]     = max(0, (min((static_cast<int>(p_img[j * 3] * b0 + p_img[j * 3 + 1] * g0 + p_img[j * 3 + 2] * r0)/1000), 255)));
+			p_src[j * 3 + 1] = max(0, (min((static_cast<int>(p_img[j * 3] * b1 + p_img[j * 3 + 1] * g1 + p_img[j * 3 + 2] * r1)/1000), 255)));
+			p_src[j * 3 + 2] = max(0, (min((static_cast<int>(p_img[j * 3] * b2 + p_img[j * 3 + 1] * g2 + p_img[j * 3 + 2] * r2)/1000), 255)));
+		
+		}
+	}
+	img = src.clone();
+	return RET_ERROR_OK;
+}
+#endif
+
+int UManger::AddGaussianNoise(Mat& img)
+{
+	Mat noise = Mat::zeros(img.size(), img.type());
+	randn(noise, (15, 15, 15), (30, 30, 30));
+	Mat dst;
+	add(img, noise, dst);
+	img = dst.clone();
+	return RET_ERROR_OK;
+}
+
+int UManger::AddSaltPepperNoise(Mat& img)
+{
+	int h = img.rows;
+	int w = img.cols;
+	
+	for (int m = 0; m < 10000; m++)
+	{
+		int i = HY_RANDOM(1, w - 1);
+		int j = HY_RANDOM(1, h - 1);
+	
+		if (i % 2 == 1)
+		{
+			img.at<Vec3b>(j, i) = Vec3b(255, 255, 255);
+		}
+		else
+		{
+			img.at<Vec3b>(j, i) = Vec3b(0, 0, 0);
+		}
+	}
+	img = img.clone();
+	return RET_ERROR_OK;
+}
