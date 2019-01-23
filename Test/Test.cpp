@@ -191,7 +191,6 @@ int main()
 			Mat test = img.clone();
 			WhiteBalance(test);
 			imshow("test", test);
-
 		}
 		char c = waitKey(30);
 		if (c == waitKey(27))

@@ -27,6 +27,12 @@
     <ClCompile Include="AKCalibr.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\Utils\source.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Utils\webcam_face_pose_ex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AKCalibr.h">
