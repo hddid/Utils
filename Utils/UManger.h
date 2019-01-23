@@ -274,10 +274,17 @@ public:
 
 
 ///////////////////////////////////////////////
+//噪音相关
 //add gaussian noise
 	int AddGaussianNoise(Mat& img);
 //add salt_noise
 	int AddSaltPepperNoise(Mat& img);
+
+
+/////////////////////////////////////////////
+//face相关
+
+
 
 protected:
 	UManger();

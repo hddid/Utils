@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\Calibr">
+      <UniqueIdentifier>{e26e7ea5-55fc-4427-af8a-be51b20218bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\dlib">
+      <UniqueIdentifier>{1002bb38-3d4f-421c-bcbb-8e43de7b5918}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -22,16 +28,16 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Calibr</Filter>
     </ClCompile>
     <ClCompile Include="AKCalibr.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\Calibr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Utils\source.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="facepoint.cpp">
+      <Filter>源文件\dlib</Filter>
     </ClCompile>
-    <ClCompile Include="..\Utils\webcam_face_pose_ex.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="source.cpp">
+      <Filter>源文件\dlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

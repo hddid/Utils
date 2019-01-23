@@ -515,9 +515,8 @@ int UManger::AddHat(Mat& img)
 {
 	imshow("mask", img);
 	
-
 	CascadeClassifier faceDetector;
-	faceDetector.load("D://workspace//Utils//face_feature//haarcascade_frontalface_alt_tree.xml");
+	faceDetector.load("D://workspace//Utils//haarcascade//haarcascade_frontalface_alt_tree.xml");
 	Mat frame;
 	Mat gray;
 	VideoCapture cap(0);
@@ -569,7 +568,7 @@ int UManger::AddGrasses(Mat& img)
 	//imshow("mask", img);
 	bool use_detect = false;
 	CascadeClassifier eyesDetect;
-	eyesDetect.load("D://workspace//Utils//face_feature//haarcascade_eye.xml");
+	eyesDetect.load("D://workspace//Utils//haarcascade//haarcascade_eye.xml");
 	Mat frame, gray;
 	VideoCapture cap(0);
 	while (1)
@@ -649,7 +648,6 @@ int UManger::Nostalgic(Mat& img)
 			src.at<Vec3b>(i, j)[2] = max(0,(min(255,(static_cast<int>((img.at<Vec3b>(i, j)[2] * 189 + img.at<Vec3b>(i, j)[1] * 769 + img.at<Vec3b>(i, j)[0] * 393)/1000)))));		
 		}
 	}
-	
 	img = src.clone();
 	return RET_ERROR_OK;
 

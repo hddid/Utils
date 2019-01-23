@@ -27,7 +27,7 @@ UTILS_API(int) PicToVideo(string Pic_Path, string Video_Path,int height,int widt
 //两张图片相加，分别输入两张图片，输出一张合成的结果
 UTILS_API(int) PicAddPic(Mat& img1, Mat& img2, Mat& result);
 
-//两张图片相加，分别输入两张图片，输出一张合成的结果，img1是被减数
+//两张图片相减，分别输入两张图片，输出一张合成的结果，img1是被减数
 UTILS_API(int) PicSubPic(Mat& img1, Mat& img2, Mat& result);
 
 //两张图片相加，分别输入两张图片，输出一张合成的结果
@@ -54,7 +54,7 @@ UTILS_API(int) YCrCbSkin(Mat& src_img, Mat& dst_img);
 //第五种：基于HSV颜色空间H范围筛选法
 UTILS_API(int) HSVSkin(Mat& src_img, Mat& dst_img);
 
-/////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //相机功能
 //添加帽子
 UTILS_API(int) AddHat(Mat& img);
@@ -69,9 +69,14 @@ UTILS_API(int) Nostalgic(Mat& img);
 
 UTILS_API(int) WhiteBalance(Mat& img);
 
-////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 //噪声
 UTILS_API(int) AddGaussianNoise(Mat& img);
 UTILS_API(int) AddSaltPepperNoise(Mat& img);
+
+
+//////////////////////////////////////////////////////////////////////////
+//face相关
+
 
 #endif//ZHY_UTILS_UTILS_H

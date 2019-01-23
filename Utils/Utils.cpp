@@ -133,3 +133,4 @@ UTILS_IMPL int WhiteBalance(Mat& img)
 {
 	return UManger::Instance()->WhiteBalance(img);
 }
+
