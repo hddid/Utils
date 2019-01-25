@@ -19,6 +19,9 @@
     <Filter Include="源文件\dlib">
       <UniqueIdentifier>{1002bb38-3d4f-421c-bcbb-8e43de7b5918}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\cvui">
+      <UniqueIdentifier>{c27308ef-7c27-4957-b331-aef240542a5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="source.cpp">
       <Filter>源文件\dlib</Filter>
+    </ClCompile>
+    <ClCompile Include="ui.cpp">
+      <Filter>源文件\cvui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
