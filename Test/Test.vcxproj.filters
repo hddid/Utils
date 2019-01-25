@@ -50,5 +50,8 @@
     <ClInclude Include="AKCalibr.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>源文件\cvui</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
