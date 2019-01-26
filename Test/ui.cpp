@@ -12,7 +12,7 @@ int main()
 
 int img(bool &use_img)
 {
-	use_camera = false;
+	
 	const int num = 500;
 	char img_name[50];
 	cv::namedWindow(WINDOW_NAME);
@@ -56,11 +56,12 @@ int img(bool &use_img)
 		cvui::update();
 		cv::imshow(WINDOW_NAME, BaseImg);
 		cv::waitKey(10);
-		while (use_camera)
+		while (use_camera && !use_img)
 		{
-			use_img = false;
-			use_camera = true;
+		
+			img.release();
 			camera(use_camera);
+			
 		}
 	}
 	return 0;
@@ -70,9 +71,8 @@ int camera(bool &use_camera)
 {
 	while (use_camera)
 	{
-		use_img = false;
-		VideoCapture cap(0);
-		
+	
+		VideoCapture cap(0);	
 		bool open_camera = true;
 		while (open_camera)
 		{
@@ -82,20 +82,31 @@ int camera(bool &use_camera)
 
 			Mat frame;
 			cap >> frame;
+			
 			resize(frame, frame, Size(640, 480));
 
+			bool use_cartoon = false;
+			cvui::checkbox(BaseImg, 200, 25, "use_cartoon", &use_cartoon);
+			if (use_cartoon == true)
+			{
+				CartoonFilter(frame);
+			}
+			
+			
 			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			addWeighted(ROI, 0, frame, 1, 0, ROI);
+			
 			cv::imshow(WINDOW_NAME, BaseImg);
+			
 			cv::waitKey(30);
-
-			while (!use_camera)
+			
+			if (!use_camera && use_img)
 			{
 				open_camera = false;
-				use_img = true;	
 				//use_camera为false的时候关闭camera
 				cap.release();				
-				img(use_img);			
+				img(use_img);		
+				
 			}		
 		}
 	}
