@@ -6,26 +6,26 @@ using namespace std;
 int main()
 {
 	img(use_img);
-	camera(use_camera);
+	//camera(use_camera);
 	return 0;
 }
 
 int img(bool &use_img)
 {
-	
 	const int num = 500;
 	char img_name[50];
 	cv::namedWindow(WINDOW_NAME);
 	cvui::init(WINDOW_NAME);
-
+	
 	int count = 1;
 
 	while (use_img)
 	{
 		cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
 		cvui::checkbox(BaseImg, 0, 25, "use_img", &use_img);
+		//cout << "img_while_use_img" << use_img << endl;
 		cvui::checkbox(BaseImg, 100, 25, "use_camera", &use_camera);
-
+		//cout << "img_while_use_camera" << endl;
 		sprintf(img_name, "D:/workspace//Utils//Test/img//%d.jpg", count);
 
 		Mat img = imread(img_name);
@@ -45,7 +45,7 @@ int img(bool &use_img)
 			count--;
 		}
 		cvui::printf(BaseImg, 130, 460, 0.4, 0xff0000, "now is:%d", count);
-
+		
 		if (img.empty())
 		{
 			cerr << "no img in file now" << endl;
@@ -56,12 +56,11 @@ int img(bool &use_img)
 		cvui::update();
 		cv::imshow(WINDOW_NAME, BaseImg);
 		cv::waitKey(10);
-		while (use_camera && !use_img)
+		if (use_camera && !use_img)
 		{
-		
 			img.release();
 			camera(use_camera);
-			
+			break;
 		}
 	}
 	return 0;
@@ -71,15 +70,15 @@ int camera(bool &use_camera)
 {
 	while (use_camera)
 	{
-	
 		VideoCapture cap(0);	
 		bool open_camera = true;
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
 			cvui::checkbox(BaseImg, 0, 25, "use_img", &use_img);
+			//cout << "camera_while_use_img" << use_img << endl;
 			cvui::checkbox(BaseImg, 100, 25, "use_camera", &use_camera);
-
+			//cout << "camera_while_use_camera" << use_camera << endl;
 			Mat frame;
 			cap >> frame;
 			
@@ -87,12 +86,12 @@ int camera(bool &use_camera)
 
 			bool use_cartoon = false;
 			cvui::checkbox(BaseImg, 200, 25, "use_cartoon", &use_cartoon);
+
 			if (use_cartoon == true)
 			{
 				CartoonFilter(frame);
 			}
-			
-			
+			//cout << "camera_while_use_cartoon" << use_cartoon << endl;
 			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			addWeighted(ROI, 0, frame, 1, 0, ROI);
 			
@@ -106,6 +105,7 @@ int camera(bool &use_camera)
 				//use_camera为false的时候关闭camera
 				cap.release();				
 				img(use_img);		
+				cvui::update();
 				
 			}		
 		}
