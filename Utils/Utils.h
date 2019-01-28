@@ -34,7 +34,7 @@ UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
 //增加五种肤色检测方法
 
 //第一种：基于RGB color space
-UTILS_API(int) RGBSkin(Mat& src_img,Mat& dst_img);
+UTILS_API(int) RGBSkin(Mat& img);
 
 //第二种：基于椭圆模型的皮肤检测
 UTILS_API(int) EllipseSkin(Mat& src_img, Mat& dst_img);
@@ -83,9 +83,9 @@ UTILS_API(int) PicToVideo(string PicPath, string VideoPath, int height, int widt
 
 //批量修改文件夹内的图片名，输入图片地址及输出图片地址
 UTILS_API(int) RenamePic(string InPath, string OutPath);
+#if 1
+UTILS_API(int) UI_Img(bool& use_img);
 
-UTILS_API(int) UI_Img(bool &use_img);
-
-UTILS_API(int) UI_Camera(bool &use_camera);
-
+UTILS_API(int) UI_Camera(bool& use_camera);
+#endif
 #endif//ZHY_UTILS_UTILS_H

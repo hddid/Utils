@@ -130,10 +130,10 @@ public:
 	// Date:      2019/01/28 15:24
 	//************************************
 	int RenamePic(string InPath, string OutPath);
-
-	int img(bool& use_img);
-	int camera(bool &use_camera);
-
+	#if 1
+	int UI_Img(bool& use_img);
+	int UI_Camera(bool& use_camera);
+	#endif
 //****************************************************************
 	//两张图片像素相加
 	//************************************

@@ -17,7 +17,8 @@
 #include <opencv2/opencv.hpp>
 
 #include "Utils.h"
-#include "../Test/Ui.h"
+
+#include "Ui.h"
 
 using namespace std;
 using namespace cv;
@@ -197,6 +198,6 @@ using namespace cv;
 
 int main()
 {
-	img(use_img);
+	UI_Img(use_img);
 	return 0;
 }

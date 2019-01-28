@@ -12,7 +12,7 @@
 
 #include "UManger.h"
 #include "Common.h"
-#include "../Test/ui.h"
+#include "Ui.h"
 
 UManger::UManger()
 {
@@ -384,7 +384,7 @@ int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	return RET_ERROR_OK;
 }
 
-int UManger::RGBSkin(Mat& src_img, Mat& dst_img)
+int UManger::RGBSkin(Mat& img)
 {
 	dst_img = Mat::zeros(src_img.size(), src_img.type());
 
@@ -809,8 +809,8 @@ int UManger::RenamePic(string InPath, string OutPath)
 	return RET_ERROR_OK;
 }
 
-
-int UManger::UI_Img(bool &use_img)
+#if 1
+int UManger::UI_Img(bool& use_img)
 {
 	const int num = 500;
 	char img_name[50];
@@ -863,14 +863,14 @@ int UManger::UI_Img(bool &use_img)
 		if (use_camera && !use_img)
 		{
 			img.release();
-			camera(use_camera);
+			UI_Camera(use_camera);
 			break;
 		}
 	}
 	return 0;
 }
 
-int UManger::UI_Camera(bool &use_camera)
+int UManger::UI_Camera(bool& use_camera)
 {
 	use_img = false;
 	while (use_camera)
@@ -909,7 +909,7 @@ int UManger::UI_Camera(bool &use_camera)
 				open_camera = false;
 				//use_camera为false的时候关闭camera
 				cap.release();
-				img(use_img);
+				UI_Img(use_img);
 				cvui::update();
 
 			}
@@ -917,3 +917,4 @@ int UManger::UI_Camera(bool &use_camera)
 	}
 	return 0;
 }
+#endif

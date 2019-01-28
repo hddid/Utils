@@ -69,9 +69,9 @@ UTILS_IMPL int PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	return UManger::Instance()->PicDivPic(img1, img2, result);
 }
 
-UTILS_IMPL int RGBSkin(Mat& src_img,Mat& dst_img)
+UTILS_IMPL int RGBSkin(Mat& img)
 {
-	return UManger::Instance()->RGBSkin(src_img,dst_img);
+	return UManger::Instance()->RGBSkin(img);
 }
 
 UTILS_IMPL int EllipseSkin(Mat& src_img, Mat& dst_img)
@@ -139,7 +139,8 @@ UTILS_IMPL int RenamePic(string InPic, string OutPic)
 	return UManger::Instance()->RenamePic(InPic, OutPic);
 }
 
-UTILS_IMPL int UI_Img(bool &use_img)
+#if 1
+UTILS_IMPL int UI_Img(bool& use_img)
 {
 	return UManger::Instance()->UI_Img(use_img);
 }
@@ -148,3 +149,4 @@ UTILS_IMPL int UI_Camera(bool& use_camera)
 {
 	return UManger::Instance()->UI_Camera(use_camera);
 }
+#endif

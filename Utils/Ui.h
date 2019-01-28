@@ -13,7 +13,7 @@
 bool use_img = true;
 bool use_camera = false;
 
-int img(bool &use_img);
-int camera(bool &use_camera);
+int UI_Img(bool &use_img);
+int UI_Camera(bool &use_camera);
 
 Mat BaseImg = Mat::zeros(Size(960, 480), CV_8UC3);

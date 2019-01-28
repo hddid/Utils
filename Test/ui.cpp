@@ -1,7 +1,9 @@
-#include "ui.h"
+#include "Ui.h"
 
 using namespace cv;
 using namespace std;
+
+Mat BaseImg = Mat::zeros(Size(960, 480), CV_8UC3);
 
 int main()
 {
@@ -14,7 +16,6 @@ int img(bool &use_img)
 {
 	const int num = 500;
 	char img_name[50];
-	cv::namedWindow(WINDOW_NAME);
 	cvui::init(WINDOW_NAME);
 	
 	int count = 1;
@@ -27,6 +28,7 @@ int img(bool &use_img)
 		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 		cvui::printf(BaseImg, 0, 40, "*************************************************");
 		cvui::checkbox(BaseImg, 0, 70, "whitebalance", &whitebalance);
+	
 
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
@@ -49,7 +51,7 @@ int img(bool &use_img)
 			count--;
 		}
 		cvui::printf(BaseImg, 130, 460, 0.4, 0xff0000, "now is:%d", count);
-		
+
 		if (img.empty())
 		{
 			cerr << "no img in file now" << endl;
@@ -59,6 +61,7 @@ int img(bool &use_img)
 
 		cvui::update();
 		cv::imshow(WINDOW_NAME, BaseImg);
+		
 		cv::waitKey(10);
 		if (use_camera && !use_img)
 		{
@@ -67,6 +70,8 @@ int img(bool &use_img)
 			break;
 		}
 	}
+	
+	waitKey(0);
 	return 0;
 }
 
@@ -77,42 +82,50 @@ int camera(bool &use_camera)
 	{
 		VideoCapture cap(0);	
 		bool open_camera = true;
+		bool cartoon = false;
+		cvui::init(WINDOW_NAME);
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
 			cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
 			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
-			cvui::printf(BaseImg, 0, 40, "*************************************************");
+			cvui::printf(BaseImg, 0, 40, "*************************************************");	
 
 			Mat frame;
 			cap >> frame;
 			
 			resize(frame, frame, Size(640, 480));
-
-			bool cartoon = false;
+			
+			/*	while (cvui::button(BaseImg, 30, 100, "cartoon"))
+				{
+					if (cartoon == false)
+						cartoon = true;
+					else
+						cartoon = false;
+					break;
+				}*/
+	
 			cvui::checkbox(BaseImg, 0, 70, "cartoon", &cartoon);
-
 			if (cartoon == true)
-			{
 				CartoonFilter(frame);
-			}
-
+			else 
+				frame = frame.clone();
+		
 			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			addWeighted(ROI, 0, frame, 1, 0, ROI);
+			//cvui::image(BaseImg, 320, 0, frame);
 			
 			cv::imshow(WINDOW_NAME, BaseImg);
-			
-			cv::waitKey(30);
-			
+			cv::waitKey(10);
+
 			if (!use_camera && use_img)
 			{
 				open_camera = false;
 				//use_camera为false的时候关闭camera
 				cap.release();				
 				img(use_img);		
-				cvui::update();
-				
-			}		
+				cvui::update();	
+			}	
 		}
 	}
 	return 0;
