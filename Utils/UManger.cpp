@@ -12,6 +12,7 @@
 
 #include "UManger.h"
 #include "Common.h"
+#include "../Test/ui.h"
 
 UManger::UManger()
 {
@@ -792,18 +793,127 @@ int UManger::AddSaltPepperNoise(Mat& img)
 
 int UManger::RenamePic(string InPath, string OutPath)
 {
-	vector<Mat> images;
+	//定义一个vector存储图片
 	vector<cv::String> filenames;
+	//将InPath的所有文件名存进filenames;
 	glob(InPath, filenames, false);
 
 	size_t count = filenames.size();
 
 	for (size_t i = 0; i < count; i++)
-	{
-		images.push_back(imread(filenames[i]));
+	{	
 		stringstream str;
 		str << i << ".jpg";
 		imwrite(OutPath + str.str(), imread(filenames[i]));
 	}
 	return RET_ERROR_OK;
+}
+
+
+int UManger::UI_Img(bool &use_img)
+{
+	const int num = 500;
+	char img_name[50];
+	cv::namedWindow(WINDOW_NAME);
+	cvui::init(WINDOW_NAME);
+
+	int count = 1;
+	bool whitebalance = false;
+	while (use_img)
+	{
+		//img按键窗口
+		cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
+		cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
+		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
+		cvui::printf(BaseImg, 0, 40, "*************************************************");
+		cvui::checkbox(BaseImg, 0, 70, "whitebalance", &whitebalance);
+
+		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
+
+		Mat img = imread(img_name);
+		if (whitebalance == true)
+			WhiteBalance(img);
+		resize(img, img, Size(640, 480));
+
+		Mat ROI = BaseImg(Rect(320, 0, 640, 480));
+
+		addWeighted(ROI, 0, img, 1, 0, ROI);
+		//下一张图片
+		if (cvui::button(BaseImg, 255, 450, 60, 30, "latter"))
+		{
+			count++;
+		}
+		//上一张图片
+		if (cvui::button(BaseImg, 5, 450, 60, 30, "previous"))
+		{
+			count--;
+		}
+		cvui::printf(BaseImg, 130, 460, 0.4, 0xff0000, "now is:%d", count);
+
+		if (img.empty())
+		{
+			cerr << "no img in file now" << endl;
+			destroyAllWindows();
+			break;
+		}
+
+		cvui::update();
+		cv::imshow(WINDOW_NAME, BaseImg);
+		cv::waitKey(10);
+		if (use_camera && !use_img)
+		{
+			img.release();
+			camera(use_camera);
+			break;
+		}
+	}
+	return 0;
+}
+
+int UManger::UI_Camera(bool &use_camera)
+{
+	use_img = false;
+	while (use_camera)
+	{
+		VideoCapture cap(0);
+		bool open_camera = true;
+		while (open_camera)
+		{
+			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
+			cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
+			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
+			cvui::printf(BaseImg, 0, 40, "*************************************************");
+
+			Mat frame;
+			cap >> frame;
+
+			resize(frame, frame, Size(640, 480));
+
+			bool cartoon = false;
+			cvui::checkbox(BaseImg, 0, 70, "cartoon", &cartoon);
+
+			if (cartoon == true)
+			{
+				CartoonFilter(frame);
+			}
+
+			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
+			addWeighted(ROI, 0, frame, 1, 0, ROI);
+
+			cv::imshow(WINDOW_NAME, BaseImg);
+
+			cv::waitKey(30);
+
+			if (!use_camera && use_img)
+			{
+				open_camera = false;
+				//use_camera为false的时候关闭camera
+				cap.release();
+				img(use_img);
+				cvui::update();
+
+			}
+		}
+	}
+	return 0;
 }

@@ -175,6 +175,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Ui.h" />
     <ClInclude Include="UManger.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="UVersion.h" />

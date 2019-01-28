@@ -17,6 +17,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "Utils.h"
+#include "../Test/Ui.h"
 
 using namespace std;
 using namespace cv;
@@ -196,7 +197,6 @@ using namespace cv;
 
 int main()
 {
-	RenamePic("D://workspace//opencv//Testcode//Testcode//*.jpg", "D://workspace//opencv//Testcode//Testcode//testimg//");
-	
+	img(use_img);
 	return 0;
 }

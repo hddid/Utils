@@ -81,6 +81,9 @@
     <ClInclude Include="share_memory_api.h">
       <Filter>share_memory_api</Filter>
     </ClInclude>
+    <ClInclude Include="Ui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">

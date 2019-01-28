@@ -71,7 +71,10 @@ UTILS_API(int) AddSaltPepperNoise(Mat& img);
 
 //***************************************************************************************
 //face相关
+
+
 //***************************************************************************************
+//工具相关
 //将文件路径中的视频转为图片，需要输入视频地址，图片地址
 UTILS_API(int) VideoToPic(string VideoPath, string PicPath, double totalFremeNumber);
 
@@ -80,5 +83,9 @@ UTILS_API(int) PicToVideo(string PicPath, string VideoPath, int height, int widt
 
 //批量修改文件夹内的图片名，输入图片地址及输出图片地址
 UTILS_API(int) RenamePic(string InPath, string OutPath);
+
+UTILS_API(int) UI_Img(bool &use_img);
+
+UTILS_API(int) UI_Camera(bool &use_camera);
 
 #endif//ZHY_UTILS_UTILS_H

@@ -138,3 +138,13 @@ UTILS_IMPL int RenamePic(string InPic, string OutPic)
 {
 	return UManger::Instance()->RenamePic(InPic, OutPic);
 }
+
+UTILS_IMPL int UI_Img(bool &use_img)
+{
+	return UManger::Instance()->UI_Img(use_img);
+}
+
+UTILS_IMPL int UI_Camera(bool& use_camera)
+{
+	return UManger::Instance()->UI_Camera(use_camera);
+}

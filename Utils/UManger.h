@@ -118,7 +118,21 @@ public:
 	//************************************
 	int PicToVideo(string PicPath, string VideoPath,int height,int width);
 
+	//************************************
+	// Method:    RenamePic
+	// FullName:  UManger::RenamePic
+	// Access:    public 
+	// Returns:   int
+	// Qualifier:
+	// Parameter: string InPath
+	// Parameter: string OutPath
+	// Author:    Haoyu_Zeng
+	// Date:      2019/01/28 15:24
+	//************************************
 	int RenamePic(string InPath, string OutPath);
+
+	int img(bool& use_img);
+	int camera(bool &use_camera);
 
 //****************************************************************
 	//两张图片像素相加

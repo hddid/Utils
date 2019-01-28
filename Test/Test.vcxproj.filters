@@ -42,7 +42,7 @@
     <ClCompile Include="source.cpp">
       <Filter>源文件\dlib</Filter>
     </ClCompile>
-    <ClCompile Include="ui.cpp">
+    <ClCompile Include="Ui.cpp">
       <Filter>源文件\cvui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClInclude Include="AKCalibr.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ui.h">
+    <ClInclude Include="Ui.h">
       <Filter>源文件\cvui</Filter>
     </ClInclude>
   </ItemGroup>
