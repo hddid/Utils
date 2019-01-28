@@ -21,6 +21,7 @@
 using namespace std;
 using namespace cv;
 
+#if 0
 //int main()
 //{
 //	cv::Mat src, grey;
@@ -178,15 +179,17 @@ using namespace cv;
 //}
 
 
+//
+//int main()
+//{
+//	Mat img = imread("11.jpg");
+//	
+//	if (RET_ERROR_OK == WhiteBalance(img))
+//	{
+//		imshow("dst", img);
+//	}
+//	waitKey(0);
+//	return 0;
+//}
 
-int main()
-{
-	Mat img = imread("11.jpg");
-	
-	if (RET_ERROR_OK == WhiteBalance(img))
-	{
-		imshow("dst", img);
-	}
-	waitKey(0);
-	return 0;
-}
+#endif

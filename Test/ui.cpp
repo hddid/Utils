@@ -18,28 +18,32 @@ int img(bool &use_img)
 	cvui::init(WINDOW_NAME);
 	
 	int count = 1;
-
+	bool whitebalance = false;
 	while (use_img)
 	{
+		//img按键窗口
 		cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
-		cvui::checkbox(BaseImg, 0, 25, "use_img", &use_img);
-		//cout << "img_while_use_img" << use_img << endl;
-		cvui::checkbox(BaseImg, 100, 25, "use_camera", &use_camera);
-		//cout << "img_while_use_camera" << endl;
-		sprintf(img_name, "D:/workspace//Utils//Test/img//%d.jpg", count);
+		cvui::checkbox(BaseImg, 50, 25, "img", &use_img);	
+		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
+		cvui::printf(BaseImg, 0, 40, "*************************************************");
+		cvui::checkbox(BaseImg, 0, 70, "whitebalance", &whitebalance);
+
+		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
 		Mat img = imread(img_name);
+		if (whitebalance == true)
+			WhiteBalance(img);
 		resize(img, img, Size(640, 480));
 
 		Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 
 		addWeighted(ROI, 0, img, 1, 0, ROI);
-
+		//下一张图片
 		if (cvui::button(BaseImg, 255, 450, 60, 30, "latter"))
 		{
 			count++;
 		}
-
+		//上一张图片
 		if (cvui::button(BaseImg, 5, 450, 60, 30, "previous"))
 		{
 			count--;
@@ -68,6 +72,7 @@ int img(bool &use_img)
 
 int camera(bool &use_camera)
 {
+	use_img = false;
 	while (use_camera)
 	{
 		VideoCapture cap(0);	
@@ -75,23 +80,21 @@ int camera(bool &use_camera)
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
-			cvui::checkbox(BaseImg, 0, 25, "use_img", &use_img);
-			//cout << "camera_while_use_img" << use_img << endl;
-			cvui::checkbox(BaseImg, 100, 25, "use_camera", &use_camera);
-			//cout << "camera_while_use_camera" << use_camera << endl;
+			cvui::checkbox(BaseImg, 0, 25, "img", &use_img);
+			cvui::checkbox(BaseImg, 100, 25, "camera", &use_camera);
 			Mat frame;
 			cap >> frame;
 			
 			resize(frame, frame, Size(640, 480));
 
-			bool use_cartoon = false;
-			cvui::checkbox(BaseImg, 200, 25, "use_cartoon", &use_cartoon);
+			bool cartoon = false;
+			cvui::checkbox(BaseImg, 200, 25, "cartoon", &cartoon);
 
-			if (use_cartoon == true)
+			if (cartoon == true)
 			{
 				CartoonFilter(frame);
 			}
-			//cout << "camera_while_use_cartoon" << use_cartoon << endl;
+
 			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			addWeighted(ROI, 0, frame, 1, 0, ROI);
 			
