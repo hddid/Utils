@@ -18,12 +18,6 @@ UTILS_API(int) FastColorReduce(Mat& image,int div);
 //修改图片的亮度和对比度，采用公式g(i,j) = α*f(i,j)+β，需要输入alpha和beta值
 UTILS_API(int) ContrastAndBright(Mat& src_image, Mat& dst_image, const double alpha, const double beta);
 
-//将文件路径中的视频转为图片，需要输入视频地址，图片地址
-UTILS_API(int) VideoToPic(string Video_Path, string Pic_Path, double totalFremeNumber);
-
-//将文件路径中的图片合成视频，需要输入图片地址，视频地址，高和宽，视频地址精确到后缀
-UTILS_API(int) PicToVideo(string Pic_Path, string Video_Path,int height,int width);
-
 //两张图片相加，分别输入两张图片，输出一张合成的结果
 UTILS_API(int) PicAddPic(Mat& img1, Mat& img2, Mat& result);
 
@@ -54,7 +48,7 @@ UTILS_API(int) YCrCbSkin(Mat& src_img, Mat& dst_img);
 //第五种：基于HSV颜色空间H范围筛选法
 UTILS_API(int) HSVSkin(Mat& src_img, Mat& dst_img);
 
-////////////////////////////////////////////////////////////////////////
+//***************************************************************************************
 //相机功能
 //添加帽子
 UTILS_API(int) AddHat(Mat& img);
@@ -69,14 +63,22 @@ UTILS_API(int) Nostalgic(Mat& img);
 
 UTILS_API(int) WhiteBalance(Mat& img);
 
-/////////////////////////////////////////////////////////////////////////
+//***************************************************************************************
 //噪声
 UTILS_API(int) AddGaussianNoise(Mat& img);
 UTILS_API(int) AddSaltPepperNoise(Mat& img);
 
 
-//////////////////////////////////////////////////////////////////////////
+//***************************************************************************************
 //face相关
+//***************************************************************************************
+//将文件路径中的视频转为图片，需要输入视频地址，图片地址
+UTILS_API(int) VideoToPic(string VideoPath, string PicPath, double totalFremeNumber);
 
+//将文件路径中的图片合成视频，需要输入图片地址，视频地址，高和宽，视频地址精确到后缀
+UTILS_API(int) PicToVideo(string PicPath, string VideoPath, int height, int width);
+
+//批量修改文件夹内的图片名，输入图片地址及输出图片地址
+UTILS_API(int) RenamePic(string InPath, string OutPath);
 
 #endif//ZHY_UTILS_UTILS_H

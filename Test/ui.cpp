@@ -80,15 +80,17 @@ int camera(bool &use_camera)
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
-			cvui::checkbox(BaseImg, 0, 25, "img", &use_img);
-			cvui::checkbox(BaseImg, 100, 25, "camera", &use_camera);
+			cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
+			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
+			cvui::printf(BaseImg, 0, 40, "*************************************************");
+
 			Mat frame;
 			cap >> frame;
 			
 			resize(frame, frame, Size(640, 480));
 
 			bool cartoon = false;
-			cvui::checkbox(BaseImg, 200, 25, "cartoon", &cartoon);
+			cvui::checkbox(BaseImg, 0, 70, "cartoon", &cartoon);
 
 			if (cartoon == true)
 			{

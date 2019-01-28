@@ -83,7 +83,8 @@ public:
 	// Date:      2018/09/05 21:04
 	//************************************
 	int ContrastAndBright(Mat& src_image, Mat& dst_image, const double alpha, const double beta);
-
+//***********************************************************************************************************8
+	//工具相关
 //*****************************************************************
 	//将视频裁成一帧一帧的图片
 	//************************************
@@ -98,7 +99,7 @@ public:
 	// Author:    Haoyu_Zeng
 	// Date:      2018/09/19 14:54
 	//************************************
-	int VideoToPic(string Video_Path, string Pic_Path, double totalFrameNumber);
+	int VideoToPic(string VideoPath, string PicPath, double totalFrameNumber);
 
 //*****************************************************************
 	//将文件路径的所有图片合成一个视频
@@ -115,7 +116,9 @@ public:
 	// Author:    Haoyu_Zeng
 	// Date:      2018/09/20 22:52
 	//************************************
-	int PicToVideo(string Pic_Path, string Video_Path,int height,int width);
+	int PicToVideo(string PicPath, string VideoPath,int height,int width);
+
+	int RenamePic(string InPath, string OutPath);
 
 //****************************************************************
 	//两张图片像素相加

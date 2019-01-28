@@ -38,14 +38,14 @@ UTILS_IMPL int ContrastAndBright(Mat& src_image, Mat& dst_image, const double al
 	return UManger::Instance()->ContrastAndBright(src_image, dst_image, alpha, beta);
 }
 
-UTILS_IMPL int VideoToPic(string Video_Path, string Pic_Path, double totalFremeNumber)
+UTILS_IMPL int VideoToPic(string VideoPath, string PicPath, double totalFremeNumber)
 {
-	return UManger::Instance()->VideoToPic(Video_Path,Pic_Path,totalFremeNumber);
+	return UManger::Instance()->VideoToPic(VideoPath,PicPath,totalFremeNumber);
 }
 
-UTILS_IMPL int PicToVideo(string Pic_Path, string Video_Path,int height,int width)
+UTILS_IMPL int PicToVideo(string PicPath, string VideoPath,int height,int width)
 {
-	return UManger::Instance()->PicToVideo(Pic_Path, Video_Path, height, width);
+	return UManger::Instance()->PicToVideo(PicPath, VideoPath, height, width);
 }
 
 UTILS_IMPL int PicAddPic(Mat& img1, Mat& img2, Mat& result)
@@ -134,3 +134,7 @@ UTILS_IMPL int WhiteBalance(Mat& img)
 	return UManger::Instance()->WhiteBalance(img);
 }
 
+UTILS_IMPL int RenamePic(string InPic, string OutPic)
+{
+	return UManger::Instance()->RenamePic(InPic, OutPic);
+}

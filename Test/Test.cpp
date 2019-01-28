@@ -193,3 +193,10 @@ using namespace cv;
 //}
 
 #endif
+
+int main()
+{
+	RenamePic("D://workspace//opencv//Testcode//Testcode//*.jpg", "D://workspace//opencv//Testcode//Testcode//testimg//");
+	
+	return 0;
+}

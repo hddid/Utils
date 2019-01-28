@@ -151,9 +151,9 @@ int UManger::ContrastAndBright(Mat& src_image, Mat& dst_image, const double alph
 // Author:    Haoyu_Zeng
 // Date:      2018/09/19 14:56
 //************************************
-int UManger::VideoToPic(string Video_Path, string Pic_Path,double totalFrameNumber)
+int UManger::VideoToPic(string VideoPath, string PicPath,double totalFrameNumber)
 {
-	VideoCapture cap(Video_Path);
+	VideoCapture cap(VideoPath);
 	totalFrameNumber = cap.get(CV_CAP_PROP_FRAME_COUNT);
 
 	Mat frame;
@@ -169,7 +169,7 @@ int UManger::VideoToPic(string Video_Path, string Pic_Path,double totalFrameNumb
 		
 		if (0 == currentFrame % 1)
 		{
-			imwrite(Pic_Path + str.str(), frame);
+			imwrite(PicPath + str.str(), frame);
 		}
 		if (currentFrame >= totalFrameNumber)
 		{
@@ -193,18 +193,18 @@ int UManger::VideoToPic(string Video_Path, string Pic_Path,double totalFrameNumb
 // Author:    Haoyu_Zeng
 // Date:      2018/09/20 22:22
 //************************************
-int UManger::PicToVideo(string Pic_Path, string Video_Path, int height, int width)
+int UManger::PicToVideo(string PicPath, string VideoPath, int height, int width)
 {
-	VideoWriter video(Video_Path, CV_FOURCC('X', 'V', 'I', 'D'), 27, Size(height, width), true);
+	VideoWriter video(VideoPath, CV_FOURCC('X', 'V', 'I', 'D'), 27, Size(height, width), true);
 	vector<String> images;
-	glob(Pic_Path, images, false);
+	glob(PicPath, images, false);
 
 	int count = images.size();
 	for (size_t i = 0; i <= count; ++i)
 	{
 		stringstream str;
 		str << i << ".jpg";
-		Mat pic = imread(Pic_Path + str.str());
+		Mat pic = imread(PicPath + str.str());
 		if (!pic.empty())
 		{
 			resize(pic, pic, Size(height, width));
@@ -790,3 +790,20 @@ int UManger::AddSaltPepperNoise(Mat& img)
 	return RET_ERROR_OK;
 }
 
+int UManger::RenamePic(string InPath, string OutPath)
+{
+	vector<Mat> images;
+	vector<cv::String> filenames;
+	glob(InPath, filenames, false);
+
+	size_t count = filenames.size();
+
+	for (size_t i = 0; i < count; i++)
+	{
+		images.push_back(imread(filenames[i]));
+		stringstream str;
+		str << i << ".jpg";
+		imwrite(OutPath + str.str(), imread(filenames[i]));
+	}
+	return RET_ERROR_OK;
+}
