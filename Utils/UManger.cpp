@@ -384,7 +384,7 @@ int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	return RET_ERROR_OK;
 }
 
-int UManger::RGBSkin(Mat& img)
+int UManger::RGBSkin(Mat& src_img, Mat& dst_img)
 {
 	dst_img = Mat::zeros(src_img.size(), src_img.type());
 
@@ -438,7 +438,6 @@ int UManger::EllipseSkin(Mat& src_img, Mat& dst_img)
 	dst_img = detect.clone();
 	return RET_ERROR_OK;
 }
-
 int UManger::YCrCbOtsuSkin(Mat& src_img, Mat& dst_img)
 {
 	Mat ycrcb_image;
@@ -754,7 +753,6 @@ int UManger::AddRandom(Mat& img)
 	return RET_ERROR_OK;
 }
 #endif
-
 
 /////////////////////////////////////////
 //noise

@@ -69,9 +69,9 @@ UTILS_IMPL int PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	return UManger::Instance()->PicDivPic(img1, img2, result);
 }
 
-UTILS_IMPL int RGBSkin(Mat& img)
+UTILS_IMPL int RGBSkin(Mat& src_img,Mat& dst_img)
 {
-	return UManger::Instance()->RGBSkin(img);
+	return UManger::Instance()->RGBSkin(src_img,dst_img);
 }
 
 UTILS_IMPL int EllipseSkin(Mat& src_img, Mat& dst_img)

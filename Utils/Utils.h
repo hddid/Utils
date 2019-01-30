@@ -34,7 +34,7 @@ UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
 //增加五种肤色检测方法
 
 //第一种：基于RGB color space
-UTILS_API(int) RGBSkin(Mat& img);
+UTILS_API(int) RGBSkin(Mat& src_img,Mat& dst_img);
 
 //第二种：基于椭圆模型的皮肤检测
 UTILS_API(int) EllipseSkin(Mat& src_img, Mat& dst_img);

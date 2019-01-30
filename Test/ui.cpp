@@ -3,12 +3,9 @@
 using namespace cv;
 using namespace std;
 
-Mat BaseImg = Mat::zeros(Size(960, 480), CV_8UC3);
-
 int main()
 {
 	img(use_img);
-	//camera(use_camera);
 	return 0;
 }
 
@@ -29,7 +26,6 @@ int img(bool &use_img)
 		cvui::printf(BaseImg, 0, 40, "*************************************************");
 		cvui::checkbox(BaseImg, 0, 70, "whitebalance", &whitebalance);
 	
-
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
 		Mat img = imread(img_name);
@@ -58,7 +54,7 @@ int img(bool &use_img)
 			destroyAllWindows();
 			break;
 		}
-
+		
 		cvui::update();
 		cv::imshow(WINDOW_NAME, BaseImg);
 		
@@ -70,7 +66,6 @@ int img(bool &use_img)
 			break;
 		}
 	}
-	
 	waitKey(0);
 	return 0;
 }
@@ -84,39 +79,28 @@ int camera(bool &use_camera)
 		bool open_camera = true;
 		bool cartoon = false;
 		cvui::init(WINDOW_NAME);
+
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
 			cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
 			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
-			cvui::printf(BaseImg, 0, 40, "*************************************************");	
+			cvui::printf(BaseImg, 0, 40, "*************************************************");
 
 			Mat frame;
 			cap >> frame;
-			
 			resize(frame, frame, Size(640, 480));
-			
-			/*	while (cvui::button(BaseImg, 30, 100, "cartoon"))
-				{
-					if (cartoon == false)
-						cartoon = true;
-					else
-						cartoon = false;
-					break;
-				}*/
-	
 			cvui::checkbox(BaseImg, 0, 70, "cartoon", &cartoon);
-			if (cartoon == true)
+			if(cartoon == true)
 				CartoonFilter(frame);
-			else 
-				frame = frame.clone();
-		
+			cvui::update();
+			
 			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			addWeighted(ROI, 0, frame, 1, 0, ROI);
 			//cvui::image(BaseImg, 320, 0, frame);
 			
 			cv::imshow(WINDOW_NAME, BaseImg);
-			cv::waitKey(10);
+			cv::waitKey(30);
 
 			if (!use_camera && use_img)
 			{
@@ -124,7 +108,7 @@ int camera(bool &use_camera)
 				//use_camera为false的时候关闭camera
 				cap.release();				
 				img(use_img);		
-				cvui::update();	
+				
 			}	
 		}
 	}
