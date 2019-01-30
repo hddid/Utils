@@ -818,7 +818,6 @@ int UManger::UI_Img(bool& use_img)
 {
 	const int num = 500;
 	char img_name[50];
-	cv::namedWindow(WINDOW_NAME);
 	cvui::init(WINDOW_NAME);
 
 	int count = 1;
@@ -839,9 +838,10 @@ int UManger::UI_Img(bool& use_img)
 			WhiteBalance(img);
 		resize(img, img, Size(640, 480));
 
-		Mat ROI = BaseImg(Rect(320, 0, 640, 480));
-
-		addWeighted(ROI, 0, img, 1, 0, ROI);
+		//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
+		//addWeighted(ROI, 0, img, 1, 0, ROI);
+		//替代上面两行代码
+		cvui::image(BaseImg, 320, 0, img);
 		//下一张图片
 		if (cvui::button(BaseImg, 255, 450, 60, 30, "latter"))
 		{
@@ -863,6 +863,7 @@ int UManger::UI_Img(bool& use_img)
 
 		cvui::update();
 		cv::imshow(WINDOW_NAME, BaseImg);
+
 		cv::waitKey(10);
 		if (use_camera && !use_img)
 		{
@@ -871,16 +872,20 @@ int UManger::UI_Img(bool& use_img)
 			break;
 		}
 	}
+	waitKey(0);
 	return 0;
 }
 
 int UManger::UI_Camera(bool& use_camera)
 {
-	use_img = false;
+	//use_img = false;
 	while (use_camera)
 	{
 		VideoCapture cap(0);
 		bool open_camera = true;
+		bool cartoon = false;
+
+		cvui::init(WINDOW_NAME);
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
@@ -888,24 +893,56 @@ int UManger::UI_Camera(bool& use_camera)
 			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 			cvui::printf(BaseImg, 0, 40, "*************************************************");
 
+			cvui::checkbox(BaseImg, 10, 60, "SkinDetector", &SkinDetector);
+			cvui::checkbox(BaseImg, 140, 60, "CameraFilter", &CameraFilter);
+			cvui::printf(BaseImg, 0, 80, "*************************************************");
+
 			Mat frame;
 			cap >> frame;
-
 			resize(frame, frame, Size(640, 480));
+			//bool puppet  = false;
+			//puppet = (SkinDetector == true && CameraFilter == false);
 
-			bool cartoon = false;
-			cvui::checkbox(BaseImg, 0, 70, "cartoon", &cartoon);
-
-			if (cartoon == true)
+			while (SkinDetector == true && CameraFilter == false)
 			{
-				CartoonFilter(frame);
+				cvui::checkbox(BaseImg, 20, 90, "RGBSkin", &rgbcolor);
+				cvui::checkbox(BaseImg, 20, 110, "EleSkin", &ellipseskin);
+				cvui::checkbox(BaseImg, 20, 130, "YOSkin", &ycrcbotusskin);
+				cvui::checkbox(BaseImg, 100, 90, "YCrSkin", &ycrcbskin);
+				cvui::checkbox(BaseImg, 100, 110, "HSVSkin", &hsvskin);
+
+				if (rgbcolor == true)
+					RGBSkin(frame);
+				if (ellipseskin == true)
+					EllipseSkin(frame);
+				if (ycrcbotusskin == true)
+					YCrCbOtusSkin(frame);
+				if (ycrcbskin == true)
+					YCrCbSkin(frame);
+				if (hsvskin == true)
+					HSVSkin(frame);
+				break;
 			}
 
-			Mat ROI = BaseImg(Rect(320, 0, 640, 480));
-			addWeighted(ROI, 0, frame, 1, 0, ROI);
+			while (CameraFilter == true && SkinDetector == false)
+			{
+				cvui::checkbox(BaseImg, 10, 90, "cartoon", &cartoon);
+				if (cartoon == true)
+					CartoonFilter(frame);
+				break;
+			}
+
+			cvui::update();
+
+			//添加摄像头遮挡
+			Mat mask = Mat::zeros(Size(640, 480), CV_8UC3);
+			frame = mask.clone();
+			//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
+			//addWeighted(ROI, 0, frame, 1, 0, ROI);
+			//使用下面代码替代上面两行
+			cvui::image(BaseImg, 320, 0, frame);
 
 			cv::imshow(WINDOW_NAME, BaseImg);
-
 			cv::waitKey(30);
 
 			if (!use_camera && use_img)
@@ -914,7 +951,6 @@ int UManger::UI_Camera(bool& use_camera)
 				//use_camera为false的时候关闭camera
 				cap.release();
 				UI_Img(use_img);
-				cvui::update();
 
 			}
 		}
