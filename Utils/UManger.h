@@ -262,7 +262,7 @@ public:
 	// Author:    Haoyu_Zeng
 	// Date:      2019/01/18 20:22
 	//************************************
-	int Nostalgic(Mat& img);
+	int NostalgicFilter(Mat& img);
 
 	//************************************
 	// Method:    AddRandom

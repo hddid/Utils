@@ -109,9 +109,9 @@ UTILS_IMPL int CartoonFilter(Mat& img)
 	return UManger::Instance()->CartoonFilter(img);
 }
 
-UTILS_IMPL int Nostalgic(Mat& img)
+UTILS_IMPL int NostalgicFilter(Mat& img)
 {
-	return UManger::Instance()->Nostalgic(img);
+	return UManger::Instance()->NostalgicFilter(img);
 }
 
 //UTILS_IMPL int AddRandom(Mat& img)

@@ -19,6 +19,11 @@ int UI_Camera(bool &use_camera);
 bool CameraFilter = false;
 bool SkinDetector = false;
 
+//CameraFilter
+bool Cartoon = false;
+bool Nostalgic = false;
+
+//SkinDetector
 bool rgbcolor = false;
 bool ellipseskin = false;
 bool ycrcbotusskin = false;

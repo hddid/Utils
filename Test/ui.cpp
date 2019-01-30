@@ -1,15 +1,11 @@
 #include "Ui.h"
 
-
-
 using namespace cv;
 using namespace std;
-
 
 int main()
 {
 	img(use_img);
-
 	return 0;
 }
 
@@ -59,9 +55,7 @@ int img(bool &use_img)
 		{
 			count--;
 		}
-		cvui::printf(BaseImg, 130, 460, 0.4, 0xff0000, "now is:%d", count);
-
-		
+		cvui::printf(BaseImg, 130, 460, 0.4, 0xff0000, "now is:%d", count);	
 
 		cvui::update();
 		cv::imshow(WINDOW_NAME, BaseImg);
@@ -79,12 +73,10 @@ int img(bool &use_img)
 
 int camera(bool &use_camera)
 {
-	//use_img = false;
 	while (use_camera)
 	{
 		VideoCapture cap(0);
 		bool open_camera = true;
-		bool cartoon = false;
 
 		cvui::init(WINDOW_NAME);
 		while (open_camera)
@@ -101,9 +93,9 @@ int camera(bool &use_camera)
 			Mat frame;
 			cap >> frame;
 			resize(frame, frame, Size(640, 480));
+
 			//bool puppet  = false;
-			//puppet = (SkinDetector == true && CameraFilter == false);
-			
+			//puppet = (SkinDetector == true && CameraFilter == false);		
 			while (SkinDetector == true && CameraFilter == false)
 			{
 				cvui::checkbox(BaseImg, 20, 90, "RGBSkin", &rgbcolor);
@@ -127,17 +119,20 @@ int camera(bool &use_camera)
 
 			while (CameraFilter == true && SkinDetector == false)
 			{
-				cvui::checkbox(BaseImg, 10, 90, "cartoon", &cartoon);
-				if (cartoon == true)
+				cvui::checkbox(BaseImg, 10, 90, "Cartoon", &Cartoon);
+				cvui::checkbox(BaseImg, 10, 120, "Nostalgic", &Nostalgic);
+				if (Cartoon == true)
 					CartoonFilter(frame);
+				if (Nostalgic == true)
+					NostalgicFilter(frame);
 				break;
 			}
 
 			cvui::update();
 		
 			//添加摄像头遮挡
-			Mat mask = Mat::zeros(Size(640, 480), CV_8UC3);
-			frame = mask.clone();
+			//Mat mask = Mat::zeros(Size(640, 480), CV_8UC3);
+			//frame = mask.clone();
 			//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			//addWeighted(ROI, 0, frame, 1, 0, ROI);
 			//使用下面代码替代上面两行

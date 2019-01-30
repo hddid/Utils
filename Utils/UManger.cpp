@@ -94,13 +94,10 @@ int UManger::FastColorReduce(Mat& image,int div = 64)
 
 		for (int i = 0; i < nc; ++i) 
 		{
-
 			//-------------开始处理每个像素-------------------
-
 			*data++ = *data&mask + div / 2;
 			*data++ = *data&mask + div / 2;
 			*data++ = *data&mask + div / 2;
-
 		}                 
 	}
 	return RET_ERROR_OK;
@@ -640,7 +637,7 @@ int UManger::CartoonFilter(Mat& img)
 	return RET_ERROR_OK;
 }
 
-int UManger::Nostalgic(Mat& img)
+int UManger::NostalgicFilter(Mat& img)
 {
 	Mat src = Mat::zeros(img.size(),img.type());
 	//imshow("src", src); 
@@ -688,11 +685,9 @@ int UManger::WhiteBalance(Mat& img)
 //		uchar *p_src = src.ptr<uchar>(i);
 //		for (int j = 0; j < img.cols; j++)
 //		{
-//
 //			p_src[j * 3] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.131 + p_img[j * 3 + 1] * 0.534 + p_img[j * 3 + 2] * 0.272)), 255)));
 //			p_src[j * 3 + 1] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.168 + p_img[j * 3 + 1] * 0.686 + p_img[j * 3 + 2] * 0.349)), 255)));
 //			p_src[j * 3 + 2] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.189 + p_img[j * 3 + 1] * 0.769 + p_img[j * 3 + 2] * 0.393)), 255)));
-//
 //		}
 //	}
 //	img = src.clone();
@@ -813,7 +808,6 @@ int UManger::RenamePic(string InPath, string OutPath)
 	return RET_ERROR_OK;
 }
 
-#if 1
 int UManger::UI_Img(bool& use_img)
 {
 	const int num = 500;
@@ -883,7 +877,7 @@ int UManger::UI_Camera(bool& use_camera)
 	{
 		VideoCapture cap(0);
 		bool open_camera = true;
-		bool cartoon = false;
+		//bool cartoon = false;
 
 		cvui::init(WINDOW_NAME);
 		while (open_camera)
@@ -926,17 +920,20 @@ int UManger::UI_Camera(bool& use_camera)
 
 			while (CameraFilter == true && SkinDetector == false)
 			{
-				cvui::checkbox(BaseImg, 10, 90, "cartoon", &cartoon);
-				if (cartoon == true)
+				cvui::checkbox(BaseImg, 10, 90, "Cartoon", &Cartoon);
+				cvui::checkbox(BaseImg, 10, 120, "Nostalgic", &Nostalgic);
+				if (Cartoon == true)
 					CartoonFilter(frame);
+				if (Nostalgic == true)
+					NostalgicFilter(frame);
 				break;
 			}
 
 			cvui::update();
 
 			//添加摄像头遮挡
-			Mat mask = Mat::zeros(Size(640, 480), CV_8UC3);
-			frame = mask.clone();
+			/*Mat mask = Mat::zeros(Size(640, 480), CV_8UC3);
+			frame = mask.clone();*/
 			//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 			//addWeighted(ROI, 0, frame, 1, 0, ROI);
 			//使用下面代码替代上面两行
@@ -957,4 +954,3 @@ int UManger::UI_Camera(bool& use_camera)
 	}
 	return 0;
 }
-#endif

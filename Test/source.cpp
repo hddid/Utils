@@ -85,7 +85,6 @@
 
 #endif // DLIB_ISO_CPP_ONLY
 
-
 #define DLIB_ALL_SOURCE_END
 
 #endif // DLIB_ALL_SOURCe_
