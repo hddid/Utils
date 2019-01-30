@@ -202,15 +202,15 @@ public:
 	//增加五种皮肤检测方法
 //*****************************************************************
 	//第一种:基于RGB color space检测
-	int RGBSkin(Mat& src_img,Mat& dst_img);
+	int RGBSkin(Mat& src_img);
 	//第二种:基于椭圆皮肤模型的皮肤检测
-	int EllipseSkin(Mat& src_img, Mat& dst_img);
+	int EllipseSkin(Mat& src_img);
 	//第三种：基于YCrCu颜色空间Cr分量+Otsu法阈值分割
-	int YCrCbOtsuSkin(Mat& src_img, Mat& dst_img);
+	int YCrCbOtsuSkin(Mat& src_img);
 	//第四种：基于YCrCb颜色空间Cr，Cb范围筛选法
-	int YCrCbSkin(Mat& src_img, Mat& dst_img);
+	int YCrCbSkin(Mat& src_img);
 	//第五种：基于HSV颜色空间H范围筛选法
-	int HSVSkin(Mat& src_img, Mat& dst_img);
+	int HSVSkin(Mat& src_img);
 
 //*****************************************************************
 	//相机功能

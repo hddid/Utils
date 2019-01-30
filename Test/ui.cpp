@@ -1,7 +1,10 @@
 #include "Ui.h"
 
+
+
 using namespace cv;
 using namespace std;
+
 
 int main()
 {
@@ -72,27 +75,58 @@ int img(bool &use_img)
 
 int camera(bool &use_camera)
 {
-	use_img = false;
+	//use_img = false;
 	while (use_camera)
 	{
 		VideoCapture cap(0);	
 		bool open_camera = true;
 		bool cartoon = false;
+	
 		cvui::init(WINDOW_NAME);
-
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
 			cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
 			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 			cvui::printf(BaseImg, 0, 40, "*************************************************");
+			
+			cvui::checkbox(BaseImg, 10, 60, "SkinDetector", &SkinDetector);
+			cvui::checkbox(BaseImg, 140, 60, "CameraFilter", &CameraFilter);
+			cvui::printf(BaseImg, 0, 80, "*************************************************");		
 
 			Mat frame;
 			cap >> frame;
 			resize(frame, frame, Size(640, 480));
-			cvui::checkbox(BaseImg, 0, 70, "cartoon", &cartoon);
-			if(cartoon == true)
-				CartoonFilter(frame);
+			
+			while (SkinDetector == true && CameraFilter == false)
+			{
+				cvui::checkbox(BaseImg, 20, 90, "RGBSkin", &rgbcolor);
+				cvui::checkbox(BaseImg, 20, 110, "EleSkin", &ellipseskin);
+				cvui::checkbox(BaseImg, 20, 130, "YOSkin", &ycrcbotusskin);
+				cvui::checkbox(BaseImg, 70, 150, "YCrSkin", &ycrcbskin);
+				cvui::checkbox(BaseImg, 70, 170, "HSVSkin", &hsvskin);
+			
+				if (rgbcolor == true)
+					RGBSkin(frame);
+				if (ellipseskin == true)
+					EllipseSkin(frame);
+				if (ycrcbotusskin == true)
+					YCrCbOtusSkin(frame);
+				if (ycrcbskin == true)
+					YCrCbSkin(frame);
+				if (hsvskin == true)
+					HSVSkin(frame);
+				break;
+			}
+
+			while (CameraFilter == true && SkinDetector == false)
+			{
+				cvui::checkbox(BaseImg, 10, 90, "cartoon", &cartoon);
+				if (cartoon == true)
+					CartoonFilter(frame);
+				break;
+			}
+			
 			cvui::update();
 			
 			Mat ROI = BaseImg(Rect(320, 0, 640, 480));

@@ -384,9 +384,9 @@ int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	return RET_ERROR_OK;
 }
 
-int UManger::RGBSkin(Mat& src_img, Mat& dst_img)
+int UManger::RGBSkin(Mat& src_img)
 {
-	dst_img = Mat::zeros(src_img.size(), src_img.type());
+	Mat dst_img = Mat::zeros(src_img.size(), src_img.type());
 
 	if (src_img.empty() || 3 != src_img.channels())
 	{
@@ -411,12 +411,13 @@ int UManger::RGBSkin(Mat& src_img, Mat& dst_img)
 			}
 		}
 	}
+	src_img = dst_img.clone();
 	return RET_ERROR_OK;
 }
 
-int UManger::EllipseSkin(Mat& src_img, Mat& dst_img)
+int UManger::EllipseSkin(Mat& src_img)
 {
-	dst_img = src_img.clone();
+	Mat dst_img = src_img.clone();
 	Mat skinCrCbHist = Mat::zeros(Size(256, 256), CV_8UC1);
 	ellipse(skinCrCbHist, Point(113, 155.6), Size(23.4, 15.2), 43.0, 0.0, 360.0, Scalar(255, 255, 255), -1);
 
@@ -436,10 +437,12 @@ int UManger::EllipseSkin(Mat& src_img, Mat& dst_img)
 	Mat detect;
 	dst_img.copyTo(detect, output_mask);
 	dst_img = detect.clone();
+	src_img = dst_img.clone();
 	return RET_ERROR_OK;
 }
-int UManger::YCrCbOtsuSkin(Mat& src_img, Mat& dst_img)
+int UManger::YCrCbOtsuSkin(Mat& src_img)
 {
+	Mat dst_img;
 	Mat ycrcb_image;
 	cvtColor(src_img, ycrcb_image, CV_BGR2YCrCb);
 	Mat detect;
@@ -449,10 +452,11 @@ int UManger::YCrCbOtsuSkin(Mat& src_img, Mat& dst_img)
 	threshold(output_mask, output_mask, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
 	src_img.copyTo(detect, output_mask);
 	dst_img = detect.clone();
+	src_img = dst_img.clone();
 	return RET_ERROR_OK;
 }
 
-int UManger::YCrCbSkin(Mat& src_img, Mat& dst_img)
+int UManger::YCrCbSkin(Mat& src_img)
 {
 	Mat ycrcb_image;
 	int Cr = 1;
@@ -474,11 +478,12 @@ int UManger::YCrCbSkin(Mat& src_img, Mat& dst_img)
 	}
 	Mat detect;
 	src_img.copyTo(detect, output_mask);
-	dst_img = detect.clone();
+	Mat dst_img = detect.clone();
+	src_img = dst_img.clone();
 	return RET_ERROR_OK;
 }
 
-int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
+int UManger::HSVSkin(Mat& src_img)
 {
 	Mat hsv_img;
 	int h = 0;
@@ -501,11 +506,12 @@ int UManger::HSVSkin(Mat& src_img, Mat& dst_img)
 	}
 	Mat detect;
 	src_img.copyTo(detect, output_mask);
-	dst_img = detect.clone();
+	Mat dst_img = detect.clone();
 
 	Mat element = getStructuringElement(MORPH_RECT, Size(3, 3));
 	dilate(dst_img, dst_img, element);
 	//erode(dst_img, dst_img, element);
+	src_img = dst_img.clone();
 	return RET_ERROR_OK;
 }
  

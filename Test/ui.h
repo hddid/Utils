@@ -17,4 +17,14 @@ bool use_camera = false;
 int img(bool &use_img);
 int camera(bool &use_camera);
 
+bool CameraFilter = false;
+bool SkinDetector = false;
+
+bool rgbcolor = false;
+bool ellipseskin = false;
+bool ycrcbotusskin = false;
+bool ycrcbskin = false;
+bool hsvskin = false;
+
+
 Mat BaseImg = Mat::zeros(Size(960, 480), CV_8UC3);
