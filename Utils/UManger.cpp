@@ -22,17 +22,6 @@ UManger::~UManger()
 {
 }
 
-//************************************
-// Method:    ConvertRGB2Gray
-// FullName:  UManger::ConvertRGB2Gray
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: const Mat & src
-// Parameter: Mat & gray
-// Author:    Haoyu_Zeng
-// Date:      2018/09/03 9:02
-//************************************
 int UManger::ConvertRGB2Gray(const Mat & src, Mat & gray)
 {
 	if (src.empty())
@@ -57,19 +46,6 @@ int UManger::ConvertRGB2Gray(const Mat & src, Mat & gray)
 	return RET_ERROR_OK;
 }
 
-
-
-//************************************
-// Method:    FastColorReduce
-// FullName:  UManger::FastColorReduce
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: Mat & image
-// Parameter: int div
-// Author:    Haoyu_Zeng
-// Date:      2018/09/04 20:23
-//************************************
 int UManger::FastColorReduce(Mat& image,int div = 64)
 {
 
@@ -103,20 +79,6 @@ int UManger::FastColorReduce(Mat& image,int div = 64)
 	return RET_ERROR_OK;
 }
 
-
-//************************************
-// Method:    ContrastAndBright
-// FullName:  UManger::ContrastAndBright
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: Mat & src_image
-// Parameter: Mat & dst_image
-// Parameter: const double alpha
-// Parameter: const double beta
-// Author:    Haoyu_Zeng
-// Date:      2018/09/06 10:13
-//************************************
 int UManger::ContrastAndBright(Mat& src_image, Mat& dst_image, const double alpha, const double beta)
 {
 	if (src_image.empty())
@@ -137,264 +99,23 @@ int UManger::ContrastAndBright(Mat& src_image, Mat& dst_image, const double alph
 	return RET_ERROR_OK;
 }
 
-//************************************
-// Method:    VideoToPic
-// FullName:  UManger::VideoToPic
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: string Video_Path
-// Parameter: string Pic_Path
-// Parameter: double totalFrameNumber
-// Author:    Haoyu_Zeng
-// Date:      2018/09/19 14:56
-//************************************
-int UManger::VideoToPic(string VideoPath, string PicPath,double totalFrameNumber)
+
+//*****************************************检测相关*****************************************
+//肤色检测的五种方法
+int UManger::RGBSkin(Mat& img)
 {
-	VideoCapture cap(VideoPath);
-	totalFrameNumber = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	Mat dst_img = Mat::zeros(img.size(), img.type());
 
-	Mat frame;
-	bool flags = true;
-	long currentFrame = 0;
-
-	while (flags)
-	{
-		cap.read(frame);
-		stringstream str;
-		str << currentFrame << ".jpg";
-		cout << "正在处理第 " << currentFrame << " 帧" << endl;
-		
-		if (0 == currentFrame % 1)
-		{
-			imwrite(PicPath + str.str(), frame);
-		}
-		if (currentFrame >= totalFrameNumber)
-		{
-			flags = false;
-		}
-		currentFrame++;
-	}
-	return RET_ERROR_OK;
-}
-
-//************************************
-// Method:    PicToVideo
-// FullName:  UManger::PicToVideo
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: string Pic_Path
-// Parameter: string Video_Path
-// Parameter: int height
-// Parameter: int width
-// Author:    Haoyu_Zeng
-// Date:      2018/09/20 22:22
-//************************************
-int UManger::PicToVideo(string PicPath, string VideoPath, int height, int width)
-{
-	VideoWriter video(VideoPath, CV_FOURCC('X', 'V', 'I', 'D'), 27, Size(height, width), true);
-	vector<String> images;
-	glob(PicPath, images, false);
-
-	int count = images.size();
-	for (size_t i = 0; i <= count; ++i)
-	{
-		stringstream str;
-		str << i << ".jpg";
-		Mat pic = imread(PicPath + str.str());
-		if (!pic.empty())
-		{
-			resize(pic, pic, Size(height, width));
-			video << pic;
-			cout << "正在处理第" << i << "帧" << endl;
-		}
-	}
-	return RET_ERROR_OK;
-}
-
-//************************************
-// Method:    PicAddPic
-// FullName:  UManger::PicAddPic
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: Mat & img1
-// Parameter: Mat & img2
-// Parameter: Mat & result
-// Author:    Haoyu_Zeng
-// Date:      2019/01/09 16:59
-//************************************
-int UManger::PicAddPic(Mat& img1, Mat& img2, Mat& result)
-{
-	if (img1.empty() || img2.empty())
-	{
-		cout << "cant load pic" << endl;
-	}
-	int b1, g1, r1;
-	int b2, g2, r2;
-
-	for (int rows = 0; rows < img1.rows; rows++)
-	{
-		for (int cols = 0; cols < img1.cols; cols++)
-		{
-			b1 = img1.at<Vec3b>(rows, cols)[0];
-			g1 = img1.at<Vec3b>(rows, cols)[1];
-			r1 = img1.at<Vec3b>(rows, cols)[2];
-
-			b2 = img2.at<Vec3b>(rows, cols)[0];
-			g2 = img2.at<Vec3b>(rows, cols)[1];
-			r2 = img2.at<Vec3b>(rows, cols)[2];
-
-			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 + b2);
-			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 + g2);
-			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 + r2);
-
-		}
-	}
-	return RET_ERROR_OK;
-}
-
-//************************************
-// Method:    PicSubPic
-// FullName:  UManger::PicSubPic
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: Mat & img1
-// Parameter: Mat & img2
-// Parameter: Mat & result
-// Author:    Haoyu_Zeng
-// Date:      2019/01/09 16:59
-//************************************
-int UManger::PicSubPic(Mat& img1, Mat& img2, Mat& result)
-{
-	if (img1.empty() || img2.empty())
-	{
-		cout << "cant load pic" << endl;
-	}
-	int b1, g1, r1;
-	int b2, g2, r2;
-
-	for (int rows = 0; rows < img1.rows; rows++)
-	{
-		for (int cols = 0; cols < img1.cols; cols++)
-		{
-			b1 = img1.at<Vec3b>(rows, cols)[0];
-			g1 = img1.at<Vec3b>(rows, cols)[1];
-			r1 = img1.at<Vec3b>(rows, cols)[2];
-
-			b2 = img2.at<Vec3b>(rows, cols)[0];
-			g2 = img2.at<Vec3b>(rows, cols)[1];
-			r2 = img2.at<Vec3b>(rows, cols)[2];
-
-			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 - b2);
-			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 - g2);
-			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 - r2);
-
-		}
-	}
-	return RET_ERROR_OK;
-}
-
-//************************************
-// Method:    PicMulPic
-// FullName:  UManger::PicMulPic
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: Mat & img1
-// Parameter: Mat & img2
-// Parameter: Mat & result
-// Author:    Haoyu_Zeng
-// Date:      2019/01/09 16:59
-//************************************
-int UManger::PicMulPic(Mat& img1, Mat& img2, Mat& result)
-{
-	if (img1.empty() || img2.empty())
-	{
-		cout << "cant load pic" << endl;
-	}
-	int b1, g1, r1;
-	int b2, g2, r2;
-
-	for (int rows = 0; rows < img1.rows; rows++)
-	{
-		for (int cols = 0; cols < img1.cols; cols++)
-		{
-			b1 = img1.at<Vec3b>(rows, cols)[0];
-			g1 = img1.at<Vec3b>(rows, cols)[1];
-			r1 = img1.at<Vec3b>(rows, cols)[2];
-
-			b2 = img2.at<Vec3b>(rows, cols)[0];
-			g2 = img2.at<Vec3b>(rows, cols)[1];
-			r2 = img2.at<Vec3b>(rows, cols)[2];
-
-			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 * b2);
-			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 * g2);
-			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 * r2);
-
-		}
-	}
-	return RET_ERROR_OK;
-}
-
-//************************************
-// Method:    PicDivPic
-// FullName:  UManger::PicDivPic
-// Access:    public 
-// Returns:   int
-// Qualifier:
-// Parameter: Mat & img1
-// Parameter: Mat & img2
-// Parameter: Mat & result
-// Author:    Haoyu_Zeng
-// Date:      2019/01/09 16:59
-//************************************
-int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
-{
-	if (img1.empty() || img2.empty())
-	{
-		cout << "cant load pic" << endl;
-	}
-	double b1, g1, r1;
-	double b2, g2, r2;
-
-	for (int rows = 0; rows < img1.rows; rows++)
-	{
-		for (int cols = 0; cols < img1.cols; cols++)
-		{
-			b1 = img1.at<Vec3b>(rows, cols)[0];
-			g1 = img1.at<Vec3b>(rows, cols)[1];
-			r1 = img1.at<Vec3b>(rows, cols)[2];
-
-			b2 = img2.at<Vec3b>(rows, cols)[0];
-			g2 = img2.at<Vec3b>(rows, cols)[1];
-			r2 = img2.at<Vec3b>(rows, cols)[2];
-
-			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 / b2);
-			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 / g2);
-			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 / r2);
-
-		}
-	}
-	return RET_ERROR_OK;
-}
-
-int UManger::RGBSkin(Mat& src_img)
-{
-	Mat dst_img = Mat::zeros(src_img.size(), src_img.type());
-
-	if (src_img.empty() || 3 != src_img.channels())
+	if (img.empty() || 3 != img.channels())
 	{
 		cout << "cant load pic" << endl;
 		return 0;
 	}
-	for (int i = 0; i < src_img.rows; i++)
+	for (int i = 0; i < img.rows; i++)
 	{
-		for (int j = 0; j < src_img.cols; j++)
+		for (int j = 0; j < img.cols; j++)
 		{
-			uchar *p_src = src_img.ptr<uchar>(i, j);
+			uchar *p_src = img.ptr<uchar>(i, j);
 			uchar *p_dst = dst_img.ptr<uchar>(i, j);
 			if ((p_src[2] > 95 && p_src[1] > 40 && p_src[0] > 20 &&
 				(MAX(p_src[0], MAX(p_src[1], p_src[2])) - MIN(p_src[0], MIN(p_src[1], p_src[2])) > 15) &&
@@ -408,13 +129,13 @@ int UManger::RGBSkin(Mat& src_img)
 			}
 		}
 	}
-	src_img = dst_img.clone();
+	img = dst_img.clone();
 	return RET_ERROR_OK;
 }
 
-int UManger::EllipseSkin(Mat& src_img)
+int UManger::EllipseSkin(Mat& img)
 {
-	Mat dst_img = src_img.clone();
+	Mat dst_img = img.clone();
 	Mat skinCrCbHist = Mat::zeros(Size(256, 256), CV_8UC1);
 	ellipse(skinCrCbHist, Point(113, 155.6), Size(23.4, 15.2), 43.0, 0.0, 360.0, Scalar(255, 255, 255), -1);
 
@@ -434,36 +155,37 @@ int UManger::EllipseSkin(Mat& src_img)
 	Mat detect;
 	dst_img.copyTo(detect, output_mask);
 	dst_img = detect.clone();
-	src_img = dst_img.clone();
+	img = dst_img.clone();
 	return RET_ERROR_OK;
 }
-int UManger::YCrCbOtsuSkin(Mat& src_img)
+
+int UManger::YCrCbOtsuSkin(Mat& img)
 {
 	Mat dst_img;
 	Mat ycrcb_image;
-	cvtColor(src_img, ycrcb_image, CV_BGR2YCrCb);
+	cvtColor(img, ycrcb_image, CV_BGR2YCrCb);
 	Mat detect;
 	vector<Mat> channels;
 	split(ycrcb_image, channels);
 	Mat output_mask = channels[1];
 	threshold(output_mask, output_mask, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-	src_img.copyTo(detect, output_mask);
+	img.copyTo(detect, output_mask);
 	dst_img = detect.clone();
-	src_img = dst_img.clone();
+	img = dst_img.clone();
 	return RET_ERROR_OK;
 }
 
-int UManger::YCrCbSkin(Mat& src_img)
+int UManger::YCrCbSkin(Mat& img)
 {
 	Mat ycrcb_image;
 	int Cr = 1;
 	int Cb = 2;
-	cvtColor(src_img, ycrcb_image, CV_BGR2YCrCb);
-	Mat output_mask = Mat::zeros(src_img.size(), CV_8UC1);
+	cvtColor(img, ycrcb_image, CV_BGR2YCrCb);
+	Mat output_mask = Mat::zeros(img.size(), CV_8UC1);
 
-	for (int i = 0; i < src_img.rows; i++)
+	for (int i = 0; i < img.rows; i++)
 	{
-		for (int j = 0; j < src_img.cols; j++)
+		for (int j = 0; j < img.cols; j++)
 		{
 			uchar *p_mask = output_mask.ptr<uchar>(i, j);
 			uchar *p_src = ycrcb_image.ptr<uchar>(i, j);
@@ -474,24 +196,24 @@ int UManger::YCrCbSkin(Mat& src_img)
 		}
 	}
 	Mat detect;
-	src_img.copyTo(detect, output_mask);
+	img.copyTo(detect, output_mask);
 	Mat dst_img = detect.clone();
-	src_img = dst_img.clone();
+	img = dst_img.clone();
 	return RET_ERROR_OK;
 }
 
-int UManger::HSVSkin(Mat& src_img)
+int UManger::HSVSkin(Mat& img)
 {
 	Mat hsv_img;
 	int h = 0;
 	int s = 1;
 	int v = 2;
-	cvtColor(src_img, hsv_img, CV_BGR2HSV);
+	cvtColor(img, hsv_img, CV_BGR2HSV);
 
-	Mat output_mask = Mat::zeros(src_img.size(), CV_8UC1);
-	for (int i = 0; i < src_img.rows; i++)
+	Mat output_mask = Mat::zeros(img.size(), CV_8UC1);
+	for (int i = 0; i < img.rows; i++)
 	{
-		for (int j = 0; j < src_img.cols; ++j)
+		for (int j = 0; j < img.cols; ++j)
 		{
 			uchar *p_mask = output_mask.ptr<uchar>(i, j);
 			uchar *p_src = hsv_img.ptr<uchar>(i, j);
@@ -502,18 +224,72 @@ int UManger::HSVSkin(Mat& src_img)
 		}
 	}
 	Mat detect;
-	src_img.copyTo(detect, output_mask);
+	img.copyTo(detect, output_mask);
 	Mat dst_img = detect.clone();
 
 	Mat element = getStructuringElement(MORPH_RECT, Size(3, 3));
 	dilate(dst_img, dst_img, element);
 	//erode(dst_img, dst_img, element);
-	src_img = dst_img.clone();
+	img = dst_img.clone();
 	return RET_ERROR_OK;
 }
+
+//人脸特征点检测
+#if 0
+int UManger::FacesPoints(Mat& img)
+{
+	cv::VideoCapture cap(0);
+	if (!cap.isOpened())
+	{
+		cout << "cant open camera" << endl;
+		return 0;
+	}
+	dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
+	dlib::shape_predictor pose_model;
+	dlib::deserialize("./shape_predictor_68_face_landmarks.dat");
+
+	while (cv::waitKey(30)!=27)
+	{
+		cv::Mat frame;
+		cap >> frame;
+		int width = cap.get(CV_CAP_PROP_FRAME_WIDTH);
+		int height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+		cout << "width" << width << endl;
+		cout << "height" << height << endl;
+
+		dlib::cv_image<dlib::bgr_pixel> cimg(frame);
+		std::vector<dlib::rectangle> faces = detector(cimg);
+		std::vector<dlib::full_object_detection> shapes;
+
+		for (unsigned long i = 0;i<faces.size();++i)
+		{
+			shapes.push_back(pose_model(cimg, faces[i]));
+		}
+		ofstream outfile;
+		outfile.open("./facespoints.txt", ios::app);
+		if (!outfile.is_open())
+		{
+			cout << "open file failure" << endl;
+		}
+		if (!shapes.empty())
+		{
+			for (int i = 0; i < 68; ++i)
+			{
+				circle(img, cvPoint(shapes[0].part(i).x(), shapes[0].part(i).y()), 3, cv::Scalar(0, 255, 0), -1);
+				cv::putText(frame, to_string(i), cvPoint(shapes[0].part(i).x(), shapes[0].part(i).y()), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 255, 0));
+				outfile << shapes[0].part(i).x() << " " << shapes[0].part(i).y() << "\t" << endl;
+
+			}
+			outfile.close();
+		}
+		
+	}
+	return RET_ERROR_OK;
+}
+#endif
  
-///////////////////////////////////////
-//camera
+//*****************************************饰品相关*****************************************
+//帽子饰品
 int UManger::AddHat(Mat& img)
 {
 	imshow("mask", img);
@@ -565,7 +341,7 @@ int UManger::AddHat(Mat& img)
 	waitKey(0);
 	return RET_ERROR_OK;
 }
-
+//眼镜饰品
 int UManger::AddGrasses(Mat& img)
 {
 	//imshow("mask", img);
@@ -598,6 +374,8 @@ int UManger::AddGrasses(Mat& img)
 
 }
 
+//*****************************************滤镜相关*****************************************
+//卡通滤镜
 int UManger::CartoonFilter(Mat& img)
 {
 	Mat dst;
@@ -636,7 +414,7 @@ int UManger::CartoonFilter(Mat& img)
 
 	return RET_ERROR_OK;
 }
-
+//怀旧滤镜
 int UManger::NostalgicFilter(Mat& img)
 {
 	Mat src = Mat::zeros(img.size(),img.type());
@@ -656,6 +434,129 @@ int UManger::NostalgicFilter(Mat& img)
 
 }
 
+//*****************************************图片相关*****************************************
+
+int UManger::PicAddPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	int b1, g1, r1;
+	int b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 + b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 + g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 + r2);
+
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+int UManger::PicSubPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	int b1, g1, r1;
+	int b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 - b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 - g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 - r2);
+
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+int UManger::PicMulPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	int b1, g1, r1;
+	int b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 * b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 * g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 * r2);
+
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
+{
+	if (img1.empty() || img2.empty())
+	{
+		cout << "cant load pic" << endl;
+	}
+	double b1, g1, r1;
+	double b2, g2, r2;
+
+	for (int rows = 0; rows < img1.rows; rows++)
+	{
+		for (int cols = 0; cols < img1.cols; cols++)
+		{
+			b1 = img1.at<Vec3b>(rows, cols)[0];
+			g1 = img1.at<Vec3b>(rows, cols)[1];
+			r1 = img1.at<Vec3b>(rows, cols)[2];
+
+			b2 = img2.at<Vec3b>(rows, cols)[0];
+			g2 = img2.at<Vec3b>(rows, cols)[1];
+			r2 = img2.at<Vec3b>(rows, cols)[2];
+
+			result.at<Vec3b>(rows, cols)[0] = saturate_cast<uchar>(b1 / b2);
+			result.at<Vec3b>(rows, cols)[1] = saturate_cast<uchar>(g1 / g2);
+			result.at<Vec3b>(rows, cols)[2] = saturate_cast<uchar>(r1 / r2);
+
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+//白平衡
 int UManger::WhiteBalance(Mat& img)
 {
 	vector<Mat> imgRGB;
@@ -676,6 +577,8 @@ int UManger::WhiteBalance(Mat& img)
 	return RET_ERROR_OK;
 
 }
+
+#if 0
 //int UManger::Nostalgic(Mat& img)
 //{
 //	Mat src = Mat::zeros(img.size(), img.type());
@@ -693,6 +596,7 @@ int UManger::WhiteBalance(Mat& img)
 //	img = src.clone();
 //	return RET_ERROR_OK;
 //}
+#endif
 
 #if 0
 int UManger::AddRandom(Mat& img)
@@ -755,8 +659,9 @@ int UManger::AddRandom(Mat& img)
 }
 #endif
 
-/////////////////////////////////////////
-//noise
+
+//*****************************************噪音相关*****************************************
+//高斯噪声
 int UManger::AddGaussianNoise(Mat& img)
 {
 	Mat noise = Mat::zeros(img.size(), img.type());
@@ -767,6 +672,7 @@ int UManger::AddGaussianNoise(Mat& img)
 	return RET_ERROR_OK;
 }
 
+//椒盐噪声
 int UManger::AddSaltPepperNoise(Mat& img)
 {
 	int h = img.rows;
@@ -790,6 +696,9 @@ int UManger::AddSaltPepperNoise(Mat& img)
 	return RET_ERROR_OK;
 }
 
+
+//*****************************************工具相关*****************************************
+//重命名图片
 int UManger::RenamePic(string InPath, string OutPath)
 {
 	//定义一个vector存储图片
@@ -808,6 +717,61 @@ int UManger::RenamePic(string InPath, string OutPath)
 	return RET_ERROR_OK;
 }
 
+//视频剪切成图片
+int UManger::VideoToPic(string VideoPath, string PicPath, double totalFrameNumber)
+{
+	VideoCapture cap(VideoPath);
+	totalFrameNumber = cap.get(CV_CAP_PROP_FRAME_COUNT);
+
+	Mat frame;
+	bool flags = true;
+	long currentFrame = 0;
+
+	while (flags)
+	{
+		cap.read(frame);
+		stringstream str;
+		str << currentFrame << ".jpg";
+		cout << "正在处理第 " << currentFrame << " 帧" << endl;
+
+		if (0 == currentFrame % 1)
+		{
+			imwrite(PicPath + str.str(), frame);
+		}
+		if (currentFrame >= totalFrameNumber)
+		{
+			flags = false;
+		}
+		currentFrame++;
+	}
+	return RET_ERROR_OK;
+}
+
+//图片合成视频
+int UManger::PicToVideo(string PicPath, string VideoPath, int height, int width)
+{
+	VideoWriter video(VideoPath, CV_FOURCC('X', 'V', 'I', 'D'), 27, Size(height, width), true);
+	vector<String> images;
+	glob(PicPath, images, false);
+
+	int count = images.size();
+	for (size_t i = 0; i <= count; ++i)
+	{
+		stringstream str;
+		str << i << ".jpg";
+		Mat pic = imread(PicPath + str.str());
+		if (!pic.empty())
+		{
+			resize(pic, pic, Size(height, width));
+			video << pic;
+			cout << "正在处理第" << i << "帧" << endl;
+		}
+	}
+	return RET_ERROR_OK;
+}
+
+//*****************************************UI相关*****************************************
+//show img in the window
 int UManger::UI_Img(bool& use_img)
 {
 	const int num = 500;
@@ -870,6 +834,7 @@ int UManger::UI_Img(bool& use_img)
 	return 0;
 }
 
+//open camera in the window
 int UManger::UI_Camera(bool& use_camera)
 {
 	//use_img = false;

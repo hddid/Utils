@@ -14,7 +14,7 @@
 
 #include "Common.h"
 
-#define OST_VERSION_MAJOR			1
+#define OST_VERSION_MAJOR			2
 #define OST_VERSION_MINOR			0
 #define OST_VERSION_MAINTENANCE		0
 #define OST_VERSION_BUILD			1
@@ -29,6 +29,7 @@
 /** OpenST version (in numeric format): (OpenST major version * 100000000 + OpenNI minor version * 1000000 + OpenST maintenance version * 10000 + OpenST build version). */
 #define OST_VERSION (OST_VERSION_MAJOR * 100000000 + OST_VERSION_MINOR * 1000000 + OST_VERSION_MAINTENANCE * 10000 + OST_VERSION_BUILD)
 #define OST_CREATE_API_VERSION(major, minor) ((major)*1000 + (minor))
+
 #define OST_API_VERSION OST_CREATE_API_VERSION(OST_VERSION_MAJOR, OST_VERSION_MINOR)
 
 /** OpenST version (in string format): "Major.Minor.Maintenance.Build-Platform (MMM DD YYYY HH:MM:SS)". */ 
