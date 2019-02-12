@@ -578,6 +578,13 @@ int UManger::WhiteBalance(Mat& img)
 
 }
 
+//int UManger::Tb_ContrasAndBright(Mat& img)
+//{
+//	int low_threshold = 0;
+//	int high_threshold = 500;
+//
+//}
+
 #if 0
 //int UManger::Nostalgic(Mat& img)
 //{

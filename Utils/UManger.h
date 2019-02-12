@@ -25,7 +25,6 @@
 #include <opencv2/objdetect/objdetect.hpp>
 
 
-
 #include "Singleton.h"
 
 using namespace std;
@@ -82,6 +81,9 @@ public:
 	int PicDivPic(Mat& img1, Mat& img2, Mat& result);
 
 	int WhiteBalance(Mat& img);
+
+	//Tb means Trackbar
+	//int Tb_ContrasAndBright(Mat& img);
 
 	//*****************************************‘Î“Ùœ‡πÿ*****************************************
 	int AddGaussianNoise(Mat& img);

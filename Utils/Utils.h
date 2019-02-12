@@ -69,8 +69,11 @@ UTILS_API(int) PicMulPic(Mat& img1, Mat& img2, Mat& result);
 //两张图片相加，分别输入两张图片，输出一张合成的结果，img1是被除数
 UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
 
+//自动白平衡，输入图片
 UTILS_API(int) WhiteBalance(Mat& img);
 
+//UI滑动条修改亮度和对比度
+//UTILS_API(int) Tb_ContrasAndBright(Mat& img);
 //*****************************************噪音相关*****************************************
 //在输入的图片上增加高斯噪音
 UTILS_API(int) AddGaussianNoise(Mat& img);

@@ -123,6 +123,12 @@ UTILS_IMPL int WhiteBalance(Mat& img)
 	return UManger::Instance()->WhiteBalance(img);
 }
 
+//UTILS_IMPL int Tb_ContrasAndBright(Mat& img)
+//{
+//	return UManger::Instance()->Tb_ContrasAndBright(img);
+//}
+
+
 //UTILS_IMPL int AddRandom(Mat& img)
 //{
 //	return UManger::Instance()->AddRandom(img);

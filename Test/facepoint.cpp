@@ -71,24 +71,22 @@ int main()
 #endif
 
 #if 1
-int main()
-{
-	cv::VideoCapture cap(0);
-	while (1)
-	{
-		cv::Mat frame;
-		cap >> frame;
-		double time0 = static_cast<double>(cv::getTickCount());
-		FacesPoints(frame);
-		double time1 = ((double)cv::getTickCount() - time0) / cv::getTickFrequency();
-		cout << "time" << time1 << endl;
-		cv::imshow("frame",frame);
-		cv::waitKey(30);
-	}
-	return 0;
-}
-
-  
+//int main()
+//{
+//	cv::VideoCapture cap(0);
+//	while (1)
+//	{
+//		cv::Mat frame;
+//		cap >> frame;
+//		double time0 = static_cast<double>(cv::getTickCount());
+//		FacesPoints(frame);
+//		double time1 = ((double)cv::getTickCount() - time0) / cv::getTickFrequency();
+//		cout << "time" << time1 << endl;
+//		cv::imshow("frame",frame);
+//		cv::waitKey(30);
+//	}
+//	return 0;
+//}
 
 int FacesPoints(cv::Mat& frame)
 {
