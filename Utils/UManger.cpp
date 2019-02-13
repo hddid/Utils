@@ -234,6 +234,13 @@ int UManger::HSVSkin(Mat& img)
 	return RET_ERROR_OK;
 }
 
+//‘≤ºÏ≤‚”Î∞ﬂµ„ºÏ≤‚
+
+
+//÷±œﬂºÏ≤‚
+//¬÷¿™ºÏ≤‚
+//
+
 //»À¡≥Ãÿ’˜µ„ºÏ≤‚
 #if 0
 int UManger::FacesPoints(Mat& img)
@@ -432,6 +439,54 @@ int UManger::NostalgicFilter(Mat& img)
 	img = src.clone();
 	return RET_ERROR_OK;
 
+}
+
+int UManger::WaveFilter(Mat& img)
+{
+	Mat src = img.clone();
+
+	int width = img.cols;
+	int height = img.rows;
+	int N = 30;
+
+	Point Center(width / 2, height / 2);
+
+	float new_x, new_y;
+	float p, q, x1, y1, x0, y0;
+
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			y0 = Center.y - y;
+			x0 = x - Center.x;
+			new_x = N*sin(2 * 3.14*y0 / 128.0) + x0;
+			new_y = N*cos(2 * 3.14*x0 / 128.0) + y0;
+			new_x = Center.x + new_x;
+			new_y = Center.y - new_y;
+
+			if (new_x < 0)         
+				new_x = 0;
+			if (new_x >= width - 1)  
+				new_x = width - 2;
+			if (new_y < 0)         
+				new_y = 0;
+			if (new_y >= height - 1)
+				new_y = height - 2;
+
+			x1 = (int)new_x;
+			y1 = (int)new_y;
+
+			p = new_x - x1;
+			q = new_y - y1;
+
+			src.at<Vec3b>(y, x)[0] = ((1 - p)*(1 - q)*img.at<Vec3b>(y1, x1)[0] + p*(1 - q)*img.at<Vec3b>(y1, x1 + 1)[0] + q*(1 - p)*img.at<Vec3b>(y1 + 1, x1)[0] + p*q*img.at<Vec3b>(y1 + 1, x1 + 1)[0]);
+			src.at<Vec3b>(y, x)[1] = ((1 - p)*(1 - q)*img.at<Vec3b>(y1, x1)[1] + p*(1 - q)*img.at<Vec3b>(y1, x1 + 1)[1] + q*(1 - p)*img.at<Vec3b>(y1 + 1, x1)[1] + p*q*img.at<Vec3b>(y1 + 1, x1 + 1)[1]);
+			src.at<Vec3b>(y, x)[2] = ((1 - p)*(1 - q)*img.at<Vec3b>(y1, x1)[2] + p*(1 - q)*img.at<Vec3b>(y1, x1 + 1)[2] + q*(1 - p)*img.at<Vec3b>(y1 + 1, x1)[2] + p*q*img.at<Vec3b>(y1 + 1, x1 + 1)[2]);
+		}
+	}
+	img = src.clone();
+	return RET_ERROR_OK;
 }
 
 //*****************************************Õº∆¨œ‡πÿ*****************************************

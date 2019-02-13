@@ -23,6 +23,7 @@ bool SkinDetector = false;
 bool Cartoon = false;
 bool Nostalgic = false;
 
+
 //SkinDetector
 bool rgbcolor = false;
 bool ellipseskin = false;

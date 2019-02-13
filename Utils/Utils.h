@@ -52,6 +52,8 @@ UTILS_API(int) AddGrasses(Mat& img);
 UTILS_API(int) CartoonFilter(Mat& img);
 //Ìí¼Ó»³¾ÉÂË¾µ
 UTILS_API(int) NostalgicFilter(Mat& img);
+//Ìí¼Ó»³¾ÉÂË¾µ
+UTILS_API(int) WaveFilter(Mat& img);
 //²âÊÔ
 //UTILS_API(int) AddRandom(Mat& img);
 

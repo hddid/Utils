@@ -28,7 +28,6 @@ int img(bool &use_img)
 		cvui::checkbox(BaseImg, 0, 70, "whitebalance", &whitebalance);
 		cvui::checkbox(BaseImg, 0, 100, "contrastAndbright", &contrastAndbright);
 		
-
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
 		Mat img = imread(img_name);
@@ -59,10 +58,10 @@ int img(bool &use_img)
 					img.at<Vec3b>(i, j)[0] = saturate_cast<uchar>((g_nContrastValue * 0.01)*img.at<Vec3b>(i, j)[0] + g_nBrightValue);
 					img.at<Vec3b>(i, j)[1] = saturate_cast<uchar>((g_nContrastValue * 0.01)*img.at<Vec3b>(i, j)[1] + g_nBrightValue);
 					img.at<Vec3b>(i, j)[2] = saturate_cast<uchar>((g_nContrastValue * 0.01)*img.at<Vec3b>(i, j)[2] + g_nBrightValue);
-
 				}
 			}
 		}
+		
 		//resize(img, img, Size(640, 480));
 		
 		//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
@@ -120,6 +119,7 @@ int camera(bool &use_camera)
 
 			//bool puppet  = false;
 			//puppet = (SkinDetector == true && CameraFilter == false);		
+
 			while (SkinDetector == true && CameraFilter == false)
 			{
 				cvui::checkbox(BaseImg, 20, 90, "RGBSkin", &rgbcolor);
@@ -145,10 +145,13 @@ int camera(bool &use_camera)
 			{
 				cvui::checkbox(BaseImg, 10, 90, "Cartoon", &Cartoon);
 				cvui::checkbox(BaseImg, 10, 120, "Nostalgic", &Nostalgic);
+				cvui::checkbox(BaseImg, 10, 150, "Wave", &Wave);
 				if (Cartoon == true)
 					CartoonFilter(frame);
 				if (Nostalgic == true)
 					NostalgicFilter(frame);
+				if (Wave == true)
+					WaveFilter(frame);
 				break;
 			}
 

@@ -14,7 +14,7 @@
 #ifndef ZHY_UTILS_UMANAGER_H
 #define ZHY_UTILS_UMANAGER_H
 
-
+#include <math.h>
 #include <string.h>
 #include <vector>
 #include <iostream>
@@ -71,6 +71,8 @@ public:
 
 	int NostalgicFilter(Mat& img);
 
+	int WaveFilter(Mat& img);
+
 	//*****************************************图片相关*****************************************
 	int PicAddPic(Mat& img1, Mat& img2, Mat& result);
 
@@ -89,6 +91,7 @@ public:
 	int AddGaussianNoise(Mat& img);
 
 	int AddSaltPepperNoise(Mat& img);
+
 	//*****************************************工具相关*****************************************
 	int VideoToPic(string VideoPath, string PicPath, double totalFrameNumber);
 	

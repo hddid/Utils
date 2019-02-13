@@ -95,6 +95,10 @@ UTILS_IMPL int NostalgicFilter(Mat& img)
 	return UManger::Instance()->NostalgicFilter(img);
 }
 
+UTILS_IMPL int WaveFilter(Mat& img)
+{
+	return UManger::Instance()->WaveFilter(img);
+}
 
 //*****************************************Õº∆¨œ‡πÿ*****************************************
 

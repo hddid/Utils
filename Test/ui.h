@@ -4,7 +4,6 @@
 #include <opencv2/opencv.hpp>
 #include "Utils.h"
 
-
 #define CVUI_IMPLEMENTATION
 #include "cvui/cvui.h"
 
@@ -12,7 +11,6 @@
 
 bool use_img = true;
 bool use_camera = false;
-
 
 int img(bool &use_img);
 int camera(bool &use_camera);
@@ -33,6 +31,7 @@ bool SkinDetector = false;
 //CameraFilter
 bool Cartoon = false;
 bool Nostalgic = false;
+bool Wave = false;
 
 //SkinDetector
 bool rgbcolor = false;

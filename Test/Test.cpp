@@ -198,7 +198,12 @@ using namespace cv;
 
 int main()
 {
-	UI_Img(use_img);
+	Mat img = imread("1.jpg");
+	if (RET_ERROR_OK == WaveFilter(img))
+	{
+		imshow("img", img);
+	}
+	waitKey(0);
 	return 0;
 
 }
