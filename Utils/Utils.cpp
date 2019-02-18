@@ -95,11 +95,15 @@ UTILS_IMPL int NostalgicFilter(Mat& img)
 	return UManger::Instance()->NostalgicFilter(img);
 }
 
-UTILS_IMPL int WaveFilter(Mat& img)
+UTILS_IMPL int WaveFilter(Mat& img,const int& level)
 {
-	return UManger::Instance()->WaveFilter(img);
+	return UManger::Instance()->WaveFilter(img,level);
 }
 
+UTILS_IMPL int OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize)
+{
+	return UManger::Instance()->OilPaintFilter(img,smoothness,bucketSize);
+}
 //*****************************************Í¼Æ¬Ïà¹Ø*****************************************
 
 UTILS_IMPL int PicAddPic(Mat& img1, Mat& img2, Mat& result)
@@ -126,6 +130,7 @@ UTILS_IMPL int WhiteBalance(Mat& img)
 {
 	return UManger::Instance()->WhiteBalance(img);
 }
+
 
 //UTILS_IMPL int Tb_ContrasAndBright(Mat& img)
 //{

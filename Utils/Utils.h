@@ -53,7 +53,9 @@ UTILS_API(int) CartoonFilter(Mat& img);
 //添加怀旧滤镜
 UTILS_API(int) NostalgicFilter(Mat& img);
 //添加怀旧滤镜
-UTILS_API(int) WaveFilter(Mat& img);
+UTILS_API(int) WaveFilter(Mat& img,const int& level);
+//优化滤镜
+UTILS_API(int) OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize);
 //测试
 //UTILS_API(int) AddRandom(Mat& img);
 
@@ -74,8 +76,11 @@ UTILS_API(int) PicDivPic(Mat& img1, Mat& img2, Mat& result);
 //自动白平衡，输入图片
 UTILS_API(int) WhiteBalance(Mat& img);
 
+
+
 //UI滑动条修改亮度和对比度
 //UTILS_API(int) Tb_ContrasAndBright(Mat& img);
+
 //*****************************************噪音相关*****************************************
 //在输入的图片上增加高斯噪音
 UTILS_API(int) AddGaussianNoise(Mat& img);

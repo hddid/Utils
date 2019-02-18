@@ -441,13 +441,13 @@ int UManger::NostalgicFilter(Mat& img)
 
 }
 
-int UManger::WaveFilter(Mat& img)
+int UManger::WaveFilter(Mat& img,const int& level)
 {
 	Mat src = img.clone();
 
 	int width = img.cols;
 	int height = img.rows;
-	int N = 30;
+	//int N = 30;
 
 	Point Center(width / 2, height / 2);
 
@@ -460,8 +460,8 @@ int UManger::WaveFilter(Mat& img)
 		{
 			y0 = Center.y - y;
 			x0 = x - Center.x;
-			new_x = N*sin(2 * 3.14*y0 / 128.0) + x0;
-			new_y = N*cos(2 * 3.14*x0 / 128.0) + y0;
+			new_x = level*sin(2 * 3.14*y0 / 128.0) + x0;
+			new_y = level*cos(2 * 3.14*x0 / 128.0) + y0;
 			new_x = Center.x + new_x;
 			new_y = Center.y - new_y;
 
@@ -486,6 +486,79 @@ int UManger::WaveFilter(Mat& img)
 		}
 	}
 	img = src.clone();
+	return RET_ERROR_OK;
+}
+
+int UManger::OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize)
+{
+	Mat gray;
+	ConvertRGB2Gray(img, gray);
+	int lenArray = bucketSize + 1;
+	int* CountIntensity = new int [lenArray];
+	uint* RedAverage = new uint [lenArray ];
+	uint* GreenAverage = new uint[lenArray];
+	uint* BlueAverage = new uint[lenArray];
+
+	Mat dst = img.clone();
+
+	for (int i = 0; i < img.rows; i++)
+	{
+		int top = i - bucketSize;
+		int bottom = i + bucketSize + 1;
+		if (top < 0)
+			top = 0;
+		if (bottom >= img.rows)
+			bottom = img.rows - 1;
+
+		for (int j = 0;j < img.cols; j++)
+		{
+			int left = j - bucketSize;
+			int right = j + bucketSize + 1;
+			if (left < 0)
+				left = 0;
+			if (right >= bucketSize)
+				right = img.cols - 1;
+
+			for (int x = 0;x< lenArray;x++)
+			{
+				CountIntensity[x] = 0;
+				RedAverage[x] = 0;
+				GreenAverage[x] = 0;
+				BlueAverage[x] = 0;
+
+			}
+			for (int m =top;m<bottom;m++)
+			{
+				for (int n = left;n<right;n++)
+				{
+					uchar intensity = static_cast<uchar>(smoothness*gray.at<uchar>(m, n) / 255);
+					CountIntensity[intensity]++;
+
+					RedAverage[intensity] += img.at<Vec3b>(m, n)[2];
+					GreenAverage[intensity] += img.at<Vec3b>(m, n)[1];
+					BlueAverage[intensity] += img.at<Vec3b>(m, n)[0];
+				}
+			}
+			uchar chosenIntensity = 0;
+			int maxInstance = CountIntensity[0];
+			for (int i = 0;i<lenArray;i++)
+			{
+				if(CountIntensity[i] > maxInstance)
+				{
+					chosenIntensity = (uchar)i;
+					maxInstance = CountIntensity[i];
+				}
+			}
+			dst.at<Vec3b>(i, j)[2] = static_cast<uchar>(RedAverage[chosenIntensity] / static_cast<float>(maxInstance));
+			dst.at<Vec3b>(i, j)[1] = static_cast<uchar>(GreenAverage[chosenIntensity] / static_cast<float>(maxInstance));
+			dst.at<Vec3b>(i, j)[0] = static_cast<uchar>(BlueAverage[chosenIntensity] / static_cast<float>(maxInstance));
+		}
+	}
+	delete[] CountIntensity;
+	delete[] RedAverage;
+	delete[] GreenAverage;
+	delete[] BlueAverage;
+	img = dst.clone();
 	return RET_ERROR_OK;
 }
 
@@ -633,12 +706,15 @@ int UManger::WhiteBalance(Mat& img)
 
 }
 
+
 //int UManger::Tb_ContrasAndBright(Mat& img)
 //{
 //	int low_threshold = 0;
 //	int high_threshold = 500;
 //
 //}
+
+
 
 #if 0
 //int UManger::Nostalgic(Mat& img)
@@ -921,6 +997,7 @@ int UManger::UI_Camera(bool& use_camera)
 			Mat frame;
 			cap >> frame;
 			resize(frame, frame, Size(640, 480));
+
 			//bool puppet  = false;
 			//puppet = (SkinDetector == true && CameraFilter == false);
 

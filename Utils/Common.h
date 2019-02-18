@@ -15,6 +15,7 @@
 #include <string> /// C++ std library
 #include <cv.h>
 
+
 #if (defined WIN32 || defined _WIN32) && defined UTILS_EXPORTS
 #	define UTILS_API_EXPORTS __declspec(dllexport) 
 #else 

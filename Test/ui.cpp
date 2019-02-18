@@ -16,11 +16,11 @@ int img(bool &use_img)
 	cvui::init(WINDOW_NAME);
 
 	int count = 1;
-	//bool whitebalance = false;
+
 	while (use_img)
 	{
 		//img°´¼ü´°¿Ú
-		cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
+		cvui::window(BaseImg, 0, 0, 320, 480, "********************vision********************");
 		cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
 		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 		cvui::printf(BaseImg, 0, 40, "*************************************************");
@@ -31,7 +31,7 @@ int img(bool &use_img)
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
 		Mat img = imread(img_name);
-
+		//equalizeHist(img, img);
 		if (img.empty())
 		{
 			cerr << "no img in file now" << endl;
@@ -51,6 +51,8 @@ int img(bool &use_img)
 			cvui::trackbar(BaseImg, 0, 190, 220, &g_nContrastValue, 5, 150);
 			cvui::printf(BaseImg, 220, 210, "ContrastValue");
 
+		
+
 			for (int i = 0; i <= img.rows; i++)		
 			{
 				for (int j = 0; j <= img.cols; j++)			
@@ -61,7 +63,7 @@ int img(bool &use_img)
 				}
 			}
 		}
-		
+	
 		//resize(img, img, Size(640, 480));
 		
 		//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
@@ -146,12 +148,22 @@ int camera(bool &use_camera)
 				cvui::checkbox(BaseImg, 10, 90, "Cartoon", &Cartoon);
 				cvui::checkbox(BaseImg, 10, 120, "Nostalgic", &Nostalgic);
 				cvui::checkbox(BaseImg, 10, 150, "Wave", &Wave);
+				cvui::checkbox(BaseImg, 10, 180, "OilPaint", &OilPaint);
 				if (Cartoon == true)
 					CartoonFilter(frame);
 				if (Nostalgic == true)
 					NostalgicFilter(frame);
 				if (Wave == true)
-					WaveFilter(frame);
+				{
+					cvui::trackbar(BaseImg, 70, 135, 250, &g_nlevel, 0, 100);
+					WaveFilter(frame, g_nlevel);
+				}
+				if(OilPaint == true)
+				{
+					cvui::trackbar(BaseImg, 70, 200, 250, &g_ntemplateSize, 0, 100);
+					cvui::trackbar(BaseImg, 70, 250, 250, &g_nbucketSize, 0, 100);
+					OilPaintFilter(frame, g_ntemplateSize, g_nbucketSize);
+				}
 				break;
 			}
 

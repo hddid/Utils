@@ -58,7 +58,8 @@ public:
 	int YCrCbSkin(Mat& img);
 	//第五种：基于HSV颜色空间H范围筛选法
 	int HSVSkin(Mat& img);
-										//face相关
+	
+	//*************face相关*************
 	//int FacesPoints(Mat& img);
 
 	//*****************************************饰品相关*****************************************
@@ -71,7 +72,9 @@ public:
 
 	int NostalgicFilter(Mat& img);
 
-	int WaveFilter(Mat& img);
+	int WaveFilter(Mat& img,const int& level);
+
+	int OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize );
 
 	//*****************************************图片相关*****************************************
 	int PicAddPic(Mat& img1, Mat& img2, Mat& result);
@@ -83,6 +86,9 @@ public:
 	int PicDivPic(Mat& img1, Mat& img2, Mat& result);
 
 	int WhiteBalance(Mat& img);
+
+	//*************颜色空间转换*************
+
 
 	//Tb means Trackbar
 	//int Tb_ContrasAndBright(Mat& img);

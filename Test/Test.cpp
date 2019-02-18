@@ -198,10 +198,13 @@ using namespace cv;
 
 int main()
 {
-	Mat img = imread("1.jpg");
-	if (RET_ERROR_OK == WaveFilter(img))
+	Mat img = imread("14.jpg");
+	//imshow("before", img);
+	
+	if (RET_ERROR_OK == OilPaintFilter(img,2,4))
 	{
 		imshow("img", img);
+		imwrite("../ss.jpg", img);
 	}
 	waitKey(0);
 	return 0;

@@ -21,8 +21,16 @@ bool contrastAndbright = false;
 
 //对比度
 int g_nContrastValue;
+
 //亮度
 int g_nBrightValue;
+
+//Wavelevel
+int g_nlevel;
+
+//OilPaint
+int g_ntemplateSize;
+int g_nbucketSize;
 
 //*****************************************camera*****************************************
 bool CameraFilter = false;
@@ -32,6 +40,7 @@ bool SkinDetector = false;
 bool Cartoon = false;
 bool Nostalgic = false;
 bool Wave = false;
+bool OilPaint = false;
 
 //SkinDetector
 bool rgbcolor = false;
