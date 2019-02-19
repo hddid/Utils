@@ -42,13 +42,11 @@ int UManger::ConvertRGB2Gray(const Mat & src, Mat & gray)
 			x3 = x + x + x;
 		}
 	}
-
 	return RET_ERROR_OK;
 }
 
 int UManger::FastColorReduce(Mat& image,int div = 64)
 {
-
 	int nl = image.rows; 
 	int nc = image.cols; 
 
@@ -64,13 +62,11 @@ int UManger::FastColorReduce(Mat& image,int div = 64)
 	//掩码值e.g. 比如div=16, mask= 0xF0
 	uchar mask = 0xFF << n; 
 
-	for (int j = 0; j < nl; ++j) {
-
+	for (int j = 0; j < nl; ++j) 
+	{
 		uchar* data = image.ptr<uchar>(j);
-
 		for (int i = 0; i < nc; ++i) 
 		{
-			//-------------开始处理每个像素-------------------
 			*data++ = *data&mask + div / 2;
 			*data++ = *data&mask + div / 2;
 			*data++ = *data&mask + div / 2;
@@ -101,7 +97,7 @@ int UManger::ContrastAndBright(Mat& src_image, Mat& dst_image, const double alph
 
 
 //*****************************************检测相关*****************************************
-//肤色检测的五种方法
+
 int UManger::RGBSkin(Mat& img)
 {
 	Mat dst_img = Mat::zeros(img.size(), img.type());
@@ -234,13 +230,6 @@ int UManger::HSVSkin(Mat& img)
 	return RET_ERROR_OK;
 }
 
-//圆检测与斑点检测
-
-
-//直线检测
-//轮廓检测
-//
-
 //人脸特征点检测
 #if 0
 int UManger::FacesPoints(Mat& img)
@@ -295,8 +284,9 @@ int UManger::FacesPoints(Mat& img)
 }
 #endif
  
+
 //*****************************************饰品相关*****************************************
-//帽子饰品
+
 int UManger::AddHat(Mat& img)
 {
 	imshow("mask", img);
@@ -348,7 +338,7 @@ int UManger::AddHat(Mat& img)
 	waitKey(0);
 	return RET_ERROR_OK;
 }
-//眼镜饰品
+
 int UManger::AddGrasses(Mat& img)
 {
 	//imshow("mask", img);
@@ -381,8 +371,9 @@ int UManger::AddGrasses(Mat& img)
 
 }
 
+
 //*****************************************滤镜相关*****************************************
-//卡通滤镜
+
 int UManger::CartoonFilter(Mat& img)
 {
 	Mat dst;
@@ -421,7 +412,7 @@ int UManger::CartoonFilter(Mat& img)
 
 	return RET_ERROR_OK;
 }
-//怀旧滤镜
+
 int UManger::NostalgicFilter(Mat& img)
 {
 	Mat src = Mat::zeros(img.size(),img.type());
@@ -562,6 +553,7 @@ int UManger::OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize
 	return RET_ERROR_OK;
 }
 
+
 //*****************************************图片相关*****************************************
 
 int UManger::PicAddPic(Mat& img1, Mat& img2, Mat& result)
@@ -684,7 +676,6 @@ int UManger::PicDivPic(Mat& img1, Mat& img2, Mat& result)
 	return RET_ERROR_OK;
 }
 
-//白平衡
 int UManger::WhiteBalance(Mat& img)
 {
 	vector<Mat> imgRGB;
@@ -707,99 +698,8 @@ int UManger::WhiteBalance(Mat& img)
 }
 
 
-//int UManger::Tb_ContrasAndBright(Mat& img)
-//{
-//	int low_threshold = 0;
-//	int high_threshold = 500;
-//
-//}
-
-
-
-#if 0
-//int UManger::Nostalgic(Mat& img)
-//{
-//	Mat src = Mat::zeros(img.size(), img.type());
-//	for (int i = 0; i < img.rows; i++)
-//	{
-//		uchar *p_img = img.ptr<uchar>(i);
-//		uchar *p_src = src.ptr<uchar>(i);
-//		for (int j = 0; j < img.cols; j++)
-//		{
-//			p_src[j * 3] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.131 + p_img[j * 3 + 1] * 0.534 + p_img[j * 3 + 2] * 0.272)), 255)));
-//			p_src[j * 3 + 1] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.168 + p_img[j * 3 + 1] * 0.686 + p_img[j * 3 + 2] * 0.349)), 255)));
-//			p_src[j * 3 + 2] = max(0, (min((static_cast<int>(p_img[j * 3] * 0.189 + p_img[j * 3 + 1] * 0.769 + p_img[j * 3 + 2] * 0.393)), 255)));
-//		}
-//	}
-//	img = src.clone();
-//	return RET_ERROR_OK;
-//}
-#endif
-
-#if 0
-int UManger::AddRandom(Mat& img)
-{
-	Mat src = Mat::zeros(img.size(), img.type());
-	for (int i = 0; i < img.rows; i++)
-	{
-		
-		uchar *p_img = img.ptr<uchar>(i);
-		uchar *p_src = src.ptr<uchar>(i);
-		for (int j = 0; j < img.cols; j++)
-		{
-			RNG rng;
-			int b0, b1, b2, g0, g1, g2, r0, r1, r2;
-#if 0	
-			b0 = rng.uniform(0, 255);
-			b1 = rng.uniform(0, 255);
-			b2 = rng.uniform(0, 255);
-
-			g0 = rng.uniform(0, 255);
-			g1 = rng.uniform(0, 255);
-			g2 = rng.uniform(0, 255);
-
-			r0 = rng.uniform(0, 255);
-			r1 = rng.uniform(0, 255);
-			r2 = rng.uniform(0, 255);
-#endif
-
-			b0 = HY_RANDOM(1,2);
-			b1 = HY_RANDOM(1,2);
-			b2 = HY_RANDOM(1,2);
-
-			g0 = HY_RANDOM(110,255);
-			g1 = HY_RANDOM(110,255);
-			g2 = HY_RANDOM(110,255);
-
-			r0 = HY_RANDOM(110,255);
-			r1 = HY_RANDOM(110,255);
-			r2 = HY_RANDOM(110,255);
-
-
-			cout << "b0 " << b0 << endl;
-			cout << "b1 " << b1 << endl;
-			cout << "b2 " << b2 << endl;
-			cout << "g0 " << g0 << endl;
-			cout << "g1 " << g1 << endl;
-			cout << "g2 " << g2 << endl;
-			cout << "r0 " << r0 << endl;
-			cout << "r1 " << r1 << endl; 
-			cout << "r2 " << r2 << endl;
-
-			p_src[j * 3]     = max(0, (min((static_cast<int>(p_img[j * 3] * b0 + p_img[j * 3 + 1] * g0 + p_img[j * 3 + 2] * r0)/1000), 255)));
-			p_src[j * 3 + 1] = max(0, (min((static_cast<int>(p_img[j * 3] * b1 + p_img[j * 3 + 1] * g1 + p_img[j * 3 + 2] * r1)/1000), 255)));
-			p_src[j * 3 + 2] = max(0, (min((static_cast<int>(p_img[j * 3] * b2 + p_img[j * 3 + 1] * g2 + p_img[j * 3 + 2] * r2)/1000), 255)));
-		
-		}
-	}
-	img = src.clone();
-	return RET_ERROR_OK;
-}
-#endif
-
-
 //*****************************************噪音相关*****************************************
-//高斯噪声
+
 int UManger::AddGaussianNoise(Mat& img)
 {
 	Mat noise = Mat::zeros(img.size(), img.type());
@@ -810,7 +710,6 @@ int UManger::AddGaussianNoise(Mat& img)
 	return RET_ERROR_OK;
 }
 
-//椒盐噪声
 int UManger::AddSaltPepperNoise(Mat& img)
 {
 	int h = img.rows;
@@ -836,7 +735,7 @@ int UManger::AddSaltPepperNoise(Mat& img)
 
 
 //*****************************************工具相关*****************************************
-//重命名图片
+
 int UManger::RenamePic(string InPath, string OutPath)
 {
 	//定义一个vector存储图片
@@ -855,7 +754,6 @@ int UManger::RenamePic(string InPath, string OutPath)
 	return RET_ERROR_OK;
 }
 
-//视频剪切成图片
 int UManger::VideoToPic(string VideoPath, string PicPath, double totalFrameNumber)
 {
 	VideoCapture cap(VideoPath);
@@ -885,7 +783,6 @@ int UManger::VideoToPic(string VideoPath, string PicPath, double totalFrameNumbe
 	return RET_ERROR_OK;
 }
 
-//图片合成视频
 int UManger::PicToVideo(string PicPath, string VideoPath, int height, int width)
 {
 	VideoWriter video(VideoPath, CV_FOURCC('X', 'V', 'I', 'D'), 27, Size(height, width), true);
@@ -908,8 +805,9 @@ int UManger::PicToVideo(string PicPath, string VideoPath, int height, int width)
 	return RET_ERROR_OK;
 }
 
+
 //*****************************************UI相关*****************************************
-//show img in the window
+
 int UManger::UI_Img(bool& use_img)
 {
 	const int num = 500;
@@ -972,7 +870,6 @@ int UManger::UI_Img(bool& use_img)
 	return 0;
 }
 
-//open camera in the window
 int UManger::UI_Camera(bool& use_camera)
 {
 	//use_img = false;

@@ -200,9 +200,11 @@ int main()
 {
 	Mat img = imread("14.jpg");
 	//imshow("before", img);
-	
-	if (RET_ERROR_OK == OilPaintFilter(img,2,4))
+	double time = static_cast<double>(getTickCount());
+	if (RET_ERROR_OK == OilPaintFilter(img,2,1))
 	{
+		time = ((double)getTickCount() - time) / getTickFrequency();
+		cout << "time" << time << endl;
 		imshow("img", img);
 		imwrite("../ss.jpg", img);
 	}
