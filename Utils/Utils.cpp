@@ -38,8 +38,9 @@ UTILS_IMPL int ContrastAndBright(Mat& src_image, Mat& dst_image, const double al
 	return UManger::Instance()->ContrastAndBright(src_image, dst_image, alpha, beta);
 }
 
+
 //*****************************************检测相关*****************************************
-//肤色检测的五种方法
+
 UTILS_IMPL int RGBSkin(Mat& img)
 {
 	return UManger::Instance()->RGBSkin(img);
@@ -73,7 +74,9 @@ UTILS_IMPL int FacesPoints(Mat& img)
 }
 #endif
 
+
 //*****************************************饰品相关*****************************************
+
 UTILS_IMPL int AddHat(Mat& img)
 {
 	return UManger::Instance()->AddHat(img);
@@ -84,7 +87,9 @@ UTILS_IMPL int AddGrasses(Mat& img)
 	return UManger::Instance()->AddGrasses(img);
 }
 
+
 //*****************************************滤镜相关*****************************************
+
 UTILS_IMPL int CartoonFilter(Mat& img)
 {
 	return UManger::Instance()->CartoonFilter(img);
@@ -104,6 +109,8 @@ UTILS_IMPL int OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSi
 {
 	return UManger::Instance()->OilPaintFilter(img,smoothness,bucketSize);
 }
+
+
 //*****************************************图片相关*****************************************
 
 UTILS_IMPL int PicAddPic(Mat& img1, Mat& img2, Mat& result)
@@ -132,17 +139,6 @@ UTILS_IMPL int WhiteBalance(Mat& img)
 }
 
 
-//UTILS_IMPL int Tb_ContrasAndBright(Mat& img)
-//{
-//	return UManger::Instance()->Tb_ContrasAndBright(img);
-//}
-
-
-//UTILS_IMPL int AddRandom(Mat& img)
-//{
-//	return UManger::Instance()->AddRandom(img);
-//}
-
 //*****************************************噪音相关*****************************************
 UTILS_IMPL int AddGaussianNoise(Mat& img)
 {
@@ -156,6 +152,7 @@ UTILS_IMPL int AddSaltPepperNoise(Mat& img)
 
 
 //*****************************************工具相关*****************************************
+
 UTILS_IMPL int RenamePic(string InPic, string OutPic)
 {
 	return UManger::Instance()->RenamePic(InPic, OutPic);
@@ -172,6 +169,7 @@ UTILS_IMPL int PicToVideo(string PicPath, string VideoPath, int height, int widt
 }
 
 //*****************************************UI相关*****************************************
+
 UTILS_IMPL int UI_Img(bool& use_img)
 {
 	return UManger::Instance()->UI_Img(use_img);

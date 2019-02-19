@@ -17,7 +17,9 @@ int camera(bool &use_camera);
 
 //*****************************************img*****************************************
 bool whitebalance = false;
-bool contrastAndbright = false;
+
+bool Contrast = false;
+bool Bright = false;
 
 //¶Ô±È¶È
 int g_nContrastValue;

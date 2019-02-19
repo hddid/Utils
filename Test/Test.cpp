@@ -201,7 +201,7 @@ int main()
 	Mat img = imread("14.jpg");
 	//imshow("before", img);
 	double time = static_cast<double>(getTickCount());
-	if (RET_ERROR_OK == OilPaintFilter(img,2,1))
+	if (RET_ERROR_OK == OilPaintFilter(img,4,8))
 	{
 		time = ((double)getTickCount() - time) / getTickFrequency();
 		cout << "time" << time << endl;

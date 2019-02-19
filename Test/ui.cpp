@@ -24,9 +24,17 @@ int img(bool &use_img)
 		cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
 		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 		cvui::printf(BaseImg, 0, 40, "*************************************************");
+		cvui::printf(BaseImg, 0, 350, "*************************************************");
+		cvui::printf(BaseImg, 0, 440, "*************************************************");
 
-		cvui::checkbox(BaseImg, 0, 70, "whitebalance", &whitebalance);
-		cvui::checkbox(BaseImg, 0, 100, "contrastAndbright", &contrastAndbright);
+		cvui::checkbox(BaseImg, 0, 70, "Bright", &Bright);
+		cvui::checkbox(BaseImg, 0, 110, "Contrast", &Contrast);
+		cvui::checkbox(BaseImg, 0, 150, "Wave", &Wave);
+		cvui::checkbox(BaseImg, 0, 190, "OilPaint", &OilPaint);
+
+		cvui::checkbox(BaseImg, 0, 360, "whitebalance", &whitebalance);
+		cvui::checkbox(BaseImg, 0, 380, "Cartoon", &Cartoon);
+		cvui::checkbox(BaseImg, 0, 400, "Nostalgic", &Nostalgic);
 		
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
@@ -44,15 +52,10 @@ int img(bool &use_img)
 
 		resize(img, img, Size(640, 480));
 
-		if (contrastAndbright == true)
+		if (Contrast == true || Bright == true)
 		{
-			cvui::trackbar(BaseImg, 0, 130, 220, &g_nBrightValue, 5, 150);
-			cvui::printf(BaseImg, 220, 150, "BrightValue");
-			cvui::trackbar(BaseImg, 0, 190, 220, &g_nContrastValue, 5, 150);
-			cvui::printf(BaseImg, 220, 210, "ContrastValue");
-
-		
-
+			cvui::trackbar(BaseImg, 70, 50, 250, &g_nBrightValue, 0, 100);
+			cvui::trackbar(BaseImg, 70, 95, 250, &g_nContrastValue, 0, 100);
 			for (int i = 0; i <= img.rows; i++)		
 			{
 				for (int j = 0; j <= img.cols; j++)			
@@ -63,7 +66,24 @@ int img(bool &use_img)
 				}
 			}
 		}
-	
+		
+		if (Cartoon == true)
+			CartoonFilter(img);
+		if (Nostalgic == true)
+			NostalgicFilter(img);
+		if (Wave == true)
+		{
+			cvui::trackbar(BaseImg, 70, 135, 250, &g_nlevel, 0, 100);
+			WaveFilter(img, g_nlevel);
+		}
+		if (OilPaint == true)
+		{	
+			//速度太慢，去掉滑动条
+			//cvui::trackbar(BaseImg, 70, 175, 250, &g_ntemplateSize, 0, 100);
+			//cvui::trackbar(BaseImg, 70, 215, 250, &g_nbucketSize, 0, 100);
+			OilPaintFilter(img, 4, 8);
+		}
+
 		//resize(img, img, Size(640, 480));
 		
 		//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
@@ -160,9 +180,11 @@ int camera(bool &use_camera)
 				}
 				if(OilPaint == true)
 				{
-					cvui::trackbar(BaseImg, 70, 200, 250, &g_ntemplateSize, 0, 100);
-					cvui::trackbar(BaseImg, 70, 250, 250, &g_nbucketSize, 0, 100);
-					OilPaintFilter(frame, g_ntemplateSize, g_nbucketSize);
+					//速度太慢，去掉滑动条
+					//cvui::trackbar(BaseImg, 70, 200, 250, &g_ntemplateSize, 0, 100);
+					//cvui::trackbar(BaseImg, 70, 250, 250, &g_nbucketSize, 0, 100);
+					//整个算法都很慢，用做油画滤镜不现实
+					OilPaintFilter(frame, 4, 8);
 				}
 				break;
 			}

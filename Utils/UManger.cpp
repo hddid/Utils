@@ -318,14 +318,9 @@ int UManger::AddHat(Mat& img)
 				Mat mask = out.clone();
 				cvtColor(mask, mask, CV_RGB2GRAY);
 				out.copyTo(imgROI, mask);
-				/*	cout << "faces.x" << faces[i].x << endl;
-					cout << "faces.y" << faces[i].y << endl;
-					cout << "faces.width" << faces[i].width << endl;
-					cout << "faces.height" << faces[i].height << endl;*/
 				cout << "faces.y" << faces[i].y << endl;
-
-				//frame.copyTo(frame);
 			}
+
 			char c = waitKey(10);
 			if (c == 27)
 			{
@@ -341,7 +336,6 @@ int UManger::AddHat(Mat& img)
 
 int UManger::AddGrasses(Mat& img)
 {
-	//imshow("mask", img);
 	bool use_detect = false;
 	CascadeClassifier eyesDetect;
 	eyesDetect.load("D://workspace//Utils//haarcascade//haarcascade_eye.xml");
@@ -368,7 +362,6 @@ int UManger::AddGrasses(Mat& img)
 		waitKey(30);
 	}
 	return 0;
-
 }
 
 
@@ -381,7 +374,7 @@ int UManger::CartoonFilter(Mat& img)
 	medianBlur(img, dst, 7);
 	Mat imgCanny;
 	Canny(dst, imgCanny, 50, 150);
-
+	//设置核的种类及大小
 	Mat kernel = getStructuringElement(MORPH_RECT, Size(2, 2));
 	dilate(imgCanny, imgCanny, kernel);
 	imgCanny = imgCanny / 255;
@@ -390,10 +383,10 @@ int UManger::CartoonFilter(Mat& img)
 	Mat imgf;
 	imgCanny.convertTo(imgf, CV_32FC3);
 	blur(imgf, imgf, Size(5, 5));
-	//imshow("imgf", imgf);
+	
 	Mat bilater;
+	//双边滤波
 	bilateralFilter(img, bilater, 9, 150.0, 150.0);
-	//imshow("bilater", bilater);
 
 	Mat result = bilater / 25;
 	result = result * 25;
@@ -482,59 +475,67 @@ int UManger::WaveFilter(Mat& img,const int& level)
 
 int UManger::OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize)
 {
-	Mat gray;
-	ConvertRGB2Gray(img, gray);
+	int width = img.cols;
+	int height = img.rows;
+
 	int lenArray = bucketSize + 1;
-	int* CountIntensity = new int [lenArray];
-	uint* RedAverage = new uint [lenArray ];
+	int* CountIntensity = new int[lenArray];
+	uint* RedAverage = new uint[lenArray];
 	uint* GreenAverage = new uint[lenArray];
 	uint* BlueAverage = new uint[lenArray];
 
-	Mat dst = img.clone();
+	Mat gray;
+	ConvertRGB2Gray(img, gray);
 
-	for (int i = 0; i < img.rows; i++)
+	/// 目标图像
+	Mat dst = Mat::zeros(img.size(), img.type());
+
+	for (int i = 0; i < height; i++)
 	{
-		int top = i - bucketSize;
-		int bottom = i + bucketSize + 1;
-		if (top < 0)
-			top = 0;
-		if (bottom >= img.rows)
-			bottom = img.rows - 1;
+		// 油画渲染范围上下边界
+		int top = i - smoothness;
+		int bottom = i + smoothness + 1;
 
-		for (int j = 0;j < img.cols; j++)
+		if (top < 0) top = 0;
+		if (bottom >= height) bottom = height - 1;
+
+		for (int j = 0; j < width; j++)
 		{
-			int left = j - bucketSize;
-			int right = j + bucketSize + 1;
-			if (left < 0)
-				left = 0;
-			if (right >= bucketSize)
-				right = img.cols - 1;
+			// 油画渲染范围左右边界
+			int left = j - smoothness;
+			int right = j + smoothness + 1;
 
-			for (int x = 0;x< lenArray;x++)
+			if (left < 0) left = 0;
+			if (right >= width) right = width - 1;
+
+			//初始化数组
+			for (int i = 0; i < lenArray; i++)
 			{
-				CountIntensity[x] = 0;
-				RedAverage[x] = 0;
-				GreenAverage[x] = 0;
-				BlueAverage[x] = 0;
-
+				CountIntensity[i] = 0;
+				RedAverage[i] = 0;
+				GreenAverage[i] = 0;
+				BlueAverage[i] = 0;
 			}
-			for (int m =top;m<bottom;m++)
+
+			for (int j = top; j < bottom; j++)
 			{
-				for (int n = left;n<right;n++)
+				for (int i = left; i < right; i++)
 				{
-					uchar intensity = static_cast<uchar>(smoothness*gray.at<uchar>(m, n) / 255);
+					uchar intensity = static_cast<uchar>(bucketSize*gray.at<uchar>(j, i) / 255.0);
 					CountIntensity[intensity]++;
 
-					RedAverage[intensity] += img.at<Vec3b>(m, n)[2];
-					GreenAverage[intensity] += img.at<Vec3b>(m, n)[1];
-					BlueAverage[intensity] += img.at<Vec3b>(m, n)[0];
+					RedAverage[intensity] += img.at<Vec3b>(j, i)[2];
+					GreenAverage[intensity] += img.at<Vec3b>(j, i)[1];
+					BlueAverage[intensity] += img.at<Vec3b>(j, i)[0];
 				}
 			}
+
+			// 求最大值，并记录下数组索引
 			uchar chosenIntensity = 0;
 			int maxInstance = CountIntensity[0];
-			for (int i = 0;i<lenArray;i++)
+			for (int i = 1; i < lenArray; i++)
 			{
-				if(CountIntensity[i] > maxInstance)
+				if (CountIntensity[i] > maxInstance)
 				{
 					chosenIntensity = (uchar)i;
 					maxInstance = CountIntensity[i];
@@ -545,10 +546,12 @@ int UManger::OilPaintFilter(Mat& img,const int& smoothness,const int& bucketSize
 			dst.at<Vec3b>(i, j)[0] = static_cast<uchar>(BlueAverage[chosenIntensity] / static_cast<float>(maxInstance));
 		}
 	}
+	//释放内存
 	delete[] CountIntensity;
 	delete[] RedAverage;
 	delete[] GreenAverage;
 	delete[] BlueAverage;
+
 	img = dst.clone();
 	return RET_ERROR_OK;
 }
