@@ -12,8 +12,8 @@
 bool use_img = true;
 bool use_camera = false;
 
-int img(bool &use_img);
-int camera(bool &use_camera);
+int Img(bool &use_img);
+int Camera(bool &use_camera);
 
 int TrackbarWindow(bool &Trackbar_Window);
 int ButtonWindow(bool &Button_Window);

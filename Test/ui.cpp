@@ -5,11 +5,39 @@ using namespace std;
 
 int main()
 {
-	img(use_img);
+	while (true)
+	{
+		//img(use_img);
+		//camera(use_camera);
+		/*if(use_img && !use_camera)
+		{
+			img(use_img);
+		}
+		else if(!use_img && use_camera)
+		{
+			camera(use_camera);
+		}
+		else
+		{
+			use_camera = false;
+			use_img = true;
+		}*/
+		if (!use_img && use_camera)
+		{
+			Camera(use_camera);
+		}
+		else
+		{
+			use_img = true;
+			use_camera = false;
+			Img(use_img);
+		}
+		
+	}
 	return 0;
 }
 
-int img(bool &use_img)
+int Img(bool &use_img)
 {
 	const int num = 500;
 	char img_name[50];
@@ -19,8 +47,32 @@ int img(bool &use_img)
 	
 	while (use_img)
 	{
-		ButtonWindow(button_window);
-
+		//if(button_window && !trackbar_window)
+		//{
+		//	ButtonWindow(button_window);
+		//	//cout << "button_window  " << button_window << endl;
+		//}
+		//else if(trackbar_window && !button_window)
+		//{
+		//	TrackbarWindow(trackbar_window);
+		//	//cout << "trackbar_window  " << trackbar_window << endl;
+		//}
+		//else
+		//{
+		//	trackbar_window = false;
+		//	button_window = true;
+		//	ButtonWindow(button_window);
+		//}
+		if(!button_window && trackbar_window)
+		{
+			TrackbarWindow(trackbar_window);
+		}
+		else
+		{
+			trackbar_window = false;
+			button_window = true;
+			ButtonWindow(button_window);
+		}
 		//img按键窗口		
 		/*cvui::window(BaseImg, 0, 0, 320, 480, "********************vision********************");
 
@@ -53,6 +105,7 @@ int img(bool &use_img)
 		if (whitebalance == true)
 			WhiteBalance(img);
 
+		//修改图片大小，否则会覆盖按键的位置
 		resize(img, img, Size(640, 480));
 
 		if (Contrast == true || Bright == true)
@@ -86,8 +139,6 @@ int img(bool &use_img)
 			//cvui::trackbar(BaseImg, 70, 215, 250, &g_nbucketSize, 0, 100);
 			OilPaintFilter(img, 4, 8);
 		}
-
-		//resize(img, img, Size(640, 480));
 		
 		//Mat ROI = BaseImg(Rect(320, 0, 640, 480));
 		//addWeighted(ROI, 0, img, 1, 0, ROI);
@@ -110,17 +161,22 @@ int img(bool &use_img)
 		cv::imshow(WINDOW_NAME, BaseImg);
 
 		cv::waitKey(10);
-		if (use_camera && !use_img)
+		//if (use_camera && !use_img)
+		//{
+		//	img.release();
+		//	camera(use_camera);
+		//	//break;
+		//}
+		if(!use_img)
 		{
 			img.release();
-			camera(use_camera);
-			//break;
+			use_camera = true;
 		}
 	}
 	return 0;
 }
 
-int camera(bool &use_camera)
+int Camera(bool &use_camera)
 {
 	while (use_camera)
 	{
@@ -131,8 +187,8 @@ int camera(bool &use_camera)
 		while (open_camera)
 		{
 			cvui::window(BaseImg, 0, 0, 320, 480, "********************camera********************");
-			cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
-			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
+			//cvui::checkbox(BaseImg, 50, 25, "Img", &use_img);
+			cvui::checkbox(BaseImg, 100, 25, "camera", &use_camera);
 			cvui::printf(BaseImg, 0, 40, "*************************************************");
 
 			cvui::checkbox(BaseImg, 5, 60, "SkinDetector", &skindetector);
@@ -141,10 +197,9 @@ int camera(bool &use_camera)
 			
 			Mat frame;
 			cap >> frame;
+			
+			//修改一下图片大小,否则会覆盖按键的位置
 			resize(frame, frame, Size(640, 480));
-
-			//bool puppet  = false;
-			//puppet = (SkinDetector == true && CameraFilter == false);		
 
 			while (skindetector == true && camerafilter == false)
 			{
@@ -192,7 +247,6 @@ int camera(bool &use_camera)
 				}
 				break;
 			}
-
 			cvui::update();
 		
 			//添加摄像头遮挡
@@ -207,12 +261,18 @@ int camera(bool &use_camera)
 			cv::imshow(WINDOW_NAME, BaseImg);
 			cv::waitKey(30);
 
-			if (!use_camera && use_img)
+			//if (!use_camera && use_img)
+			//{
+			//	open_camera = false;
+			//	//use_camera为false的时候关闭camera
+			//	cap.release();
+			//	img(use_img);
+			//}
+			if(!use_camera)
 			{
 				open_camera = false;
-				//use_camera为false的时候关闭camera
+				use_img = true;
 				cap.release();
-				img(use_img);
 			}
 		}
 		break;
@@ -224,25 +284,22 @@ int TrackbarWindow(bool &trackbar_window)
 {
 	cvui::window(BaseImg, 0, 0, 320, 480, "********************TrackbarWindow********************");
 
-	cvui::checkbox(BaseImg, 50, 25, "Img", &use_img);
-	cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
+	cvui::checkbox(BaseImg, 100, 25, "Img", &use_img);
+	//cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
+	cout << "TrackbarWindow use_camera  " << use_camera << endl;
 	cvui::printf(BaseImg, 0, 40, "*************************************************");
 
 	cvui::checkbox(BaseImg, 0, 70, "Bright", &Bright);
 	cvui::checkbox(BaseImg, 0, 110, "Contrast", &Contrast);
 	cvui::checkbox(BaseImg, 0, 150, "Wave", &wave);
 	cvui::checkbox(BaseImg, 0, 190, "OilPaint", &oilpaint);
-	cout << "this is test in trackbarwindow" << endl;
 
 	cvui::checkbox(BaseImg, 0, 250, "Trackbar_Window", &trackbar_window);
-	cvui::checkbox(BaseImg, 200, 250, "Button_Window", &button_window);
-
-	if (!trackbar_window && button_window)
+	
+	if (!trackbar_window)
 	{
-		//button_window = true;
-		ButtonWindow(button_window);
+		button_window = true;
 	}
-	cout << "return trackbar_window" << endl;
 	return 0;
 }
 
@@ -250,24 +307,21 @@ int ButtonWindow(bool &button_window)
 {
 	cvui::window(BaseImg, 0, 0, 320, 480, "********************ButtonWindow********************");
 
-	cvui::checkbox(BaseImg, 50, 25, "Img", &use_img);
-	cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
+	cvui::checkbox(BaseImg, 100, 25, "Img", &use_img);
+	//cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
+	cout << "ButtonWindow use_camera  " << use_camera << endl;
 	cvui::printf(BaseImg, 0, 40, "*************************************************");
 
 	cvui::checkbox(BaseImg, 0, 70, "WhiteBalance", &whitebalance);
 	cvui::checkbox(BaseImg, 0, 110, "Cartoon", &cartoon);
 	cvui::checkbox(BaseImg, 0, 150, "Nostalgic", &nostalgic);
-	cout << "this is a test in button" << endl;
 
 	cvui::checkbox(BaseImg, 200, 400, "Button_Window", &button_window);
-	cvui::checkbox(BaseImg, 0, 400, "Trackbar_Window", &trackbar_window);
 
-	if (!button_window && trackbar_window)
+	if (!button_window)
 	{
-		//trackbar_window = true;
-		TrackbarWindow(trackbar_window);
+		trackbar_window = true;
 	}
-	cout << "return button_window" << endl;
 	return 0;
 	
 }
