@@ -45,12 +45,21 @@
     <ClCompile Include="Ui.cpp">
       <Filter>源文件\cvui</Filter>
     </ClCompile>
+    <ClCompile Include="puppet.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AKCalibr.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Ui.h">
+      <Filter>源文件\cvui</Filter>
+    </ClInclude>
+    <ClInclude Include="EnhancedWindow.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ExtendWindow.h">
       <Filter>源文件\cvui</Filter>
     </ClInclude>
   </ItemGroup>

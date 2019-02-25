@@ -15,6 +15,12 @@ bool use_camera = false;
 int img(bool &use_img);
 int camera(bool &use_camera);
 
+int TrackbarWindow(bool &Trackbar_Window);
+int ButtonWindow(bool &Button_Window);
+
+bool trackbar_window = false;
+bool button_window = true;
+
 //*****************************************img*****************************************
 bool whitebalance = false;
 
@@ -22,27 +28,27 @@ bool Contrast = false;
 bool Bright = false;
 
 //对比度
-int g_nContrastValue;
+int g_nContrastValue = 0;
 
 //亮度
-int g_nBrightValue;
+int g_nBrightValue = 0;
 
 //Wavelevel
-int g_nlevel;
+int g_nlevel = 0;
 
 //OilPaint
-int g_ntemplateSize;
-int g_nbucketSize;
+int g_ntemplateSize = 0;
+int g_nbucketSize = 0;
 
 //*****************************************camera*****************************************
-bool CameraFilter = false;
-bool SkinDetector = false;
+bool camerafilter = false;
+bool skindetector = false;
 
 //CameraFilter
-bool Cartoon = false;
-bool Nostalgic = false;
-bool Wave = false;
-bool OilPaint = false;
+bool cartoon = false;
+bool nostalgic = false;
+bool wave = false;
+bool oilpaint = false;
 
 //SkinDetector
 bool rgbcolor = false;

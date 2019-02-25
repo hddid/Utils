@@ -1,5 +1,5 @@
 #include "Ui.h"
-
+#include "ExtendWindow.h"
 using namespace cv;
 using namespace std;
 
@@ -16,11 +16,14 @@ int img(bool &use_img)
 	cvui::init(WINDOW_NAME);
 
 	int count = 1;
-
+	
 	while (use_img)
 	{
-		//img按键窗口
-		cvui::window(BaseImg, 0, 0, 320, 480, "********************vision********************");
+		ButtonWindow(button_window);
+
+		//img按键窗口		
+		/*cvui::window(BaseImg, 0, 0, 320, 480, "********************vision********************");
+
 		cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
 		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 		cvui::printf(BaseImg, 0, 40, "*************************************************");
@@ -34,12 +37,12 @@ int img(bool &use_img)
 
 		cvui::checkbox(BaseImg, 0, 360, "whitebalance", &whitebalance);
 		cvui::checkbox(BaseImg, 0, 380, "Cartoon", &Cartoon);
-		cvui::checkbox(BaseImg, 0, 400, "Nostalgic", &Nostalgic);
+		cvui::checkbox(BaseImg, 0, 400, "Nostalgic", &Nostalgic);*/
 		
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
 		Mat img = imread(img_name);
-		//equalizeHist(img, img);
+		
 		if (img.empty())
 		{
 			cerr << "no img in file now" << endl;
@@ -67,16 +70,16 @@ int img(bool &use_img)
 			}
 		}
 		
-		if (Cartoon == true)
+		if (cartoon == true)
 			CartoonFilter(img);
-		if (Nostalgic == true)
+		if (nostalgic == true)
 			NostalgicFilter(img);
-		if (Wave == true)
+		if (wave == true)
 		{
 			cvui::trackbar(BaseImg, 70, 135, 250, &g_nlevel, 0, 100);
 			WaveFilter(img, g_nlevel);
 		}
-		if (OilPaint == true)
+		if (oilpaint == true)
 		{	
 			//速度太慢，去掉滑动条
 			//cvui::trackbar(BaseImg, 70, 175, 250, &g_ntemplateSize, 0, 100);
@@ -90,6 +93,7 @@ int img(bool &use_img)
 		//addWeighted(ROI, 0, img, 1, 0, ROI);
 		//替代上面两行代码
 		cvui::image(BaseImg, 320, 0, img);
+
 		//下一张图片
 		if (cvui::button(BaseImg, 255, 450, 60, 30, "latter"))
 		{
@@ -131,8 +135,8 @@ int camera(bool &use_camera)
 			cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
 			cvui::printf(BaseImg, 0, 40, "*************************************************");
 
-			cvui::checkbox(BaseImg, 5, 60, "SkinDetector", &SkinDetector);
-			cvui::checkbox(BaseImg, 110, 60, "CameraFilter", &CameraFilter);
+			cvui::checkbox(BaseImg, 5, 60, "SkinDetector", &skindetector);
+			cvui::checkbox(BaseImg, 110, 60, "CameraFilter", &camerafilter);
 			cvui::printf(BaseImg, 0, 80, "*************************************************");
 			
 			Mat frame;
@@ -142,7 +146,7 @@ int camera(bool &use_camera)
 			//bool puppet  = false;
 			//puppet = (SkinDetector == true && CameraFilter == false);		
 
-			while (SkinDetector == true && CameraFilter == false)
+			while (skindetector == true && camerafilter == false)
 			{
 				cvui::checkbox(BaseImg, 20, 90, "RGBSkin", &rgbcolor);
 				cvui::checkbox(BaseImg, 20, 110, "EleSkin", &ellipseskin);
@@ -163,27 +167,27 @@ int camera(bool &use_camera)
 				break;
 			}
 
-			while (CameraFilter == true && SkinDetector == false)
+			while (camerafilter == true && skindetector == false)
 			{
-				cvui::checkbox(BaseImg, 10, 90, "Cartoon", &Cartoon);
-				cvui::checkbox(BaseImg, 10, 120, "Nostalgic", &Nostalgic);
-				cvui::checkbox(BaseImg, 10, 150, "Wave", &Wave);
-				cvui::checkbox(BaseImg, 10, 180, "OilPaint", &OilPaint);
-				if (Cartoon == true)
+				cvui::checkbox(BaseImg, 10, 90, "Cartoon", &cartoon);
+				cvui::checkbox(BaseImg, 10, 120, "Nostalgic", &nostalgic);
+				cvui::checkbox(BaseImg, 10, 150, "Wave", &wave);
+				cvui::checkbox(BaseImg, 10, 180, "OilPaint", &oilpaint);
+				if (cartoon == true)
 					CartoonFilter(frame);
-				if (Nostalgic == true)
+				if (nostalgic == true)
 					NostalgicFilter(frame);
-				if (Wave == true)
+				if (wave == true)
 				{
 					cvui::trackbar(BaseImg, 70, 135, 250, &g_nlevel, 0, 100);
 					WaveFilter(frame, g_nlevel);
 				}
-				if(OilPaint == true)
+				if(oilpaint == true)
 				{
 					//速度太慢，去掉滑动条
 					//cvui::trackbar(BaseImg, 70, 200, 250, &g_ntemplateSize, 0, 100);
 					//cvui::trackbar(BaseImg, 70, 250, 250, &g_nbucketSize, 0, 100);
-					//整个算法都很慢，用做油画滤镜不现实
+					//速度慢，去掉
 					OilPaintFilter(frame, 4, 8);
 				}
 				break;
@@ -216,3 +220,54 @@ int camera(bool &use_camera)
 	return 0;
 }
 
+int TrackbarWindow(bool &trackbar_window)
+{
+	cvui::window(BaseImg, 0, 0, 320, 480, "********************TrackbarWindow********************");
+
+	cvui::checkbox(BaseImg, 50, 25, "Img", &use_img);
+	cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
+	cvui::printf(BaseImg, 0, 40, "*************************************************");
+
+	cvui::checkbox(BaseImg, 0, 70, "Bright", &Bright);
+	cvui::checkbox(BaseImg, 0, 110, "Contrast", &Contrast);
+	cvui::checkbox(BaseImg, 0, 150, "Wave", &wave);
+	cvui::checkbox(BaseImg, 0, 190, "OilPaint", &oilpaint);
+	cout << "this is test in trackbarwindow" << endl;
+
+	cvui::checkbox(BaseImg, 0, 250, "Trackbar_Window", &trackbar_window);
+	cvui::checkbox(BaseImg, 200, 250, "Button_Window", &button_window);
+
+	if (!trackbar_window && button_window)
+	{
+		//button_window = true;
+		ButtonWindow(button_window);
+	}
+	cout << "return trackbar_window" << endl;
+	return 0;
+}
+
+int ButtonWindow(bool &button_window)
+{
+	cvui::window(BaseImg, 0, 0, 320, 480, "********************ButtonWindow********************");
+
+	cvui::checkbox(BaseImg, 50, 25, "Img", &use_img);
+	cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
+	cvui::printf(BaseImg, 0, 40, "*************************************************");
+
+	cvui::checkbox(BaseImg, 0, 70, "WhiteBalance", &whitebalance);
+	cvui::checkbox(BaseImg, 0, 110, "Cartoon", &cartoon);
+	cvui::checkbox(BaseImg, 0, 150, "Nostalgic", &nostalgic);
+	cout << "this is a test in button" << endl;
+
+	cvui::checkbox(BaseImg, 200, 400, "Button_Window", &button_window);
+	cvui::checkbox(BaseImg, 0, 400, "Trackbar_Window", &trackbar_window);
+
+	if (!button_window && trackbar_window)
+	{
+		//trackbar_window = true;
+		TrackbarWindow(trackbar_window);
+	}
+	cout << "return button_window" << endl;
+	return 0;
+	
+}
