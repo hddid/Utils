@@ -7,21 +7,6 @@ int main()
 {
 	while (true)
 	{
-		//img(use_img);
-		//camera(use_camera);
-		/*if(use_img && !use_camera)
-		{
-			img(use_img);
-		}
-		else if(!use_img && use_camera)
-		{
-			camera(use_camera);
-		}
-		else
-		{
-			use_camera = false;
-			use_img = true;
-		}*/
 		if (!use_img && use_camera)
 		{
 			Camera(use_camera);
@@ -32,7 +17,6 @@ int main()
 			use_camera = false;
 			Img(use_img);
 		}
-		
 	}
 	return 0;
 }
@@ -47,22 +31,6 @@ int Img(bool &use_img)
 	
 	while (use_img)
 	{
-		//if(button_window && !trackbar_window)
-		//{
-		//	ButtonWindow(button_window);
-		//	//cout << "button_window  " << button_window << endl;
-		//}
-		//else if(trackbar_window && !button_window)
-		//{
-		//	TrackbarWindow(trackbar_window);
-		//	//cout << "trackbar_window  " << trackbar_window << endl;
-		//}
-		//else
-		//{
-		//	trackbar_window = false;
-		//	button_window = true;
-		//	ButtonWindow(button_window);
-		//}
 		if(!button_window && trackbar_window)
 		{
 			TrackbarWindow(trackbar_window);
@@ -73,23 +41,6 @@ int Img(bool &use_img)
 			button_window = true;
 			ButtonWindow(button_window);
 		}
-		//img按键窗口		
-		/*cvui::window(BaseImg, 0, 0, 320, 480, "********************vision********************");
-
-		cvui::checkbox(BaseImg, 50, 25, "img", &use_img);
-		cvui::checkbox(BaseImg, 200, 25, "camera", &use_camera);
-		cvui::printf(BaseImg, 0, 40, "*************************************************");
-		cvui::printf(BaseImg, 0, 350, "*************************************************");
-		cvui::printf(BaseImg, 0, 440, "*************************************************");
-
-		cvui::checkbox(BaseImg, 0, 70, "Bright", &Bright);
-		cvui::checkbox(BaseImg, 0, 110, "Contrast", &Contrast);
-		cvui::checkbox(BaseImg, 0, 150, "Wave", &Wave);
-		cvui::checkbox(BaseImg, 0, 190, "OilPaint", &OilPaint);
-
-		cvui::checkbox(BaseImg, 0, 360, "whitebalance", &whitebalance);
-		cvui::checkbox(BaseImg, 0, 380, "Cartoon", &Cartoon);
-		cvui::checkbox(BaseImg, 0, 400, "Nostalgic", &Nostalgic);*/
 		
 		sprintf(img_name, "D://workspace//Utils//Test//img//%d.jpg", count);
 
@@ -161,12 +112,7 @@ int Img(bool &use_img)
 		cv::imshow(WINDOW_NAME, BaseImg);
 
 		cv::waitKey(10);
-		//if (use_camera && !use_img)
-		//{
-		//	img.release();
-		//	camera(use_camera);
-		//	//break;
-		//}
+
 		if(!use_img)
 		{
 			img.release();
@@ -261,13 +207,6 @@ int Camera(bool &use_camera)
 			cv::imshow(WINDOW_NAME, BaseImg);
 			cv::waitKey(30);
 
-			//if (!use_camera && use_img)
-			//{
-			//	open_camera = false;
-			//	//use_camera为false的时候关闭camera
-			//	cap.release();
-			//	img(use_img);
-			//}
 			if(!use_camera)
 			{
 				open_camera = false;
@@ -286,7 +225,7 @@ int TrackbarWindow(bool &trackbar_window)
 
 	cvui::checkbox(BaseImg, 100, 25, "Img", &use_img);
 	//cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
-	cout << "TrackbarWindow use_camera  " << use_camera << endl;
+	//cout << "TrackbarWindow use_camera  " << use_camera << endl;
 	cvui::printf(BaseImg, 0, 40, "*************************************************");
 
 	cvui::checkbox(BaseImg, 0, 70, "Bright", &Bright);
@@ -309,7 +248,7 @@ int ButtonWindow(bool &button_window)
 
 	cvui::checkbox(BaseImg, 100, 25, "Img", &use_img);
 	//cvui::checkbox(BaseImg, 200, 25, "Camera", &use_camera);
-	cout << "ButtonWindow use_camera  " << use_camera << endl;
+	//cout << "ButtonWindow use_camera  " << use_camera << endl;
 	cvui::printf(BaseImg, 0, 40, "*************************************************");
 
 	cvui::checkbox(BaseImg, 0, 70, "WhiteBalance", &whitebalance);

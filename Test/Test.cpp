@@ -24,23 +24,43 @@ using namespace std;
 using namespace cv;
 
 #if 0
-//int main()
-//{
-//	cv::Mat src, grey;
-//	src = imread("1.jpg");
-//	string ver = GetCurrentVersion();
-//	cout << ver << endl;
-//
-//	if (RET_ERROR_OK == ConvertRGB2Gray(src, grey))
-//	{
-//		imshow("grey", grey);
-//	}
-//	imshow("src", src);
-//	int ret = waitKey(0);
-//
-//	return 0;
-//
-//}
+int main()
+{
+	cv::Mat src, grey;
+	src = imread("C:\\Users\\Robin\\Desktop\\map-00003.bmp");
+
+	//if (RET_ERROR_OK == ConvertRGB2Gray(src, grey))
+	//{
+	//	imshow("grey", grey);
+	//}
+
+	const char *txtname = "C:\\Users\\Robin\\Desktop\\test.txt";
+	imwrite("C:\\Users\\Robin\\Desktop\\map.jpg", src);
+	Mat img = imread("C:\\Users\\Robin\\Desktop\\map.jpg");
+	FILE *temp;
+	if((temp = fopen(txtname,"wb"))==NULL)
+	{
+		cout << "read file fail" << endl;
+		return 0;
+	}
+	for(int i = 0;i<img.rows;i++)
+	{
+		for(int j =0;j<img.cols;j++)
+		{
+			fprintf(temp, "%d ", img.at<Vec3b>(i, j)[0]);
+			fprintf(temp, "%d ", img.at<Vec3b>(i, j)[1]);
+			fprintf(temp, "%d   ", img.at<Vec3b>(i, j)[2]);
+			
+		}
+		fprintf(temp, "\n");
+	}
+	fclose(temp);
+	imwrite("C:\\Users\\Robin\\Desktop\\map.bmp", img);
+	int ret = waitKey(0);
+
+	return 0;
+
+}
 
 //int main()
 //{
@@ -196,19 +216,128 @@ using namespace cv;
 
 #endif
 
+//int main()
+//{
+//	Mat img = imread("14.jpg");
+//	//imshow("before", img);
+//	double time = static_cast<double>(getTickCount());
+//	if (RET_ERROR_OK == OilPaintFilter(img,4,8))
+//	{
+//		time = ((double)getTickCount() - time) / getTickFrequency();
+//		cout << "time" << time << endl;
+//		imshow("img", img);
+//		imwrite("../ss.jpg", img);
+//	}
+//	waitKey(0);
+//	return 0;
+//
+//}
+
+#include <stdio.h>
+#include "cJSON.h"
+
+
 int main()
 {
-	Mat img = imread("14.jpg");
-	//imshow("before", img);
-	double time = static_cast<double>(getTickCount());
-	if (RET_ERROR_OK == OilPaintFilter(img,4,8))
+	const char* version = cJSON_Version();
+	printf("version:%s\n", version);
+	FILE* file = fopen("C:\\Users\\Robin\\Desktop\\test.json", "r");
+	if (NULL == file)
 	{
-		time = ((double)getTickCount() - time) / getTickFrequency();
-		cout << "time" << time << endl;
-		imshow("img", img);
-		imwrite("../ss.jpg", img);
+		printf("load file fail!\n");
+		return -1;
 	}
-	waitKey(0);
-	return 0;
 
+	fseek(file, 0, SEEK_END);
+	long size = ftell(file);
+	fseek(file, 0, SEEK_SET);
+	char* tmpStr = (char*)malloc(size + 1);
+	memset(tmpStr, 0, size + 1);
+	size_t ret = fread(tmpStr, size, 1, file);
+	tmpStr[size] = '\0';
+	printf("ret = %d size = %ld str=%s\n", ret, size, tmpStr);
+
+	cJSON* root = cJSON_Parse(tmpStr);
+	cJSON* map_id = cJSON_GetObjectItem(root, "map_id");
+	if (NULL != map_id)
+		printf("mapid is %d\n", map_id->valueint);
+
+	cJSON *rect = cJSON_GetObjectItem(root, "rect");
+	if (NULL != rect)
+	{
+		if (cJSON_IsArray(rect))
+		{
+			int len = cJSON_GetArraySize(rect);
+			for (int i = 0; i < len; i++)
+			{
+				cJSON* pos = cJSON_GetArrayItem(rect, i);
+				printf("i=%d value = %d\n", i, pos->valueint);
+			}
+		}
+		else
+		{
+			printf("the rect is not an array!\n");
+		}
+	}
+	else
+	{
+		printf("rect is null\n");
+	}
+
+	cJSON *areas = cJSON_GetObjectItem(root, "areas");
+	if (NULL != areas)
+	{
+		if (cJSON_IsArray(areas))
+		{
+			int num = cJSON_GetArraySize(areas);
+			cJSON* area = areas->child;
+			for (int i = 0; i < num; i++)
+			{
+				//cJSON_Print(cJSON_GetObjectItem(area,"id"));
+				cJSON* id = cJSON_GetObjectItem(area, "id");
+				printf("id = %d\n", id->valueint);
+				cJSON* name = cJSON_GetObjectItem(area, "name");
+				printf("name = %s\n", name->valuestring);
+				cJSON* rect = cJSON_GetObjectItem(area, "rect");
+				{
+					if (cJSON_IsArray(rect))
+					{
+						int n = cJSON_GetArraySize(rect);
+						for (int j = 0; j < n; j++)
+						{
+							cJSON* item = cJSON_GetArrayItem(rect, j);
+							{
+								printf("item = %d\n", item->valueint);
+							}
+						}
+					}
+					else
+					{
+						printf("not a array\n");
+
+					}
+
+				}
+				area = area->next;
+			}
+		}
+		else
+		{
+			{
+				printf("the areas is not a array\n");
+			}
+		}
+
+	}
+	else
+	{
+		printf("areas is null\n");
+	}
+
+	
+	fclose(file);
+	free(tmpStr);
+	system("pause");
+	
+	return 0;
 }

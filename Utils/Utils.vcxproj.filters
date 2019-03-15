@@ -84,6 +84,9 @@
     <ClInclude Include="Ui.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="cJSON.h">
+      <Filter>json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -109,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="share_memory_api.cpp">
       <Filter>share_memory_api</Filter>
+    </ClCompile>
+    <ClCompile Include="cJSON.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="read.cpp">
+      <Filter>json</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
