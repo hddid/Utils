@@ -232,112 +232,52 @@ int main()
 //	return 0;
 //
 //}
+#if 0
+int main()
+{
+	Mat src = imread("./w.jpg");
+	if(src.empty())
+	{
+		printf("cound not load image\n");
+		return -1;
+	}
+	imshow("ԭͼ", src);
 
-#include <stdio.h>
-#include "cJSON.h"
+	Mat dst, gray, binary;
 
+	Mat se = getStructuringElement(MORPH_RECT, Size(3, 3), Point(-1, -1));
+	morphologyEx(src, dst, MORPH_GRADIENT, se);
+	imshow("dst", dst);
+
+	cvtColor(dst, gray, COLOR_BGR2GRAY);
+	threshold(gray, binary, 0, 255, THRESH_BINARY | THRESH_OTSU);
+	imshow("binary", binary);
+
+	se = getStructuringElement(MORPH_RECT, Size(1, 5), Point(-1, -1));
+	morphologyEx(binary, binary, MORPH_DILATE, se);
+	vector<vector<Point>> contours;
+	vector<Vec4i> hierarchy;
+	findContours(binary, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+	for (size_t c = 0; c < contours.size(); c++) {
+		Rect rect = boundingRect(contours[c]);
+		double area = contourArea(contours[c]);
+		if (area < 200)
+			continue;
+		int h = rect.height;
+		int w = rect.width;
+		if (h > (3 * w) || h < 20)
+			continue;
+		rectangle(src, rect, Scalar(0, 0, 255), 1, 8, 0);
+	}
+	imshow("result", src);
+	waitKey(0);
+	return 0;
+}
+
+#endif
 
 int main()
 {
-	const char* version = cJSON_Version();
-	printf("version:%s\n", version);
-	FILE* file = fopen("C:\\Users\\Robin\\Desktop\\test.json", "r");
-	if (NULL == file)
-	{
-		printf("load file fail!\n");
-		return -1;
-	}
-
-	fseek(file, 0, SEEK_END);
-	long size = ftell(file);
-	fseek(file, 0, SEEK_SET);
-	char* tmpStr = (char*)malloc(size + 1);
-	memset(tmpStr, 0, size + 1);
-	size_t ret = fread(tmpStr, size, 1, file);
-	tmpStr[size] = '\0';
-	printf("ret = %d size = %ld str=%s\n", ret, size, tmpStr);
-
-	cJSON* root = cJSON_Parse(tmpStr);
-	cJSON* map_id = cJSON_GetObjectItem(root, "map_id");
-	if (NULL != map_id)
-		printf("mapid is %d\n", map_id->valueint);
-
-	cJSON *rect = cJSON_GetObjectItem(root, "rect");
-	if (NULL != rect)
-	{
-		if (cJSON_IsArray(rect))
-		{
-			int len = cJSON_GetArraySize(rect);
-			for (int i = 0; i < len; i++)
-			{
-				cJSON* pos = cJSON_GetArrayItem(rect, i);
-				printf("i=%d value = %d\n", i, pos->valueint);
-			}
-		}
-		else
-		{
-			printf("the rect is not an array!\n");
-		}
-	}
-	else
-	{
-		printf("rect is null\n");
-	}
-
-	cJSON *areas = cJSON_GetObjectItem(root, "areas");
-	if (NULL != areas)
-	{
-		if (cJSON_IsArray(areas))
-		{
-			int num = cJSON_GetArraySize(areas);
-			cJSON* area = areas->child;
-			for (int i = 0; i < num; i++)
-			{
-				//cJSON_Print(cJSON_GetObjectItem(area,"id"));
-				cJSON* id = cJSON_GetObjectItem(area, "id");
-				printf("id = %d\n", id->valueint);
-				cJSON* name = cJSON_GetObjectItem(area, "name");
-				printf("name = %s\n", name->valuestring);
-				cJSON* rect = cJSON_GetObjectItem(area, "rect");
-				{
-					if (cJSON_IsArray(rect))
-					{
-						int n = cJSON_GetArraySize(rect);
-						for (int j = 0; j < n; j++)
-						{
-							cJSON* item = cJSON_GetArrayItem(rect, j);
-							{
-								printf("item = %d\n", item->valueint);
-							}
-						}
-					}
-					else
-					{
-						printf("not a array\n");
-
-					}
-
-				}
-				area = area->next;
-			}
-		}
-		else
-		{
-			{
-				printf("the areas is not a array\n");
-			}
-		}
-
-	}
-	else
-	{
-		printf("areas is null\n");
-	}
-
-	
-	fclose(file);
-	free(tmpStr);
-	system("pause");
-	
+	KNN();
 	return 0;
 }

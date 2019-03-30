@@ -85,11 +85,12 @@ int UManger::ContrastAndBright(Mat& src_image, Mat& dst_image, const double alph
 	{
 		for (int j = 0; j < src_image.cols; ++j)
 		{
-			for (int c = 0; c < 3; ++c)
-			{
-				dst_image.at<Vec3b>(i, j)[c] =
-					saturate_cast<uchar>(alpha*(src_image.at<Vec3b>(i, j)[c]) + beta);
-			}
+			dst_image.at<Vec3b>(i, j)[0] =
+				saturate_cast<uchar>(alpha*(src_image.at<Vec3b>(i, j)[0]) + beta);
+			dst_image.at<Vec3b>(i, j)[1] =
+				saturate_cast<uchar>(alpha*(src_image.at<Vec3b>(i, j)[1]) + beta);
+			dst_image.at<Vec3b>(i, j)[2] =
+				saturate_cast<uchar>(alpha*(src_image.at<Vec3b>(i, j)[2]) + beta);
 		}
 	}
 	return RET_ERROR_OK;
@@ -808,6 +809,305 @@ int UManger::PicToVideo(string PicPath, string VideoPath, int height, int width)
 	return RET_ERROR_OK;
 }
 
+
+//*****************************************DeepLearning相关*****************************************
+int UManger::KmeansDataClassification(int& numCluster)
+{
+	Mat img(500, 500, CV_8UC3);
+	RNG rng(12345);
+
+	Scalar colorTab[] = {
+		Scalar(0,0,255),
+		Scalar(255, 0, 0),
+	};
+
+	int sampleCount = rng.uniform(5, 500);
+
+	Mat points(sampleCount, 1, CV_32FC2);
+
+	//生成随机数
+	for (int k = 0;k<numCluster;k++)
+	{
+		Point center;
+		center.x = rng.uniform(0, img.cols);
+		center.y = rng.uniform(0, img.rows);
+		Mat pointChunk = points.rowRange(k*sampleCount / numCluster,
+			k == numCluster - 1 ? sampleCount : (k + 1)*sampleCount / numCluster);
+
+		rng.fill(pointChunk, RNG::NORMAL, Scalar(center.x, center.y), Scalar(img.cols*0.05, img.rows*0.05));
+
+	}
+	randShuffle(points, 1, &rng);
+
+	Mat labels;
+	Mat centers;
+	kmeans(points, numCluster, labels, TermCriteria(TermCriteria::EPS + TermCriteria::COUNT, 10, 0.1), 3, KMEANS_PP_CENTERS,centers);
+
+	img = Scalar::all(255);
+	for (int i = 0;i<sampleCount;i++)
+	{
+		int index = labels.at<int>(i);
+		Point p = points.at<Point2f>(i);
+		circle(img, p, 2, colorTab[index], -1, 8);
+	}
+	for (int i = 0;i<centers.rows;i++)
+	{
+		int x = centers.at<float>(i, 0);
+		int y = centers.at<float>(i, 1);
+		cout << " c.x " << x << " c.y " << y << endl;
+		circle(img, Point(x, y), 40, colorTab[i], 1, LINE_AA);
+	}
+	imshow("KMeans-Data-Demo", img);
+	waitKey(0);
+	return RET_ERROR_OK;
+}
+
+
+int UManger::KmeansImageDivision(string& PicPath)
+{
+	Mat img = imread(PicPath);
+	if(img.empty())
+	{
+		cout << "cant load img" << endl;
+		return -1;
+	}
+	imshow("input-img", img);
+
+	Scalar colorTab[] = {
+		Scalar(0,0,255),
+		Scalar(0,255,0),
+		Scalar(255,0,0),
+		Scalar(0,255,255),
+		Scalar(255,0,255),
+	};
+
+	int width = img.cols;
+	int height = img.rows;
+	int dims = img.channels();
+
+	//初始化定义
+	int sampleCount = width*height;
+	int clusterCount = 3;
+	Mat labels;
+	Mat centers;
+
+	//RGB 数据转样本数据
+	Mat sample_data = img.reshape(3, sampleCount);
+	Mat data;
+	sample_data.convertTo(data, CV_32F);
+
+	// 运行K-Means
+	TermCriteria criteria = TermCriteria(TermCriteria::EPS + TermCriteria::COUNT, 10, 0.1);
+	kmeans(data, clusterCount, labels, criteria, clusterCount, KMEANS_PP_CENTERS, centers);
+
+	// 显示图像分割结果
+	int index = 0;
+	Mat result = Mat::zeros(img.size(), img.type());
+	for (int row = 0; row < height; row++) 
+	{
+		for (int col = 0; col < width; col++) 
+		{
+			index = row*width + col;
+			int label = labels.at<int>(index, 0);
+			result.at<Vec3b>(row, col)[0] = colorTab[label][0];
+			result.at<Vec3b>(row, col)[1] = colorTab[label][1];
+			result.at<Vec3b>(row, col)[2] = colorTab[label][2];
+	
+		}
+	}
+
+	imshow("KMeans-image-Division", result);
+	waitKey(0);
+	return RET_ERROR_OK;
+}
+
+int UManger::KmeansBackgroundSubstitution(string& PicPath)
+{
+	Mat img = imread(PicPath);
+	if (img.empty())
+	{
+		cout << "cant load img" << endl;
+		return -1;
+	}
+	imshow("input-img", img);
+
+
+	int width = img.cols;
+	int height = img.rows;
+	int dims = img.channels();
+
+	//初始化定义
+	int sampleCount = width*height;
+	int clusterCount = 3;
+	Mat labels;
+	Mat centers;
+
+	//RGB 数据转样本数据
+	Mat sample_data = img.reshape(3, sampleCount);
+	Mat data;
+	sample_data.convertTo(data, CV_32F);
+
+	// 运行K-Means
+	TermCriteria criteria = TermCriteria(TermCriteria::EPS + TermCriteria::COUNT, 10, 0.1);
+	kmeans(data, clusterCount, labels, criteria, clusterCount, KMEANS_PP_CENTERS, centers);
+
+	Mat mask = Mat::zeros(img.size(), CV_8UC1);
+	int index = labels.at<int>(0, 0);
+	labels = labels.reshape(1, height);
+
+	for(int row = 0;row<height;row++)
+	{
+		for(int col = 0;col<width;col++)
+		{
+			int c = labels.at<int>(row, col);
+			if(c == index)
+			{
+				mask.at<uchar>(row, col) = 255;
+			}
+		}
+	}
+
+	Mat se = getStructuringElement(MORPH_RECT, Size(3, 3), Point(-1, -1));
+	dilate(mask, mask, se);
+	GaussianBlur(mask, mask, Size(5, 5), 0);
+	Mat result = Mat::zeros(img.size(), CV_8UC3);
+	for (int row = 0; row < height; row++) {
+		for (int col = 0; col < width; col++) {
+			float w1 = mask.at<uchar>(row, col) / 255.0;
+			Vec3b bgr = img.at<Vec3b>(row, col);
+			bgr[0] = w1 * 255.0 + bgr[0] * (1.0 - w1);
+			bgr[1] = w1 * 0 + bgr[1] * (1.0 - w1);
+			bgr[2] = w1 * 255.0 + bgr[2] * (1.0 - w1);
+			result.at<Vec3b>(row, col) = bgr;
+		}
+	}
+	imshow("KMeans-image-Demo", result);
+	waitKey(0);
+	return RET_ERROR_OK;
+}
+
+int UManger::KmeansColorExtraction(string& PicPath)
+{
+	Mat img = imread(PicPath);
+	if (img.empty())
+	{
+		cout << "cant load img" << endl;
+		return -1;
+	}
+	imshow("input-img", img);
+
+	int width = img.cols;
+	int height = img.rows;
+	int dims = img.channels();
+
+	//初始化定义
+	int sampleCount = width*height;
+	int clusterCount = 4;
+	Mat labels;
+	Mat centers;
+
+	//RGB 数据转样本数据
+	Mat sample_data = img.reshape(3, sampleCount);
+	Mat data;
+	sample_data.convertTo(data, CV_32F);
+
+	// 运行K-Means
+	TermCriteria criteria = TermCriteria(TermCriteria::EPS + TermCriteria::COUNT, 10, 0.1);
+	  
+	kmeans(data, clusterCount, labels, criteria, clusterCount, KMEANS_PP_CENTERS, centers);
+
+	Mat card = Mat::zeros(Size(width, 50), CV_8UC3);
+	vector<float> clusters(clusterCount);
+	for (int i = 0; i < labels.rows; i++) {
+		clusters[labels.at<int>(i, 0)]++;
+	}
+	for (int i = 0; i < clusters.size(); i++) {
+		clusters[i] = clusters[i] / sampleCount;
+	}
+	int x_offset = 0;
+	for (int x = 0; x < clusterCount; x++) {
+		Rect rect;
+		rect.x = x_offset;
+		rect.y = 0;
+		rect.height = 50;
+		rect.width = round(clusters[x] * width);
+		x_offset += rect.width;
+		int b = centers.at<float>(x, 0);
+		int g = centers.at<float>(x, 1);
+		int r = centers.at<float>(x, 2);
+		rectangle(card, rect, Scalar(b, g, r), -1, 8, 0);
+	}
+
+	imshow("Image Color Card", card);
+	waitKey(0);
+	return RET_ERROR_OK;
+
+}
+
+int UManger::KNN(void)
+{
+	Mat img = imread("../Test/img/digits.png");
+	if(img.empty())
+	{
+		cout << "cant read img" << endl;
+		return -1;
+	}
+	Mat gray;
+	cvtColor(img, gray, COLOR_BGR2GRAY);
+
+	//分割为5000个cells
+	Mat images = Mat::zeros(5000, 400, CV_8UC1);
+	Mat labels = Mat::zeros(5000, 1, CV_8UC1);
+
+	Rect rect;
+
+	rect.height = 20;
+	rect.width = 20;
+	int index = 0;
+
+	Rect roi;
+	roi.x = 0;
+	roi.y = 0;
+
+	roi.height = 1;
+	roi.width = 400;
+
+	for(int row = 0;row<50;row++)
+	{
+		int label = row / 5;
+		for (int col=0;col<100;col++)
+		{
+			Mat digits = Mat::zeros(20, 20, CV_8UC1);
+			index = row * 100 + col;
+
+			rect.x = col * 20;
+			rect.y = row * 20;
+			gray(rect).copyTo(digits);
+			Mat one_row = digits.reshape(1, 1);
+			roi.y = index;
+			one_row.copyTo(images(roi));
+			labels.at<uchar>(index, 0) = label;
+		}
+	}
+	cout << "load sample hand-writing data.." << endl;
+
+	//装换为浮点数
+	images.convertTo(images, CV_32FC1);
+	labels.convertTo(labels, CV_32SC1);
+
+	// 开始KNN训练
+	printf("Start to knn train...\n");
+	Ptr<ml::KNearest> knn = ml::KNearest::create();
+	knn->setDefaultK(5);
+	knn->setIsClassifier(true);
+	Ptr<ml::TrainData> tdata = ml::TrainData::create(images, ml::ROW_SAMPLE, labels);
+	knn->train(tdata);
+	knn->save("./knn_knowledge.yml");
+	printf("Finished KNN...\n");
+	return true;
+	
+
+}
 
 //*****************************************UI相关*****************************************
 

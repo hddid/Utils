@@ -23,6 +23,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
+#include <opencv2/ml/ml.hpp>
 
 
 #include "Singleton.h"
@@ -124,7 +125,23 @@ public:
 	//批量修改文件夹内的图片名，输入图片地址及输出图片地址
 	int RenamePic(string InPath, string OutPath);
 
-	//*****************************************UI相关*****************************************
+	//*****************************************DeepLearning相关******************************************
+	//Kmeans 数据分类 输入的数字代表要分成几类
+	int KmeansDataClassification(int& numCluster);
+
+	//Kmeans 图像分割
+	int KmeansImageDivision(string& PicPath);
+
+	//Kmeans 背景替换
+	int KmeansBackgroundSubstitution(string& PicPath);
+
+	//Kmeans 色彩提取
+	int KmeansColorExtraction(string& PicPath);
+
+	//KNNTrain
+	int KNNTrain(void);
+
+	//*****************************************UI相关******************************************
 	
 	//UI图片相关
 	int UI_Img(bool& use_img);

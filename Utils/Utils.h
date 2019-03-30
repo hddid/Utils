@@ -79,6 +79,16 @@ UTILS_API(int) PicToVideo(string PicPath, string VideoPath, int height, int widt
 UTILS_API(int) RenamePic(string InPath, string OutPath);
 
 
+//*****************************************DeepLearning相关**********************************
+UTILS_API(int) KmeansDataClassification(int& numCluster);
+
+UTILS_API(int) KmeansImageDivision(string& PicPath);
+
+UTILS_API(int) KmeansBackgroundSubstitution(string& PicPath);
+
+UTILS_API(int) KmeansColorExtraction(string& PicPath);
+
+UTILS_API(int) KNN(void);
 //*****************************************UI相关*****************************************
 
 UTILS_API(int) UI_Img(bool& use_img);

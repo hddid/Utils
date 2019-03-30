@@ -9,6 +9,8 @@
 
 #define WINDOW_NAME "CVUI"
 
+
+#if 1
 bool use_img = true;
 bool use_camera = false;
 
@@ -58,3 +60,4 @@ bool ycrcbskin = false;
 bool hsvskin = false;
 
 Mat BaseImg = Mat::zeros(Size(960, 480), CV_8UC3);
+#endif

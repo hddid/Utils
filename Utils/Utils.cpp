@@ -140,6 +140,7 @@ UTILS_IMPL int WhiteBalance(Mat& img)
 
 
 //*****************************************噪音相关*****************************************
+
 UTILS_IMPL int AddGaussianNoise(Mat& img)
 {
 	return UManger::Instance()->AddGaussianNoise(img);
@@ -168,7 +169,35 @@ UTILS_IMPL int PicToVideo(string PicPath, string VideoPath, int height, int widt
 	return UManger::Instance()->PicToVideo(PicPath, VideoPath, height, width);
 }
 
-//*****************************************UI相关*****************************************
+//*****************************************DeepLearning相关******************************************
+
+UTILS_IMPL int KmeansDataClassification(int& numCluster)
+{
+	return UManger::Instance()->KmeansDataClassification(numCluster);
+}
+
+UTILS_IMPL int KmeansImageDivision(string& PicPath)
+{
+	return UManger::Instance()->KmeansImageDivision(PicPath);
+}
+
+UTILS_IMPL int KmeansBackgroundSubstitution(string& PicPath)
+{
+	return UManger::Instance()->KmeansBackgroundSubstitution(PicPath);
+}
+
+UTILS_IMPL int KmeansColorExtraction(string& PicPath)
+{
+	return UManger::Instance()->KmeansColorExtraction(PicPath);
+}
+
+UTILS_IMPL int KNNTrain(void)
+{
+	return UManger::Instance()->KNNTrain();
+}
+
+
+//*****************************************UI相关******************************************
 
 UTILS_IMPL int UI_Img(bool& use_img)
 {
